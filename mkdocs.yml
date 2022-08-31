@@ -4,6 +4,7 @@ nav:
   - Home: index.md
   - About: about.md
   - How to write articles: articles.md
+  - SP PPE: reighns_ml_journey/sp_ppe.md
   - Software Engineering Practices: 
     - Workflow: reighns_ml_journey/software_engineering/workflow.md
     - Git: reighns_ml_journey/software_engineering/git.md
@@ -121,6 +122,8 @@ theme:
   name: material
   features:
     - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github-square
 markdown_extensions:
   - attr_list
   - md_in_html
@@ -133,6 +136,19 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.tabbed:
+      alternate_style: true 
+repo_url: https://github.com/reigHns92
+repo_name: reigHns92
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://sg.linkedin.com/in/reighnss
+    - icon: fontawesome/brands/github
+      link: https://github.com/reigHns92
+      name: gao hn
+  generator: true # false if don't show made by materials
+copyright: Copyright &copy; 2021-2022 Gao Hongnan
 extra_javascript:
   - javascript/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
@@ -141,4 +157,7 @@ extra_css:
     - css/extra.css
 plugins:
   - search
-  #- mkdocstrings
+  # - markdown-exec
+  # - mknotebooks # python 3.9 not supported
+  # - pheasant
+  # - mkdocstrings
