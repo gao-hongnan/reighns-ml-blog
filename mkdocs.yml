@@ -157,7 +157,7 @@ extra_css:
     - css/extra.css
 plugins:
   - search
-  # - markdown-exec
-  # - mknotebooks # python 3.9 not supported
+  - markdown-exec # https://pypi.org/project/markdown-exec/
+  # - mknotebooks # python 3.9 not supported https://github.com/greenape/mknotebooks
   # - pheasant
   # - mkdocstrings
