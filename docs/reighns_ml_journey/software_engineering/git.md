@@ -49,11 +49,11 @@ Git Tutorial](https://www.atlassian.com/git/tutorials/install-git).
 In your terminal, configure your **Git username** and **email** using the following commands: 
 
 ```bash title="configure git" linenums="1"
-git config --global user.name {gaohn}
-git config --global user.email {gaohn@gmail.com}
+~/gaohn $ git config --global user.name <your name>
+~/gaohn $ git config --global user.email <your email>
 ```
 
-replacing `gaohn` with your own name, and set the `user.email` to the email address you used to sign up for GitHub.
+replacing `<your name>` with your own name, and set the `user.email` to the email address you used to sign up for GitHub.
 
 These details will be associated with any commits that you create!
 
@@ -147,7 +147,9 @@ setting-up-a-repository/git-clone) for more details.
 
 #### Initialize Remote Repository
 
-Generally stored outside of your isolated local system, usually on a remote server. It's especially useful when working in teams - this is the place where you can share your project code, see other people's code and integrate it into your local version of the project, and also push your changes to the remote repository.
+Generally stored outside of your isolated local system, usually on a remote server.
+It's especially useful when working in teams - this is the place where you can share your project 
+code, see other people's code and integrate it into your local version of the project, and also push your changes to the remote repository.
 
 !!! note
     Simply create this using this simple [guide](https://docs.github.com/en/get-started/quickstart/create-a-repo).
@@ -808,20 +810,12 @@ different OS. We will reproduce the steps on macOS.
 
 #### Syncing the Forked Repository with Upstream 
 
-Now I will use my other account to make a new commit [0780e45
-](https://github.com/ghnreigns/github-test/commit/0780e45e0efba76881477af91474a05c1da9ae4e) on the repository's main branch (i.e the upstream) and now
+Now I will use my other account to make a new commit [32f5bbd
+](https://github.com/ghnreigns/git-sample-workflow/commit/32f5bbd7ba31bb4d50e40c27fca946ebc32dbefe) on the repository's main branch (i.e the upstream) and now
 my forked repository will be 1 commit behind.
 
 <figure markdown>
-  ![Image title](../../assets/software_engineering/git/main_1.png){ width="600" }
-  <figcaption>Image caption</figcaption>
-</figure>
-
-Note that the `dev` branch that we forked remains the same as it is still in sync with the upstream's `dev` branch, hence the 
-image below shows that as well:
-
-<figure markdown>
-  ![Image title](../../assets/software_engineering/git/dev_1.png){ width="600" }
+  ![Image title](../../assets/software_engineering/git/main_1.PNG){ width="600" }
   <figcaption>Image caption</figcaption>
 </figure>
 
@@ -832,61 +826,125 @@ section on syncing a fork branch from the command line.
 1. In the same terminal, we fetch all branches and commites from the upstream repository.
 
     ```bash title="fetching from upstream repo" linenums="1"
-    ~/gaohn/github-test $ git fetch upstream
+    ~/gaohn/git-sample-workflow $ git fetch upstream
+
     > remote: Enumerating objects: 5, done.
     > remote: Counting objects: 100% (5/5), done.
-    > remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
-    > Unpacking objects: 100% (3/3), 653 bytes | 217.00 KiB/s, done.
-    > From https://github.com/ghnreigns/github-test
-    > * [new branch]      dev        -> upstream/dev
+    > remote: Compressing objects: 100% (2/2), done.
+    > remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+    > Unpacking objects: 100% (3/3), 711 bytes | 71.00 KiB/s, done.
+    > From https://github.com/ghnreigns/git-sample-workflow
     > * [new branch]      main       -> upstream/main
     ```
 
 2. Switch to your fork's main branch (or the branch you want the changes to be synced and merged).
+
+    ```
+    ~/gaohn/git-sample-workflow $ git checkout main
+    ```
+
+3. Before you merge, you can use `git log` from the [previous section](git.md#synchronize-origin-with-git-fetch)
+    to check what was committed on the upstream repository.
+
+    ```bash title="checking what was committed on upstream" linenums="1"
+    ~/gaohn/git-sample-workflow $ git log --oneline upstream/main..main
+    ```
        
-3. Merge the changes from the upstream default branch - in this case, `upstream/main` - into your local default branch. 
+    and it indeed returns the message `32f5bbd (upstream/main) git: update README.md for new commit`
+    which was indeed the commit [32f5bbd
+    ](https://github.com/ghnreigns/git-sample-workflow/commit/32f5bbd7ba31bb4d50e40c27fca946ebc32dbefe) done on my other account.
+
+4. Merge the changes from the upstream default branch - in this case, `upstream/main` - into your local default branch. 
    This brings your fork's default branch into sync with the upstream repository, without losing your local changes.
 
     ```bash title="merge with upstream" linenums="1"
-    ~/gaohn/github-test $ git merge upstream/main
-    > Updating 3faaf86..0b69046
+    ~/gaohn/git-sample-workflow $ git merge upstream/main
+
+    > Updating 2d47f2d..32f5bbd
     > Fast-forward
-    > hello.py | 8 ++++++++
-    > 1 file changed, 8 insertions(+)
-    > create mode 100644 hello.py
+    > README.md | 2 ++
+    > 1 file changed, 2 insertions(+)
     ```
 
-After this step, the origin (forked) repo of mine will be in sync with the upstream as can be verified by
-the message "This branch is up to date with ghnreigns/github-test:main." on your main branch github.
+5. Now it is time to push the commits to the origin repository, a quick `git status` will tell you
+    that you are 1 commit ahead of the origin repository.
 
-!!! warning
-    Notice that the `dev` branch does not automatically appear in your local git (i.e. calling `git checkout dev` does not work).
-    The `dev` branch exists in both `origin` and `upstream` as can be seen by `git branch -a`.
+    ```bash title="checking status" linenums="1"
+    ~/gaohn/git-sample-workflow $ git status
 
-    There are [two ways](https://www.freecodecamp.org/news/git-checkout-remote-branch-tutorial/) to "fetch" the `dev` repo to your local:
+    > On branch main
+    > Your branch is ahead of 'origin/main' by 1 commit.
+    > (use "git push" to publish your local commits)
+    ```
 
-    - `git checkout -b dev upstream/dev` will create a branch named `dev` that pulls the information from the `upstream/dev` branch;
-    - Alternatively, you can `git checkout -b dev origin/main` which essentially fetches the `dev` branch on your forked repo and then
-    we can do `git merge upstream/dev` to be in sync.
+    and we will use `git push` to push the commits to the origin repository.
+
+    ```bash title="pushing to origin" linenums="1"
+    ~/gaohn/git-sample-workflow $ git push -u origin main
+
+    > Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+    > To https://github.com/reigHns92/git-sample-workflow.git
+    >    2d47f2d..32f5bbd  main -> main
+    > Branch 'main' set up to track remote branch 'main' from 'origin'.
+    ```
+
+    After this step, the origin (forked) repo of mine will be in sync with the upstream as can be verified by
+    the message "This branch is up to date with ghnreigns/git-sample-workflow:main." on your main branch github.
+
+#### Syncing the Forked Repository with Upstream's Other Branches
+
+Let's say our upstream repository created a new branch `dev` and we want to sync our forked repository with it
+(note that our forked repository `origin` does not have this branch yet).
+
+We can first `git fetch upstream` to fetch all branches and commits from the upstream repository.
+We see that `git` tells us the following:
+
+```bash
+From https://github.com/ghnreigns/git-sample-workflow
+ * [new branch]      dev        -> upstream/dev
+```
+
+which means that the upstream repository has a new branch `dev` and it "downloads (fetch)" it to our local repository.
+
+Notice that the `dev` branch does not automatically appear in your local git (i.e. calling `git checkout dev` does not work).
+The `dev` branch exists in both `origin` and `upstream` as can be seen by `git branch -a`.
+
+There are [two ways](https://www.freecodecamp.org/news/git-checkout-remote-branch-tutorial/) to "fetch" the `dev` repo to your local:
+
+- `git checkout -b dev upstream/dev` will create a branch named `dev` that pulls the information from the `upstream/dev` branch;
+- Alternatively, you can `git checkout -b dev origin/main` which essentially fetches the `dev` branch on your forked repo and then
+we can do `git merge upstream/dev` to be in sync.
 
 
-#### Creating Pull Request
+### Creating Pull Request
 
-Now on my local `dev` branch, I made some changes and committed to [c5db9a0](https://github.com/reigHns92/github-test/commit/c5db9a0afd0b46c6851d75e2e599356dae3cc6e8)
+Now on my local `dev` branch, I made some changes and committed to 
+[7e8a124](https://github.com/reigHns92/git-sample-workflow/commit/7e8a124590d1c33f88bc124a0df294a423886713)
 using `git push -u origin dev`.
 
 I now want to create a pull request for the upstream repository owner to see my changes, and to merge into his repo if necessary.
 
-We first go to our origin (forked) repo and see that there is a new popup on "compare and pull request".
+We first go to our `origin` (forked) [repository](https://github.com/reigHns92/git-sample-workflow/tree/dev) and see that there is a new popup on "compare and pull request".
 We click it and the following interface will appear, that is for you to write a message to the upstream author.
 
 <figure markdown>
-  ![Image title](../../assets/software_engineering/git/pull_request_1.png){ width="600" }
+  ![Image title](../../assets/software_engineering/git/pull_request_1.PNG){ width="600" }
   <figcaption>Image caption</figcaption>
 </figure>
 
 Once you created pull request, you can wait for the upstream author to decide and reply.
+Since I am the owner of the other account, I went in and see the following:
 
+<figure markdown>
+  ![Image title](../../assets/software_engineering/git/pull_request_2.PNG){ width="600" }
+  <figcaption>Image caption</figcaption>
+</figure>
+
+and proceeded to approve the merge.
+
+## Handling Merge Conflicts
+
+...
 
 
 ## Commit Courtesy
