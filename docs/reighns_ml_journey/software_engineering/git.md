@@ -940,7 +940,23 @@ Since I am the owner of the other account, I went in and see the following:
   <figcaption>Image caption</figcaption>
 </figure>
 
-and proceeded to approve the merge.
+and proceeded to approve the merge request.
+
+We used the default option to merge the pull request, which is to merge into the `dev` branch
+of the upstream repository and create a new commit (SHA 1fa405d). We can have different types of merge
+which we can read up more [here](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-request-merges).
+
+Consequently, you will need to repeat the following steps to sync your forked repository's `dev` branch with the upstream repository's `dev` branch:
+
+```bash title="syncing forked repo with upstream" linenums="1"
+~/gaohn/git-sample-workflow $ git checkout dev
+~/gaohn/git-sample-workflow $ git fetch upstream
+~/gaohn/git-sample-workflow $ git merge upstream/dev
+~/gaohn/git-sample-workflow $ git push -u origin dev
+```
+
+even though the point is slightly moot since this step is exactly the same as the previous commit.
+
 
 ## Handling Merge Conflicts
 
