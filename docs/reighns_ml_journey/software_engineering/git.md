@@ -19,6 +19,45 @@ git remote add origin <>
 git push -u origin master
 ```
 
+
+
+
+git-tutorial
+
+master
+1. 27378ad
+2. b9d3256
+3. 13e956d
+
+git-fetch
+1. 27378ad
+2. b9d3256
+3. 13e956d 
+4. f3d4f25
+
+
+git-sample-workflow (ghnreigns)
+
+master
+1. 96e7501
+2. 2d47f2d
+3. 32f5bbd
+
+dev
+
+1. 96e7501
+2. 2d47f2d
+3. 32f5bbd
+4. 7e8a124
+5. 1fa405d
+
+git-sample-workflow (reigHns92)
+
+1. 96e7501
+2. 2d47f2d
+3. 32f5bbd
+4. 7e8a124
+
 ## Installation and Configuration
 
 ### Installing Git

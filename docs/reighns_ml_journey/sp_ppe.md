@@ -371,3 +371,25 @@ however for now comment out a chunk of code in logger since it has `self.cats` w
 
 We first check if model can memorize, then generalize, the former is important to check for bugs, and to ensure our model has basic capability to learn, but no way does it 
 guarantee that it can generalize. Regardless, we still want to ensure this as if it cannot even memorize in-sample data points, it for sure cannot generalize.
+
+## References
+
+
+- https://docs.wandb.ai/guides/track/log/media to log bounding boxes
+- https://www.youtube.com/watch?v=be_D3V9Pxlg&t=2371s
+- https://github.com/awsaf49/bbox/blob/main/bbox/utils.py
+- https://www.kaggle.com/code/ayuraj/train-yolov5-cross-validation-ensemble-w-b/notebook
+- https://github.com/roboflow-ai/YOLOX
+- https://www.kaggle.com/code/awsaf49/great-barrier-reef-yolov5-train/notebook#%F0%9F%93%81-Create-Folds
+- Transfer learning for YOLOX: https://github.com/Megvii-BaseDetection/YOLOX/issues/1105 + https://github.com/Megvii-BaseDetection/YOLOX/pull/1156
+- Converting darknet or yolov5 datasets to COCO format for YOLOX: YOLO2COCO [from Daniel](https://github.com/RapidAI/YOLO2COCO)
+* https://stackoverflow.com/questions/67733876/create-pascol-voc-xml-from-csv
+https://pyimagesearch.com/2022/05/02/mean-average-precision-map-using-the-coco-evaluator/
+https://wandb.ai/manan-goel/yolox-nano/reports/Tracking-your-YOLOX-Runs-with-Weights-Biases---VmlldzoxNzc0NjA0
+https://docs.wandb.ai/guides/integrations/other/yolox
+https://www.kaggle.com/code/remekkinas/yolox-training-pipeline-cots-dataset-lb-0-507/notebook#6.-RUN-INFERENCE
+https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch
+https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch
+https://blog.roboflow.com/how-to-train-yolox-on-a-custom-dataset/
+https://www.kaggle.com/code/litaldavar/hard-head-detection-with-yolov5/notebook
+https://www.kaggle.com/code/billiemage/object-detection
