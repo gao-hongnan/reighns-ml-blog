@@ -5,6 +5,7 @@ nav:
   - About: about.md
   - How to write articles: articles.md
   - SP PPE: reighns_ml_journey/sp_ppe.md
+  - Workflow: reighns_ml_journey/workflow_latest.md
   - Software Engineering Practices: 
     - Workflow: reighns_ml_journey/software_engineering/workflow.md
     - Git: reighns_ml_journey/software_engineering/git.md

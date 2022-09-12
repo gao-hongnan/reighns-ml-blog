@@ -1,8 +1,5 @@
 ## Gearing Up For Development
 
-!!! Danger
-    See TODOs below for further improvements.
-
 ### Set Up Main Directory (IDE)
 
 Let us assume that we are residing in our root folder `~/gaohn` and
@@ -19,7 +16,7 @@ we want to create a new project called **YOLOX**, we can do as follows:
 If you are cloning a repository to your local folder **YOLOX**, you can further do:
 
 ```bash title="cloning repository" linenums="1"
-~/gaohn/YOLOX $ git clone git@github.com:Megvii-BaseDetection/YOLOX.git .
+~/gaohn/YOLOX $ git clone https://github.com/Megvii-BaseDetection/YOLOX.git .
 ```
 
 where `.` means cloning to the current directory.
@@ -31,7 +28,7 @@ Follow the steps below to set up a virtual environment for your development.
 === "Windows"
 
     ```bash title="venv" linenums="1"
-    ~/gaohn/YOLOX        $ python -m venv {venv}                                     # (1)
+    ~/gaohn/YOLOX        $ python -m venv <name of virtual env>                      # (1)
     ~/gaohn/YOLOX        $ .\venv\Scripts\activate                                   # (2)
     ~/gaohn/YOLOX (venv) $ python -m pip install --upgrade pip setuptools wheel      # (3)
     ```
@@ -44,7 +41,7 @@ Follow the steps below to set up a virtual environment for your development.
 
     ```bash title="venv" linenums="1"
     ~/gaohn/YOLOX        $ pip3 install virtualenv 
-    ~/gaohn/YOLOX        $ virtualenv {venv}                                           
+    ~/gaohn/YOLOX        $ virtualenv <name of virtual env>                                          
     ~/gaohn/YOLOX        $ source .\venv\bin\activate
     ~/gaohn/YOLOX (venv) $ python3 -m pip install --upgrade pip setuptools wheel
     ```
@@ -53,7 +50,7 @@ Follow the steps below to set up a virtual environment for your development.
 
     ```bash title="venv" linenums="1"
     ~/gaohn/YOLOX        $ sudo apt install python3.8 python3.8-venv python3-venv 
-    ~/gaohn/YOLOX        $ python3 -m venv {venv}                                  
+    ~/gaohn/YOLOX        $ python3 -m venv <name of virtual env>                                 
     ~/gaohn/YOLOX        $ source .\venv\bin\activate                                 
     ~/gaohn/YOLOX (venv) $ python3 -m pip install --upgrade pip setuptools wheel      
     ```

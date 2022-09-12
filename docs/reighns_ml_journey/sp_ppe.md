@@ -1,8 +1,5 @@
 ## Gearing Up For Development
 
-!!! Danger
-    CODE is not refined.
-
 ### Set Up Main Directory (IDE)
 
 Let us assume that we are residing in our root folder `~/gaohn` and
@@ -19,7 +16,7 @@ we want to create a new project called **YOLOX**, we can do as follows:
 If you are cloning a repository to your local folder **YOLOX**, you can further do:
 
 ```bash title="cloning repository" linenums="1"
-~/gaohn/YOLOX $ git clone git@github.com:Megvii-BaseDetection/YOLOX.git .
+~/gaohn/YOLOX $ git clone https://github.com/Megvii-BaseDetection/YOLOX.git .
 ```
 
 where `.` means cloning to the current directory.
@@ -31,7 +28,7 @@ Follow the steps below to set up a virtual environment for your development.
 === "Windows"
 
     ```bash title="venv" linenums="1"
-    ~/gaohn/YOLOX        $ python -m venv {venv}                                     # (1)
+    ~/gaohn/YOLOX        $ python -m venv <name of virtual env>                      # (1)
     ~/gaohn/YOLOX        $ .\venv\Scripts\activate                                   # (2)
     ~/gaohn/YOLOX (venv) $ python -m pip install --upgrade pip setuptools wheel      # (3)
     ```
@@ -44,7 +41,7 @@ Follow the steps below to set up a virtual environment for your development.
 
     ```bash title="venv" linenums="1"
     ~/gaohn/YOLOX        $ pip3 install virtualenv 
-    ~/gaohn/YOLOX        $ virtualenv {venv}                                           
+    ~/gaohn/YOLOX        $ virtualenv <name of virtual env>                                          
     ~/gaohn/YOLOX        $ source .\venv\bin\activate
     ~/gaohn/YOLOX (venv) $ python3 -m pip install --upgrade pip setuptools wheel
     ```
@@ -53,7 +50,7 @@ Follow the steps below to set up a virtual environment for your development.
 
     ```bash title="venv" linenums="1"
     ~/gaohn/YOLOX        $ sudo apt install python3.8 python3.8-venv python3-venv 
-    ~/gaohn/YOLOX        $ python3 -m venv {venv}                                  
+    ~/gaohn/YOLOX        $ python3 -m venv <name of virtual env>                                 
     ~/gaohn/YOLOX        $ source .\venv\bin\activate                                 
     ~/gaohn/YOLOX (venv) $ python3 -m pip install --upgrade pip setuptools wheel      
     ```
@@ -139,6 +136,224 @@ For this version of YOLOX, use the commands below to do installation:
     ```bash title="install" linenums="1"
     ...
     ```
+
+## Get Raw Data
+
+The incoming raw data is a zip file named `sp_ppe_all_combination_images.zip` and contains 1,600 images
+alongside a csv file named `all_annotations.csv` which contains the bounding box coordinates and
+its corresponding class labels.
+
+Our goal is to download these data to our local machine (main directory).
+
+```tree title="main directory tree" linenums="1"
+YOLOX/
+├── venv/
+├── datasets/
+    └── sp_ppe_data/
+        ├── sp_ppe_all_images/
+        └── sp_ppe_all_annotations/
+|── ...
+├── requirements.txt
+└── setup.py
+```
+
+
+where `sp_ppe_all_images` contains 1,600 images and `sp_ppe_all_annotations` contains 1,600
+corresponding annotations in `.xml` format. We will touch on that later.
+
+1. First, we create a folder named `datasets` in the root directory of the project alongside
+    its sub-folders `sp_ppe_data` and `sp_ppe_all_images` and `sp_ppe_all_annotations`.
+
+    ```bash title="creating datasets folder" linenums="1"
+    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data 
+    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/sp_ppe_all_images
+    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/sp_ppe_all_annotations 
+    ```
+
+    Take note that in this YOLOX repo, the `datasets` folder is already there when
+    you clone the repo, but having the command `-p` allows you to create the subfolder
+    without raising an error.
+
+2. To download the data into `datasets/sp_ppe_data`, we can issue the below commands:
+    
+    === "Windows"
+
+        ```bash title="download raw data" linenums="1"
+        ~/gaohn/YOLOX (venv) $ wget -P <destination folder> <url> 
+        ~/gaohn/YOLOX (venv) $ tar xf <zip file> -C <destination folder>
+        ```
+
+    === "macOS M1"
+
+        ```bash title="download raw data" linenums="1"
+        ~/gaohn/YOLOX (venv) $ wget -P <destination folder> <url> 
+        ~/gaohn/YOLOX (venv) $ unzip <zip file> -d <destination folder>
+        ```
+
+    where the `<url>` for the raw data is 
+    `https://storage.googleapis.com/peekingduck/data/sp_ppe_all_combination_images.zip`.
+    
+    More concretely, we have:
+
+    ```bash title="download raw data windows" linenums="1"
+    ~/gaohn/YOLOX (venv) $ wget -P datasets/sp_ppe_data/sp_ppe_all_images https://storage.googleapis.com/peekingduck/data/sp_ppe_all_combination_images.zip
+    ~/gaohn/YOLOX (venv) $ tar xf datasets/sp_ppe_data/sp_ppe_all_images/sp_ppe_all_combination_images.zip -C datasets/sp_ppe_data/sp_ppe_all_images
+    ~/gaohn/YOLOX (venv) $ rm datasets/sp_ppe_data/sp_ppe_all_images/sp_ppe_all_combination_images.zip
+    ```
+
+3. Now we want to move our `all_annotations.csv` file into `datasets/sp_ppe_data/sp_ppe_all_annotations`.
+    We can do this by issuing the following command:
+
+
+    === "Windows"
+
+        ```bash title="move files" linenums="1"
+        ~/gaohn/YOLOX (venv) $ move <source file> <destination folder>
+        ```
+
+    === "macOS"
+
+        ```bash title="move files" linenums="1"
+        ~/gaohn/YOLOX (venv) $ mv <source file> <destination folder>
+        ```
+
+    === "Linux"
+
+        ```bash title="move files filesnv" linenums="1"
+        ~/gaohn/YOLOX (venv) $ mv <source file> <destination folder> 
+        ```
+
+    So in our case, it is simply:
+
+    ```bash title="move files windows" linenums="1"
+    ~/gaohn/YOLOX (venv) $ move datasets/sp_ppe_data/sp_ppe_all_images/all_annotations.csv datasets/sp_ppe_data/sp_ppe_all_annotations
+    ```
+
+4. The above steps can be a good opportunity to introduce a very basic shell script.
+
+    ```bash
+    #!/bin/bash
+    # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+    # Download COCO128 dataset https://www.kaggle.com/ultralytics/coco128 (first 128 images from COCO train2017)
+    # Example usage: bash data/scripts/get_coco128.sh
+    # parent
+    # ├── yolov5
+    # └── datasets
+    #     └── coco128  ← downloads here
+
+    # Download/unzip images and labels
+    d='../datasets' # unzip directory
+    url=https://github.com/ultralytics/yolov5/releases/download/v1.0/
+    f='coco128.zip' # or 'coco128-segments.zip', 68 MB
+    echo 'Downloading' $url$f ' ...'
+    curl -L $url$f -o $f -# && unzip -q $f -d $d && rm $f &
+
+    wait # finish background tasks
+    ```
+
+
+
+## Convert Raw Data into Required Formats
+
+Even though we have the raw images and annotations, we need to convert them into the required format
+for most out of the box models. This is because when we load the data into our deep learning model,
+it will expect the data to be in a certain format. 
+
+The format is **largely determined** by how we write the `dataset` class in PyTorch (or TensorFlow).
+
+
+
+## Label Tools 
+
+### CVAT
+
+#### macOS M1
+
+Follow the [installation guide](https://opencv.github.io/cvat/docs/administration/basics/installation/):
+
+1. Download Docker for Mac M1 (without Rosetta), as mentioned in [issue](https://github.com/docker/for-mac/issues/6232) opened on GitHub, we need to select **use docker compose v2** in the settings of docker as it is unselected by default, causing an error when using `docker compose`.
+2. Download and install CVAT:
+    
+    ```bash
+    $ git clone https://github.com/opencv/cvat
+    $ cd cvat
+    $ CVAT_VERSION=dev docker-compose pull
+    $ CVAT_VERSION=dev docker-compose up -d
+    ```
+    
+    Note that the commands above are **unique to macOS M1** as the CVAT installation guide does not fully support M1 yet, so have to go through some loops and hoops.
+    
+    See [issue](https://github.com/opencv/cvat/issues/4816) here for reference.
+    
+3. You can register a user but by default it will not have rights even to view list of tasks. Thus you should create a superuser. A superuser can use an admin panel to assign correct groups to other users. Please use the command below:
+    
+    ```bash
+    docker exec -it cvat_server bash -ic 'python3 ~/manage.py createsuperuser'
+    ```
+    
+    username: django/django2
+    
+    password: ZGRu3pUsCw66HGa
+    
+4. Somehow you need to re-run steps 2-3 when you restart you computer?
+5. See my short video clip for annotation steps.
+
+#### Windows
+
+1. Install WSL2
+
+    Newer windows can directly call the following command in **adminstrator** Powershell:
+
+    ```bash
+    $ wsl --install
+    ```
+
+    If not, the safe choice is to follow the guide [here](https://docs.microsoft.com/en-gb/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package), starting from step 4.
+
+2. Install Docker
+
+    Download and install docker **[here](https://docs.docker.com/desktop/install/windows-install/)**.
+
+3. Install Git
+
+    Make sure there is Git for Windows.
+
+4. Run CVAT
+
+    1. Clone CVAT to local machine.
+        
+        ```bash
+        $ git clone https://github.com/opencv/cvat
+        $ cd cvat
+        ```
+        
+    2. Run docker containers.
+        
+        ```bash
+        $ docker-compose up -d
+        # run below since now latest version has issues
+        $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
+        ```
+        
+        However, there is an issue opened just 2 weeks ago:
+        
+        - See https://github.com/opencv/cvat/issues/4888 and https://github.com/opencv/cvat/issues/4816
+    3. Create username and password:
+        
+        ```bash
+        # enter docker image first
+        $ docker exec -it cvat_server /bin/bash
+        # then run
+        $ python3 ~/manage.py createsuperuser
+        ```
+        
+        username: django
+        
+        password: ZGRu3pUsCw66HGa
+    
+5. Open the installed Google Chrome browser and go to [localhost:8080](http://localhost:8080/). Type your login/password for the superuser on the login page and press the *Login* button. Now you should be able to create a new annotation task. Please read the [CVAT manual](https://opencv.github.io/cvat/docs/manual/) for more details.
+
+---
 
 ## End-to-End ML Workflow
 
