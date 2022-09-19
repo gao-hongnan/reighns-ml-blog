@@ -115,8 +115,6 @@ For this version of YOLOX, use the commands below to do installation:
 === "Windows"
 
     ```bash title="install" linenums="1"
-    git clone git@github.com:Megvii-BaseDetection/YOLOX.git
-    cd YOLOX
     pip install -U pip && pip install -r requirements.txt
     pip install -v -e .  # or  python setup.py develop
     pip install cython
@@ -150,8 +148,9 @@ YOLOX/
 ├── venv/
 ├── datasets/
     └── sp_ppe_data/
-        ├── sp_ppe_all_images/
-        └── sp_ppe_all_annotations/
+       └── raw/     
+            ├── sp_ppe_all_images/
+            └── sp_ppe_all_annotations/
 |── ...
 ├── requirements.txt
 └── setup.py
@@ -162,12 +161,12 @@ where `sp_ppe_all_images` contains 1,600 images and `sp_ppe_all_annotations` con
 corresponding annotations in `.xml` format. We will touch on that later.
 
 1. First, we create a folder named `datasets` in the root directory of the project alongside
-    its sub-folders `sp_ppe_data` and `sp_ppe_all_images` and `sp_ppe_all_annotations`.
+    its sub-folder `sp_ppe_data/raw` and `sp_ppe_all_images` and `sp_ppe_all_annotations`.
 
     ```bash title="creating datasets folder" linenums="1"
     ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data 
-    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/sp_ppe_all_images
-    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/sp_ppe_all_annotations 
+    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/raw/sp_ppe_all_images
+    ~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/raw/sp_ppe_all_annotations 
     ```
 
     Take note that in this YOLOX repo, the `datasets` folder is already there when
@@ -191,17 +190,17 @@ corresponding annotations in `.xml` format. We will touch on that later.
         ```
 
     where the `<url>` for the raw data is 
-    `https://storage.googleapis.com/peekingduck/data/sp_ppe_all_combination_images.zip`.
+    `https://storage.googleapis.com/reighns/datasets/sp_ppe_all_combination_images.zip`.
     
     More concretely, we have:
 
     ```bash title="download raw data windows" linenums="1"
-    ~/gaohn/YOLOX (venv) $ wget -P datasets/sp_ppe_data/sp_ppe_all_images https://storage.googleapis.com/peekingduck/data/sp_ppe_all_combination_images.zip
-    ~/gaohn/YOLOX (venv) $ tar xf datasets/sp_ppe_data/sp_ppe_all_images/sp_ppe_all_combination_images.zip -C datasets/sp_ppe_data/sp_ppe_all_images
-    ~/gaohn/YOLOX (venv) $ rm datasets/sp_ppe_data/sp_ppe_all_images/sp_ppe_all_combination_images.zip
+    ~/gaohn/YOLOX (venv) $ wget -P datasets/sp_ppe_data/raw/sp_ppe_all_images https://storage.googleapis.com/reighns/datasets/sp_ppe_all_combination_images.zip # https://storage.googleapis.com/peekingduck/data/sp_ppe_all_combination_images.zip
+    ~/gaohn/YOLOX (venv) $ tar xf datasets/sp_ppe_data/raw/sp_ppe_all_images/sp_ppe_all_combination_images.zip -C datasets/sp_ppe_data/sp_ppe_all_images
+    ~/gaohn/YOLOX (venv) $ rm datasets/sp_ppe_data/raw/sp_ppe_all_images/sp_ppe_all_combination_images.zip
     ```
 
-3. Now we want to move our `all_annotations.csv` file into `datasets/sp_ppe_data/sp_ppe_all_annotations`.
+3. Now we want to move our `all_annotations.csv` file into `datasets/sp_ppe_data/raw/sp_ppe_all_annotations`.
     We can do this by issuing the following command:
 
 
@@ -226,30 +225,10 @@ corresponding annotations in `.xml` format. We will touch on that later.
     So in our case, it is simply:
 
     ```bash title="move files windows" linenums="1"
-    ~/gaohn/YOLOX (venv) $ move datasets/sp_ppe_data/sp_ppe_all_images/all_annotations.csv datasets/sp_ppe_data/sp_ppe_all_annotations
+    ~/gaohn/YOLOX (venv) $ move datasets/sp_ppe_data/raw/sp_ppe_all_images/all_annotations.csv datasets/sp_ppe_data/raw/sp_ppe_all_annotations
     ```
 
 4. The above steps can be a good opportunity to introduce a very basic shell script.
-
-    ```bash
-    #!/bin/bash
-    # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
-    # Download COCO128 dataset https://www.kaggle.com/ultralytics/coco128 (first 128 images from COCO train2017)
-    # Example usage: bash data/scripts/get_coco128.sh
-    # parent
-    # ├── yolov5
-    # └── datasets
-    #     └── coco128  ← downloads here
-
-    # Download/unzip images and labels
-    d='../datasets' # unzip directory
-    url=https://github.com/ultralytics/yolov5/releases/download/v1.0/
-    f='coco128.zip' # or 'coco128-segments.zip', 68 MB
-    echo 'Downloading' $url$f ' ...'
-    curl -L $url$f -o $f -# && unzip -q $f -d $d && rm $f &
-
-    wait # finish background tasks
-    ```
 
 
 
@@ -261,7 +240,105 @@ it will expect the data to be in a certain format.
 
 The format is **largely determined** by how we write the `dataset` class in PyTorch (or TensorFlow).
 
+### Pascal VOC
 
+Assume that we already have downloaded pascal voc format data from roboflow in this format:
+
+```tree title="main directory tree" linenums="1"
+YOLOX/
+├── venv/
+├── datasets/
+    └── sp_ppe_data/
+       └── raw/     
+            ├── sp_ppe_all_images/
+            └── sp_ppe_all_annotations/
+       └── pascal_voc/     
+            ├── images/
+            └── annotations/     
+|── ...
+├── requirements.txt
+└── setup.py
+```
+
+```bash title="download pascal voc" linenums="1"
+~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data
+~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/pascal_voc/images
+~/gaohn/YOLOX (venv) $ mkdir -p datasets/sp_ppe_data/pascal_voc/annotations
+```
+
+Then move all the images to the `images` folder and all the annotations to the `annotations` folder.
+
+Note that the annotations are already in `.xml` pascal voc format.
+
+For YOLOX however, we need to strictly adhere to their VOC format, as follows
+
+```tree title="YOLOX Pascal VOC" linenums="1"
+YOLOX/
+├── datasets/
+│   ├── VOCdevkit/
+│   │   ├── VOC2012/
+│   │   │   ├── sp_ppe_voc_helmet_mask_vest/
+│   │   │   │   ├── Annotations/
+│   │   │   │   ├── ImageSets/
+|   |   |   |   |   ├── Main/
+|   |   |   |   |   |   ├── train.txt
+|   |   |   |   |   |   ├── val.txt
+|   |   |   |   |   |   ├── test.txt
+|   |   |   |   |   |   ├── trainval.txt
+│   │   │   │   ├── JPEGImages/
+```
+
+
+## Download Weights
+
+Download weights to weights folder `YOLOX/weights`
+   
+   ```bash
+   ~/gaohn/YOLOX (venv) $ mkdir -p weights
+   ~/gaohn/YOLOX (venv) $ wget.exe -P weights https://github.com/Megvii-BaseDetection/storage/releases/download/0.0.1/yolox_s.pth
+   ```
+
+## Train CLI
+
+1. Tricky part is to convert the images to COCO or VOC format, if you convert to COCO format and then ask Roboflow to convert to voc format, you need to use the script below to do so:
+
+```python
+from pathlib import Path
+
+train_p = Path(
+    "./datasets/VOCdevkit/VOC2012/sp_ppe_voc_all_combinations/train"
+)
+valid_p = Path(
+    "./datasets/VOCdevkit/VOC2012/sp_ppe_voc_all_combinations/valid"
+)
+test_p = Path("./datasets/VOCdevkit/VOC2012/sp_ppe_voc_all_combinations/test")
+
+with open("train.txt", "w") as f:
+    for p in train_p.glob("*.jpg"):
+        f.write(f"{p.stem}\n")
+
+with open("valid.txt", "w") as f:
+    for p in valid_p.glob("*.jpg"):
+        f.write(f"{p.stem}\n")
+
+with open("test.txt", "w") as f:
+    for p in test_p.glob("*.jpg"):
+        f.write(f"{p.stem}\n")
+```
+
+1. Then run the training
+
+```bash
+python tools/train.py -f .\exps\custom\sp_ppe\sp_ppe_voc_all_combinations.py -d 1 -b 16 --fp16 -o -c .\weights\yolox_s.pth
+```
+
+and infer whole folder:
+
+```bash
+python tools/demo.py image -f .\exps\custom\sp_ppe\sp_ppe_voc_all_combinations.py -c .\YOLOX_outputs\sp_ppe_voc_all_combinations\best_ckpt.pth --path .\datasets\VOCdevkit\VOC2012\sp_ppe_voc_all_combinations\test\ --conf 0.25 --nms 0.45 --tsize 640 --save_result --device gpu
+```
+
+1. Important rmb change both voc and coco class file because later demo py uses coco class lame.
 
 ## Label Tools 
 
