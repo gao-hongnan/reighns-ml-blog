@@ -132,14 +132,14 @@ markdown_extensions:
       generic: true
   - pymdownx.tabbed:
       alternate_style: true 
-repo_url: https://github.com/reigHns92
+repo_url: https://github.com/reighns92
 repo_name: reigHns92
 extra:
   social:
     - icon: fontawesome/brands/linkedin
       link: https://sg.linkedin.com/in/reighnss
     - icon: fontawesome/brands/github
-      link: https://github.com/reigHns92
+      link: https://github.com/reighns92
       name: gao hn
   generator: true # false if don't show made by materials
 copyright: Copyright &copy; 2021-2022 Gao Hongnan
