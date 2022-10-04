@@ -1,7 +1,7 @@
 site/
 *~
 \#*\#
-venv_ml_website
+venv_*
 **/.ipynb_checkpoints/
 A-journey-into-Convolutional-Neural-Network-visualization--master
 # Converted Markdown Files
