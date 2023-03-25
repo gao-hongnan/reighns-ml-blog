@@ -1,15 +1,13 @@
 site_name: Hongnan G. Machine Learning Blog
-site_url: https://reighns92.github.io/reighns-ml-blog
+site_url: https://gao-hongnan.github.io/reighns-ml-blog
 nav:
   - Home: index.md
   - About: about.md
   - SP PPE: reighns_ml_journey/sp_ppe.md
-  - Code Design: code_design.md
-  - Gradient Descent: reighns_ml_journey/mathematics/gradient_descent.md
   - Mathematics:
     - General Mathematic Terms and Definitions: reighns_ml_journey/mathematics/general_mathematical_terms_and_definitions.md
     - Linear Algebra:
-      - Preliminaries: 
+      - Preliminaries:
         - Lines and Planes: reighns_ml_journey/mathematics/linear_algebra/01_preliminaries/lines_and_planes.md
         - Fields: reighns_ml_journey/mathematics/linear_algebra/01_preliminaries/fields.md
       - Vectors:
@@ -20,7 +18,7 @@ nav:
           - Outer Product: reighns_ml_journey/mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md
           - Unit Vector: reighns_ml_journey/mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector.md
           - Exercises: reighns_ml_journey/mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises.md
-      - Vector Spaces: 
+      - Vector Spaces:
         - Vector Space and Subspaces: reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces.md
         - Vector Span: reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span.md
         - Linear Independence: reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence.md
@@ -31,10 +29,10 @@ nav:
         - Basic Matrix Operations: reighns_ml_journey/mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations.md
         - Matrix Multiplication: reighns_ml_journey/mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication.md
       - Matrix Theory:
-        - System of Linear Equations: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md 
+        - System of Linear Equations: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md
         - Row Reduction Preserves Rank: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank.md
-        - Row Space: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space.md  
-        - Column Space: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space.md  
+        - Row Space: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space.md
+        - Column Space: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space.md
         - Right Nullspace (Kernel): reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace.md
         - Left Nullspace: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace.md
         - Matrix Rank: reighns_ml_journey/mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank.md
@@ -59,7 +57,7 @@ nav:
       - Interview: reighns_ml_journey/mathematics/linear_algebra/linear_algebra_interview_questions.md
     - Probability and Statistics:
       - Introduction to Probability for Data Science (Stanley H. Chan): reighns_ml_journey/mathematics/probability_statistics_theory/probability4datascience.md
-      - Introduction to Probability: 
+      - Introduction to Probability:
         - Probability Space: reighns_ml_journey/mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md
         - Probability Axioms: reighns_ml_journey/mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md
         - Conditional Probability: reighns_ml_journey/mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md
@@ -67,22 +65,10 @@ nav:
         - Bayes Theorem: reighns_ml_journey/mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md
         - Summary: reighns_ml_journey/mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md
   - Machine Learning and Deep Learning:
-    - Metrics: 
-      - Classification:
-        - Introduction: reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/classification_metrics.md
-        - Accuracy: reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/accuracy.md
-        - Confusion Matrix: reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/confusion_matrix.md
-        - Precision-Recall-F1: reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/precision_recall_f1.md
-        - ROC and PR Curves: reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/roc_pr_curve.md
-        - Cohen's Kappa: reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/cohens_kappa.md
-      - Regression:
-        - Introduction: reighns_ml_journey/machine_learning_and_deep_learning/metrics/regression_metrics/regression_metrics.md
-        - MAE and MSE: reighns_ml_journey/machine_learning_and_deep_learning/metrics/regression_metrics/mae_rmse.md
-        - MAPE: reighns_ml_journey/machine_learning_and_deep_learning/metrics/regression_metrics/mape.md
     - Computer Vision:
       - README: reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/README.md
-      - Neural Network Interpretation: 
-        - Visualization of Feature Map Activations: 
+      - Neural Network Interpretation:
+        - Visualization of Feature Map Activations:
           - Feature Map Activations (Part I): reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation.md
           - Feature Map Activations (Part II): reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced.md
         - Visualization of Convolutional Filters: reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md
@@ -95,9 +81,6 @@ nav:
       - Cross Entropy Loss: reighns_ml_journey/machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md
     - Ensemble Theory:
       - Forward Ensemble (Hill Climbing): reighns_ml_journey/machine_learning_and_deep_learning/ensemble_theory/forward_ensemble.md
-  - Data Structures and Algorithms: 
-    - Introduction: reighns_ml_journey/data_structures_and_algorithms/introduction.md
-    - Linked Lists: reighns_ml_journey/data_structures_and_algorithms/Linked List.md
   - Machine Learning Projects:
       - RANZCR CLiP - Catheter and Line Position Challenge: reighns_ml_journey/projects/RANZCR CLiP - Catheter and Line Position Challenge/notebooks/walkthrough.md
       - SIIM-ISIC Melanoma Classification: reighns_ml_journey/projects/SIIM-ISIC Melanoma Classification/notebooks/walkthrough.md
@@ -131,16 +114,16 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.tabbed:
-      alternate_style: true 
-repo_url: https://github.com/reighns92
-repo_name: reigHns92
+      alternate_style: true
+repo_url: https://github.com/gao-hongnan
+repo_name: gao-hongnan
 extra:
   social:
     - icon: fontawesome/brands/linkedin
       link: https://sg.linkedin.com/in/reighnss
     - icon: fontawesome/brands/github
-      link: https://github.com/reighns92
-      name: gao hn
+      link: https://github.com/gao-hongnan
+      name: gaohn
   generator: true # false if don't show made by materials
 copyright: Copyright &copy; 2021-2022 Gao Hongnan
 extra_javascript:
