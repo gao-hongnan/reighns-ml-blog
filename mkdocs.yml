@@ -9,9 +9,7 @@ nav:
     - Linear Algebra:
       - Preliminaries:
         - Lines and Planes: reighns_ml_journey/mathematics/linear_algebra/01_preliminaries/lines_and_planes.md
-        - Fields: reighns_ml_journey/mathematics/linear_algebra/01_preliminaries/fields.md
       - Vectors:
-        - Vector Operations: reighns_ml_journey/mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors.md
         - Vector Products:
           - Linear Combination: reighns_ml_journey/mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_linear_combination.md
           - Dot Product: reighns_ml_journey/mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_dot_product.md
