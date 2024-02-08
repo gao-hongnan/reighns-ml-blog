@@ -1,0 +1,2248 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/projects/breast_cancer_wisconsin/Appendix/">
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Notations - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#notations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Notations
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#input-space-mathcalx" class="md-nav__link">
+    Input Space: \(\mathcal{X}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output-space-mathcaly" class="md-nav__link">
+    Output Space: \(\mathcal{Y}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distribution-mathcalp" class="md-nav__link">
+    Distribution: \(\mathcal{P}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-mathcald" class="md-nav__link">
+    Data: \(\mathcal{D}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-matrix-mathrmx" class="md-nav__link">
+    Design Matrix: \(\mathrm{X}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-training-vector-mathrmx" class="md-nav__link">
+    Single Training Vector: \(\mathrm{x}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#targetlabel-mathrmy" class="md-nav__link">
+    Target/Label: \(\mathrm{Y}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hypothesis-set-mathcalh" class="md-nav__link">
+    Hypothesis Set: \(\mathcal{H}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hypothesis-mathcalh-mathrmx-to-mathrmy-where-mathrmx-mapsto-mathrmy" class="md-nav__link">
+    Hypothesis: \(\mathcal{h}: \mathrm{X} \to \mathrm{Y}\) where \(\mathrm{x} \mapsto \mathrm{y}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-algorithm-mathcala" class="md-nav__link">
+    Learning Algorithm: \(\mathcal{A}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hypothesis-subscript-mathcald-h_mathcald" class="md-nav__link">
+    Hypothesis Subscript \(\mathcal{D}\): \(h_{\mathcal{D}}\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generalization-errortest-errorout-of-sample-error-mathcale_textouth" class="md-nav__link">
+    Generalization Error/Test Error/Out-of-Sample Error: \(\mathcal{E}_{\text{out}}(h)\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expected-generalization-errortest-errorout-of-sample-error-mathbbe_mathcaldmathcale_textouth" class="md-nav__link">
+    Expected Generalization Error/Test Error/Out-of-Sample Error: \(\mathbb{E}_{\mathcal{D}}[\mathcal{E}_{\text{out}}(h)]\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#empirical-errortraining-errorin-sample-error-mathcale_textinh" class="md-nav__link">
+    Empirical Error/Training Error/In-Sample Error: \(\mathcal{E}_{\text{in}}(h)\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bias-variance-decomposition" class="md-nav__link">
+    Bias - Variance Decomposition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bias-bigmathbbe_mathcaldh_mathcaldx-fxbig2" class="md-nav__link">
+    Bias: \(\big(\;\mathbb{E}_\mathcal{D}[\;h_{\mathcal{D}}(x)\;] - f(x)\;\big)^2\)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variance-mathbbe_mathcaldbigh_mathcaldx-mathbbe_mathcaldh_mathcaldx2big" class="md-nav__link">
+    Variance: \(\mathbb{E}_\mathcal{D}\big[\;(\;h_{\mathcal{D}}(x) - \mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;])^2\;\big]\)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/projects/breast_cancer_wisconsin/Appendix.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="notations">Notations</h1>
+<h3 id="input-space-mathcalx"><strong>Input Space:</strong> <span class="arithmatex">\(\mathcal{X}\)</span></h3>
+<ul>
+<li>
+<p>The input space contains the set of all possible examples/instances in a <strong>population</strong>.</p>
+</li>
+<li>
+<p>This is generally unknown.</p>
+</li>
+</ul>
+<hr />
+<h3 id="output-space-mathcaly"><strong>Output Space:</strong> <span class="arithmatex">\(\mathcal{Y}\)</span></h3>
+<ul>
+<li>The output space is the set of all possible labels/targets that corresponds to each point in <span class="arithmatex">\(\mathcal{X}\)</span>. </li>
+</ul>
+<hr />
+<h3 id="distribution-mathcalp"><strong>Distribution</strong>: <span class="arithmatex">\(\mathcal{P}\)</span></h3>
+<ul>
+<li><strong>Reference: Learning From Data p43.</strong></li>
+<li>The unknown distribution that generated our input space <span class="arithmatex">\(\mathcal{X}\)</span>.</li>
+<li>In general, instead of the mapping <span class="arithmatex">\(\mathrm{y} = f(\mathrm{x})\)</span>, we can take the output <span class="arithmatex">\(\mathrm{y}\)</span> to be a random variable that is affected by, rather than determined by, the input <span class="arithmatex">\(\mathrm{x}\)</span>. </li>
+<li>Formally, we have a <strong>target distribution</strong> <span class="arithmatex">\(\mathcal{P}(\mathrm{y} | \mathrm{x})\)</span> instead of just <span class="arithmatex">\(\mathrm{y} = f(\mathrm{x})\)</span>. Now we say that any point <span class="arithmatex">\((\mathrm{x}, \mathrm{y})\)</span> in <span class="arithmatex">\(\mathcal{X}\)</span> is now generated by the <strong>joint distribution</strong> <span class="arithmatex">\(<span class="arithmatex">\(\mathcal{P}(\mathrm{x}, \mathrm{y}) = \mathcal{P}(\mathrm{x})\mathcal{P}(\mathrm{y} | \mathrm{x})\)</span>\)</span></li>
+</ul>
+<hr />
+<h3 id="data-mathcald"><strong>Data:</strong> <span class="arithmatex">\(\mathcal{D}\)</span></h3>
+<ul>
+<li>This is the set of samples drawn from <span class="arithmatex">\(\mathcal{X} \times \mathcal{Y}\)</span> over a distribution <span class="arithmatex">\(\mathcal{P}\)</span>.</li>
+<li>The general notation is as follows:
+    <span class="arithmatex">\(<span class="arithmatex">\(\mathcal{D} = [(\mathrm{x^{(1)}}, \mathrm{y^{(1)}}), (\mathrm{x^{(2)}}, \mathrm{y^{(2)}}), ..., (\mathrm{x^{(N)}}, \mathrm{y^{(N)}}))]\)</span>\)</span>
+    where <span class="arithmatex">\(N\)</span> denotes the number of training samples, and each <span class="arithmatex">\(\mathrm{x}^{(i)} \in \mathbb{R}^{n}\)</span> with <span class="arithmatex">\(n\)</span> features. In general, <span class="arithmatex">\(\mathrm{y}^{(i)} \in \mathbb{R}\)</span> and is a single label.</li>
+<li>We can split <span class="arithmatex">\(\mathcal{D}\)</span> into two sets respectively, where <span class="arithmatex">\(\mathrm{X}\)</span> consists of all the <span class="arithmatex">\(\mathrm{x}\)</span>, and <span class="arithmatex">\(\mathrm{Y}\)</span> consists of all the <span class="arithmatex">\(\mathrm{y}\)</span>. We will see this next.</li>
+</ul>
+<hr />
+<h3 id="design-matrix-mathrmx"><strong>Design Matrix:</strong> <span class="arithmatex">\(\mathrm{X}\)</span></h3>
+<ul>
+<li>Let <span class="arithmatex">\(\mathrm{X}\)</span> be the design matrix of dimensions <span class="arithmatex">\(m \times (n + 1)\)</span> where <span class="arithmatex">\(m\)</span> is the number of observations (training samples) and <span class="arithmatex">\(n\)</span> independent feature/input variables. Note the inconsistency in the matrix size, I just want to point out that the second matrix, has a column of one in the first row because we usually have a bias term <span class="arithmatex">\(\mathrm{x_0}\)</span>, which we set to 1.</li>
+</ul>
+<div class="arithmatex">\[\mathrm{X} = \begin{bmatrix} (\mathbf{x^{(1)}})^{T} \\ (\mathbf{x^{(2)}})^{T} \\ \vdots \\ (\mathbf{x^{(m)}})^{T}\end{bmatrix}_{m \times n} = \begin{bmatrix} 1 &amp;  x_1^{(1)} &amp; x_2^{(1)} &amp; \cdots &amp; x_n^{(1)} \\\\
+                 1 &amp;  x_1^{(2)} &amp; x_2^{(2)} &amp; \cdots &amp; x_n^{(2)} \\\\ 
+                \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\\\
+                1 &amp;  x_1^{(m)} &amp; x_2^{(m)} &amp; \cdots &amp; x_n^{(m)} \end{bmatrix}_{m \times (n+1)} 
+\]</div>
+<hr />
+<h3 id="single-training-vector-mathrmx"><strong>Single Training Vector:</strong> <span class="arithmatex">\(\mathrm{x}\)</span></h3>
+<ul>
+<li>It is worth noting the <span class="arithmatex">\(\mathrm{x}^{(i)}\)</span> defined above is formally defined to be the <span class="arithmatex">\(i\)</span>-th column of <span class="arithmatex">\(\mathrm{X}\)</span>, which is the <span class="arithmatex">\(i\)</span>-th training sample, represented as a <span class="arithmatex">\(n \times 1\)</span> <strong>column vector</strong>. However, the way we define the Design Matrix is that each row of <span class="arithmatex">\(\mathrm{X}\)</span> is the transpose of <span class="arithmatex">\(\mathrm{x}^{(i)}\)</span>. </li>
+<li>Note <span class="arithmatex">\(x^{(i)}_j\)</span> is the value of feature/attribute j in the ith training instance.</li>
+</ul>
+<div class="arithmatex">\[\mathbf{x^{(i)}} = \begin{bmatrix} x_1^{(i)} \\ x_2^{(i)} \\ \vdots \\ x_n^{(i)} \end{bmatrix}_{n \times 1}\]</div>
+<hr />
+<h3 id="targetlabel-mathrmy"><strong>Target/Label:</strong> <span class="arithmatex">\(\mathrm{Y}\)</span></h3>
+<ul>
+<li>This is the target vector. By default, it is a column vector of size <span class="arithmatex">\(m \times 1\)</span>.</li>
+</ul>
+<div class="arithmatex">\[\mathbf{y} = \begin{bmatrix} y^{(1)} \\ y^{(2)} \\ \vdots \\ y^{(m)} \end{bmatrix}_{m \times 1}\]</div>
+<hr />
+<h3 id="hypothesis-set-mathcalh"><strong>Hypothesis Set:</strong> <span class="arithmatex">\(\mathcal{H}\)</span></h3>
+<ul>
+<li>The set where it contains all possible functions to approximate our true function <span class="arithmatex">\(f\)</span>. Note that the Hypothesis Set can be either continuous or discrete, means to say it can be either a finite or infinite set. But in reality, it is almost always infinite.</li>
+</ul>
+<hr />
+<h3 id="hypothesis-mathcalh-mathrmx-to-mathrmy-where-mathrmx-mapsto-mathrmy"><strong>Hypothesis:</strong> <span class="arithmatex">\(\mathcal{h}: \mathrm{X} \to \mathrm{Y}\)</span> where <span class="arithmatex">\(\mathrm{x} \mapsto \mathrm{y}\)</span></h3>
+<ul>
+<li>Note that this <span class="arithmatex">\(\mathcal{h} \in \mathcal{H}\)</span> is the hypothesis function,</li>
+<li>The final best hypothesis function is called <span class="arithmatex">\(g\)</span>, which approximates the true function <span class="arithmatex">\(f\)</span>.</li>
+</ul>
+<hr />
+<h3 id="learning-algorithm-mathcala"><strong>Learning Algorithm:</strong> <span class="arithmatex">\(\mathcal{A}\)</span></h3>
+<ul>
+<li><strong>What this does is from the set of Hypothesis</strong> <span class="arithmatex">\(\mathcal{H}\)</span>, <strong>the learning algorithm's role is to pick one</strong> <span class="arithmatex">\(\mathcal{h} \in \mathcal{H}\)</span> <strong>such that this <span class="arithmatex">\(h\)</span> is the hypothesis function.</strong></li>
+<li>More often, we also call our final hypothesis learned from <span class="arithmatex">\(\mathcal{A}\)</span> <span class="arithmatex">\(g\)</span>.</li>
+</ul>
+<h3 id="hypothesis-subscript-mathcald-h_mathcald"><strong>Hypothesis Subscript <span class="arithmatex">\(\mathcal{D}\)</span>:</strong> <span class="arithmatex">\(h_{\mathcal{D}}\)</span></h3>
+<ul>
+<li>This is no different from the previous hypothesis, instead the previous <span class="arithmatex">\(h\)</span> is a shorthand for this notation.</li>
+<li>This means that the hypothesis we choose is dependent on the sample data given to us, that is to say, given a <span class="arithmatex">\(\mathcal{D}\)</span>, we will use <span class="arithmatex">\(\mathcal{A}\)</span> to learn a <span class="arithmatex">\(h_{\mathcal{D}}\)</span> from <span class="arithmatex">\(\mathcal{H}\)</span>.</li>
+</ul>
+<h3 id="generalization-errortest-errorout-of-sample-error-mathcale_textouth"><strong>Generalization Error/Test Error/Out-of-Sample Error:</strong> <span class="arithmatex">\(\mathcal{E}_{\text{out}}(h)\)</span></h3>
+<ul>
+<li><strong>Reference from Foundations of Machine Learning</strong>.</li>
+<li>Given a hypothesis <span class="arithmatex">\(h \in \mathcal{H}\)</span>, a true function <span class="arithmatex">\(f \in \mathcal{C}\)</span>, and an underlying distribution <span class="arithmatex">\(\mathcal{P}\)</span>, the test/out-of-sample error of <span class="arithmatex">\(h\)</span> is defined by 
+<span class="arithmatex">\(<span class="arithmatex">\(\begin{aligned}\mathcal{E}_{\text{out}}(h) = \underset{x \sim \mathcal{P}}{\mathrm{Pr}}[h(\mathrm{x}) \neq f(\mathrm{x})]\end{aligned}\)</span>\)</span></li>
+<li>Note that the above equation is just the error rate between the hypothesis function <span class="arithmatex">\(h\)</span> and the true function <span class="arithmatex">\(f\)</span> and as a result, the test error of a hypothesis is not known because both the distribution <span class="arithmatex">\(\mathcal{P}\)</span> and the true function <span class="arithmatex">\(f\)</span> are unknown.</li>
+<li>This brings us to the next best thing we can measure, the In-sample/Empirical/Training Error.</li>
+</ul>
+<hr />
+<p>More formally, in a regression setting where we Mean Squared Error, <span class="arithmatex">\(<span class="arithmatex">\(\begin{aligned}\mathcal{E}_{\text{out}}(h) = \mathbb{E}_{\mathrm{x}}\left[(h_{\mathcal{D}}(\mathrm{x}) - f(\mathrm{x}))^2 \right]
+\end{aligned}\)</span>\)</span></p>
+<hr />
+<p>This is difficult and confusing to understand. To water down the formal definition, it is worth taking an example, in <span class="arithmatex">\(\mathcal{E}_{\text{out}}(h)\)</span> we are only talking about the <strong>Expected Test Error</strong> over the Test Set and nothing else. <strong>Think of a test set with only one query point</strong>, we call it <span class="arithmatex">\(\mathrm{x}_{q}\)</span>, then the above equation is just <span class="arithmatex">\(<span class="arithmatex">\(\begin{aligned}\mathcal{E}_{\text{out}}(h) = \mathbb{E}_{\mathrm{x}_{q}}\left[(h_{\mathcal{D}}(\mathrm{x}_{q}) - f(\mathrm{x}_{q}))^2 \right]
+\end{aligned}\)</span>\)</span></p>
+<p>over a single point over the distribution <span class="arithmatex">\(\mathrm{x}_{q}\)</span>. That is if <span class="arithmatex">\(\mathrm{x}_{q} = 3\)</span> and <span class="arithmatex">\(h_{\mathcal{D}}(\mathrm{x}_{q}) = 2\)</span> and <span class="arithmatex">\(f(\mathrm{x}_{q}) = 5\)</span>, then <span class="arithmatex">\((h_{\mathcal{D}}(\mathrm{x}_{q}) - f(\mathrm{x}_{q}))^2 = 9\)</span> and it follows that <span class="arithmatex">\(<span class="arithmatex">\(\mathcal{E}_{\text{out}}(h) =  \mathbb{E}_{\mathrm{x}_{q}}\left[(h_{\mathcal{D}}(\mathrm{x}_{q}) - f(\mathrm{x}_{q}))^2 \right] = \mathbb{E}_{\mathrm{x}_{q}}[9] = \frac{9}{1} = 9\)</span>\)</span></p>
+<p>Note that I purposely denoted the denominator to be 1 because we have only 1 test point, if we were to have 2 test point, say <span class="arithmatex">\(\mathrm{x} = [x_{p}, x_{q}] = [3, 6]\)</span>, then if <span class="arithmatex">\(h_{\mathcal{D}}(x_{p}) = 4\)</span> and <span class="arithmatex">\(f(x_{p}) = 6\)</span>, then our <span class="arithmatex">\((h_{\mathcal{D}}(\mathrm{x}_{p}) - f(\mathrm{x}_{p}))^2 = 4\)</span>. </p>
+<p>Then our <span class="arithmatex">\(<span class="arithmatex">\(\mathcal{E}_{\text{out}}(h) =  \mathbb{E}_{\mathrm{x}}\left[(h_{\mathcal{D}}(\mathrm{x}) - f(\mathrm{x}))^2 \right] = \mathbb{E}_{\mathrm{x}_{q}}[[9, 4]] = \frac{1}{2} [9 + 4] = 6.5\)</span>\)</span></p>
+<p>Note how I secretly removed the subscript in <span class="arithmatex">\(\mathrm{x}\)</span>, and how when there are two points, we are taking expectation over the 2 points. So if we have <span class="arithmatex">\(m\)</span> test points, then the expectation is taken over all the test points.</p>
+<p>Till now, our hypothesis <span class="arithmatex">\(h\)</span> is fixed over a particular sample set <span class="arithmatex">\(\mathcal{D}\)</span>. We will now move on to the next concept on <strong>Expected Generalization Error</strong> (adding a word Expected in front makes a lot of difference).</p>
+<h3 id="expected-generalization-errortest-errorout-of-sample-error-mathbbe_mathcaldmathcale_textouth"><strong>Expected Generalization Error/Test Error/Out-of-Sample Error:</strong> <span class="arithmatex">\(\mathbb{E}_{\mathcal{D}}[\mathcal{E}_{\text{out}}(h)]\)</span></h3>
+<p>For the previous generalization error, we are only talking a fixed hypothesis generated by one particular <span class="arithmatex">\(\mathcal{D}\)</span>. In order to remove this dependency, we can simply take the expectation of Generalization Error of <span class="arithmatex">\(h\)</span> over a particular <span class="arithmatex">\(\mathcal{D}\)</span> by simply taking the expectation over all such <span class="arithmatex">\(\mathcal{D}_{i}\)</span>, <span class="arithmatex">\(i = 1,2,3,...K\)</span>.</p>
+<hr />
+<p>Then the <strong>Expected Generalization Test Error</strong> is independent of any particular realization of <span class="arithmatex">\(\mathcal{D}\)</span>:</p>
+<div class="arithmatex">\[\begin{aligned}\mathbb{E}_{\mathcal{D}}[\mathcal{E}_{\text{out}}(h)] = \mathbb{E}_{\mathcal{D}}[\mathbb{E}_{\mathrm{x}}\left[(h_{\mathcal{D}}(\mathrm{x}) - f(\mathrm{x}))^2 \right]]
+\end{aligned}\]</div>
+<hr />
+<p>In the following example, we can calculate the Expected Generalization Error, where we are using the Error to be Mean Squared Error, so in essence, we are finding the expected MSE.</p>
+<h3 id="empirical-errortraining-errorin-sample-error-mathcale_textinh"><strong>Empirical Error/Training Error/In-Sample Error:</strong> <span class="arithmatex">\(\mathcal{E}_{\text{in}}(h)\)</span></h3>
+<ul>
+<li>Given a hypothesis <span class="arithmatex">\(h \in \mathcal{H}\)</span>, a true function <span class="arithmatex">\(f \in \mathcal{C}\)</span>, and an underlying distribution <span class="arithmatex">\(\mathcal{P}\)</span>, and a sample <span class="arithmatex">\(\mathrm{X}\)</span> drawn from <span class="arithmatex">\(\mathcal{X}\)</span> i.i.d with distribution <span class="arithmatex">\(\mathcal{P}\)</span>, the test/out-of-sample error of <span class="arithmatex">\(h\)</span> is defined by 
+<span class="arithmatex">\(<span class="arithmatex">\(\begin{aligned}\mathcal{E}_{\text{in}}(h) = \frac{1}{\mathrm{m}}\sum_{i=1}^{\mathrm{m}}\text{sign}[h(\mathrm{x}^{(i)}) \neq f(\mathrm{x}^{(i)})]\end{aligned}\)</span>\)</span></li>
+<li>Here the sign function is mainly used for binary classification, where if <span class="arithmatex">\(h\)</span> and <span class="arithmatex">\(f\)</span> disagrees at any point <span class="arithmatex">\(x^{(i)}\)</span>, then <span class="arithmatex">\(\text{sign}[h(\mathrm{x}^{(i)}) \neq f(\mathrm{x}^{(i)})]\)</span> evaluates to 1. We take the sum of all disagreements and divide by the total number of samples. In short, that is just the misclassification/error rate.</li>
+<li>The empirical error of <span class="arithmatex">\(h \in \mathcal{H}\)</span> is its average error over the sample <span class="arithmatex">\(\mathcal{X}\)</span>, in contrast, the generalization error is its expected error based on the distribution <span class="arithmatex">\(\mathcal{P}\)</span>.</li>
+<li>Take careful note here that <span class="arithmatex">\(h(x^{(i)})\)</span> is the prediction made by our hypothesis (model), we can conventionally call it <span class="arithmatex">\(\hat{y}^{(i)}\)</span> whereby our <span class="arithmatex">\(f(x^{(i)})\)</span> is our ground truth label <span class="arithmatex">\(y^{(i)}\)</span>. I believe that this ground truth label is realized once we draw the sample from <span class="arithmatex">\(\mathcal{X}\)</span> even though we do not know what <span class="arithmatex">\(f\)</span> is.</li>
+<li>An additional note here, is that the summand of the in-sample error function is not fixated to the sign function. In fact, I believe you can define any loss function to calculate the "error". As an example, if we are dealing with regression, then we can modify the summand to our favourite Mean Squared Error.</li>
+</ul>
+<div class="arithmatex">\[\begin{aligned}\mathcal{E}_{\text{in}}(h) = \frac{1}{\mathrm{m}}\sum_{i=1}^{\mathrm{m}}[h(\mathrm{x}^{(i)}) - f(\mathrm{x}^{(i)})]^2\end{aligned}\]</div>
+<hr />
+<h3 id="bias-variance-decomposition"><strong>Bias - Variance Decomposition</strong></h3>
+<ul>
+<li>This is a decomposition of the <strong>Expected</strong> Generalization Error. Formal Proof please read Learning From Data.</li>
+<li>Unless otherwise stated, we consider only the univariate case where <span class="arithmatex">\(\mathrm{x}\)</span> is a single test point.</li>
+</ul>
+<hr />
+<div class="arithmatex">\[\begin{align*}
+\mathbb{E}_{\mathcal{D}}[\mathcal{E}_{\text{out}}(h)] &amp;= \mathbb{E}_{\mathcal{D}}[\mathbb{E}_{\mathrm{x}}\left[(h_{\mathcal{D}}(\mathrm{x}) - f(\mathrm{x}))^2 \right]] 
+\\ &amp;= \big(\;\mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;] - f(x)\;\big)^2 + \mathbb{E}_{\mathcal{D}}\big[\;(\;h_{\mathcal{D}}(x) - \mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;])^2\;\big] + \mathbb{E}\big[(y-f(x))^2\big]
+\\ &amp;= \big(\;\bar{h}(\mathrm{x}) - f(x)\;\big)^2 + \mathbb{E}_\mathcal{D}\big[\;(\;h_{\mathcal{D}}(x) - \bar{h}(\mathrm{x}) \;])^2\;\big]+ \mathbb{E}\big[(y-f(x))^2\big]
+\end{align*} 
+\]</div>
+<hr />
+<p>Where $\big(\;\mathbb{E}<em _mathcal_D="\mathcal{D">{\mathcal{D}}[\;h</em>}(x)\;] - f(x)\;\big)^2 $ is the Bias, <span class="arithmatex">\(\mathbb{E}_\mathcal{D}\big[\;(\;h_{\mathcal{D}}(x) - \mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;])^2\;\big]\)</span> is the Variance and <span class="arithmatex">\(\mathbb{E}\big[(y-f(x))^2\big]\)</span> is the irreducible error <span class="arithmatex">\(\epsilon\)</span>.</p>
+<h3 id="bias-bigmathbbe_mathcaldh_mathcaldx-fxbig2"><strong>Bias:</strong> <span class="arithmatex">\(\big(\;\mathbb{E}_\mathcal{D}[\;h_{\mathcal{D}}(x)\;] - f(x)\;\big)^2\)</span></h3>
+<p>In other form, we can express Bias as 
+<span class="arithmatex">\(<span class="arithmatex">\(\big(\;\mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;] - f(x)\;\big)^2 = \big(\;\bar{h}(\mathrm{x}) - f(x)\;\big)^2\)</span>\)</span></p>
+<hr />
+<p>See simulation on Bias-Variance Tradeoff to understand.</p>
+<hr />
+<p>If our test point is <span class="arithmatex">\(x_{q} = 0.9\)</span>, then our bias is as such:</p>
+<div class="arithmatex">\[
+\widehat{\text{bias}} \left(\hat{f}(0.90) \right)  = \frac{1}{n_{\texttt{sims}}}\sum_{i = 1}^{n_{\texttt{sims}}} \left(\hat{f}_k^{[i]}(0.90) \right) - f(0.90)
+\]</div>
+<h3 id="variance-mathbbe_mathcaldbigh_mathcaldx-mathbbe_mathcaldh_mathcaldx2big"><strong>Variance:</strong> <span class="arithmatex">\(\mathbb{E}_\mathcal{D}\big[\;(\;h_{\mathcal{D}}(x) - \mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;])^2\;\big]\)</span></h3>
+<hr />
+<p>This is more confusing, but we first express Variance as:</p>
+<div class="arithmatex">\[\mathbb{E}_\mathcal{D}\big[\;(\;h_{\mathcal{D}}(x) - \mathbb{E}_{\mathcal{D}}[\;h_{\mathcal{D}}(x)\;])^2\;\big] = \mathbb{E}_\mathcal{D}\big[\;(\;h_{\mathcal{D}}(x) - \bar{h}(\mathrm{x}) \;])^2\;\big]\]</div>
+<hr />
+<p>If our test point is <span class="arithmatex">\(x_{q} = 0.9\)</span>, then our variance is as such:</p>
+<div class="arithmatex">\[
+\widehat{\text{var}} \left(\hat{f}(0.90) \right) = \frac{1}{n_{\texttt{sims}}}\sum_{i = 1}^{n_{\texttt{sims}}} \left(\hat{f}_k^{[i]}(0.90) - \frac{1}{n_{\texttt{sims}}}\sum_{i = 1}^{n_{\texttt{sims}}}\hat{f}_k^{[i]}(0.90) \right)^2 
+\]</div>
+<h1 id="pseudo-code">Pseudo Code</h1>
+<h2 id="cross-validation">Cross-Validation</h2>
+<ul>
+<li>Define <span class="arithmatex">\(G\)</span> as the set of combination of hyperparamters. Define number of splits to be <span class="arithmatex">\(K\)</span>.</li>
+<li>For each set of hyperparameter <span class="arithmatex">\(z \in Z\)</span>:<ul>
+<li>for fold <span class="arithmatex">\(j\)</span> in K:<ul>
+<li>Set <span class="arithmatex">\(F_{\text{train}}=\bigcup\limits_{i\neq k}^{K} F_{i}\)</span></li>
+<li>Set <span class="arithmatex">\(F_{\text{val}} = F_{j}\)</span> as the validation set</li>
+<li>Perform Standard Scaling on <span class="arithmatex">\(F_{\text{train}}\)</span> and find the mean and std</li>
+<li>Perform VIF recursively on <span class="arithmatex">\(F_{\text{train}}\)</span> and find the selected features</li>
+<li>Transform <span class="arithmatex">\(F_{\text{val}}\)</span> using the mean and std found using <span class="arithmatex">\(F_{\text{train}}\)</span></li>
+<li>Transform <span class="arithmatex">\(F_{\text{val}}\)</span> to have only the selected features from <span class="arithmatex">\(F_{\text{train}}\)</span></li>
+<li>Train and fit on <span class="arithmatex">\(F_{\text{train}}\)</span> </li>
+</ul>
+</li>
+<li>Evaluate the fitted parameters on <span class="arithmatex">\(F_{\text{val}}\)</span> to obtain <span class="arithmatex">\(\mathcal{M}\)</span></li>
+</ul>
+</li>
+</ul>
+<h1 id="logistic-regression">Logistic Regression</h1>
+<p>Given target variable <span class="arithmatex">\(Y \in \{0, 1\}\)</span> and predictors <span class="arithmatex">\(X\)</span>, denote <span class="arithmatex">\(\mathbb{P}(X) = P(Y = 1 | X)\)</span> to estimate the probability of <span class="arithmatex">\(Y\)</span> is of positive (malignant) class. LR expresses <span class="arithmatex">\(\mathbb{P}\)</span> as a function the predictors <span class="arithmatex">\(X\)</span> as <span class="arithmatex">\(\mathbb{P}(X) = \sigma(\hat{\mathrm{\beta}}^T X) = \frac{1}{1 + \exp(\hat{\mathrm{\beta}}^T X)}\)</span> where <span class="arithmatex">\(\hat{\beta}\)</span> is the estimated coefficients of the model. One thing worth mentioning is the logistic function <span class="arithmatex">\(\sigma(z) = \frac{1}{1 + \exp(-z)}\)</span> outputs values from 0 to 1  which is actually the functional form of our hypothesis, and therefore makes up the \textbf{Hypothesis Space} <span class="arithmatex">\(\mathcal{H}\)</span>. We then uses a learning algorithm <span class="arithmatex">\(\mathcal{A}\)</span>, \textbf{Maximum Likelihood Estimation (MLE)}, to estimate the coefficients of our predictors; however, since there is no closed form solution to MLE, the learning algorithm will use optimization techniques like \textbf{Gradient Descent}\footnote{We can use Gradient Descent if we instead minimze the negative loglikehood function which is the same as maximizing MLE} to find <span class="arithmatex">\(\hat{\beta}\)</span>.</p>
+<h1 id="readings-and-references">Readings and References</h1>
+<ul>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/17986804/">False-positive and false-negative cases of fine-needle aspiration cytology for palpable breast lesions</a></li>
+<li><a href="https://www.displayr.com/what-is-dendrogram/">What is a Dendrogram?</a></li>
+<li><a href="https://www.mayoclinic.org/tests-procedures/breast-biopsy/about/pac-20384812">Breast Biopsy - Mayo Clinic</a></li>
+<li><a href="https://analyticsindiamag.com/big-data-to-good-data-andrew-ng-urges-ml-community-to-be-more-data-centric-and-less-model-centric/">Data Centric - Andrew Ng</a></li>
+<li><a href="https://statisticalhorizons.com/multicollinearity">When is Multicollinearity not an issue - Paul Allison</a></li>
+<li><a href="https://stats.stackexchange.com/questions/1149/is-there-an-intuitive-explanation-why-multicollinearity-is-a-problem-in-linear-r">Intuitive Explanation of Multicollinearity in Linear Regression - Stackoverflow</a></li>
+<li><a href="http://rasbt.github.io/mlxtend/user_guide/evaluate/paired_ttest_kfold_cv/">Hypothesis Testing Across Models</a></li>
+<li><a href="https://machinelearningmastery.com/hypothesis-test-for-comparing-machine-learning-algorithms/">Hypothesis Test for Comparing ML Algorithms - Jason Brownlee</a></li>
+<li><a href="https://www.springer.com/us/book/9783319194240">Regression Modelling Strategies - Professor Frank Harrell</a></li>
+<li><a href="https://www.fharrell.com/post/class-damage/">Damage Caused by Classification Accuracy and Other Discontinuous Improper Accuracy Scoring Rules - Professor Frank Harrell</a></li>
+<li><a href="https://www.fharrell.com/post/split-val/">On a reliable cross validation split 1</a></li>
+<li><a href="https://stats.stackexchange.com/questions/545990/after-model-selection-can-i-perform-prediction-on-the-test-set-using-all-my-mod/546017#546017">On a reliable cross validation split 2</a></li>
+<li><a href="https://ai.stackexchange.com/questions/50/how-can-the-generalization-error-be-estimated">Estimate Generalization Error</a></li>
+<li><a href="https://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/">Using Boxplot to compare Model's Performance</a></li>
+<li><a href="https://scikit-learn.org/stable/common_pitfalls.html">Common Pitfalls - Scikit-Learn</a></li>
+<li><a href="https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html">Common pitfalls in the interpretation of coefficients of linear models - Scikit-Learn</a></li>
+<li><a href="https://machinelearningmastery.com/calibrated-classification-model-in-scikit-learn/">Calibrated Classification - Jason Brownlee</a></li>
+<li><a href="https://scikit-learn.org/stable/modules/calibration.html">scikit learn calibration</a></li>
+<li><a href="https://towardsdatascience.com/calibrating-classifiers-559abc30711a">Are you sure your models return probabilities?</a></li>
+<li><a href="https://blog.cambridgespark.com/probability-calibration-c7252ac123f">cambridge's probability calibration</a></li>
+<li><a href="https://stats.stackexchange.com/questions/270508/meaning-of-model-calibration">calibration in ML Terms</a></li>
+<li><a href="https://neptune.ai/blog/brier-score-and-model-calibration">Brier Score and Model Calibration - Neptune AI</a></li>
+<li><a href="https://www.unofficialgoogledatascience.com/2021/04/why-model-calibration-matters-and-how.html">Google's take on calibrated models</a></li>
+<li><a href="https://statisticaloddsandends.wordpress.com/2020/10/07/what-is-calibration/">IMPORTANT: WHAT IS CALIBRATION</a></li>
+<li><a href="https://scikit-learn.org/stable/auto_examples/calibration/plot_calibration_curve.html">Hands on sklearn calibration</a></li>
+<li><a href="https://changhsinlee.com/python-calibration-plot/">Hands on sklearn calibration v2</a></li>
+<li><a href="https://stats.stackexchange.com/questions/339919/what-does-it-mean-that-auc-is-a-semi-proper-scoring-rule">Examples of scoring rules</a></li>
+<li><a href="https://stats.stackexchange.com/questions/390487/why-is-logistic-regression-well-calibrated-and-how-to-ruin-its-calibration">Logistic Regression is well calibrated</a></li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

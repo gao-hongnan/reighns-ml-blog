@@ -1,0 +1,2532 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/references/cnn_visual/">
+      
+      <link rel="icon" href="../../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>A journey into Convolutional Neural Network visualization - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a-journey-into-convolutional-neural-network-visualization" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A journey into Convolutional Neural Network visualization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#nosce-te-ipsum" class="md-nav__link">
+    Nosce te ipsum
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/references/cnn_visual/README.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="a-journey-into-convolutional-neural-network-visualization">A journey into Convolutional Neural Network visualization</h1>
+<p><em>Francesco Saverio Zuppichini</em></p>
+<p>There is one famous urban legend about computer vision. Around the 80s, the US military wanted to use neural networks to automatically detect camouflaged enemy tanks. They took a number of pictures of trees without tanks and then pictures with the same trees with tanks behind them.
+The results were impressive. So impressive that the army wanted to be sure the net had correctly generalized. They took new pictures of woods with and without tanks and they showed them again to the network. This time, the model performed terribly, it was not able to discriminate between pictures with tanks behind woods and just trees.It turned out that all the pictures without tanks were taken on a cloudy day while the ones with tanks on a sunny day! In reality, the network learns to recognize the weather, not the enemy tanks.</p>
+<p>The source code can be found <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-">here</a>.</p>
+<p>This article is also available as an interactive <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/blob/master/notebook.ipynb">jupyter notebook</a></p>
+<h2 id="nosce-te-ipsum">Nosce te ipsum</h2>
+<p>With this article, we are going to see different techniques to <em>understand</em> what it is going on inside a Convolutional Neural Network to avoid making the same US' army mistake.</p>
+<p>We are going to use <a href="https://pytorch.org/">Pytorch</a>. All the code can be found <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-">here</a>. Most of the visualizations were developed from scratch, however, some inspiration and parts were taken from <a href="https://github.com/utkuozbulak/pytorch-cnn-visualizations/tree/master/src">here</a>.</p>
+<p>We will first introduce each technique by briefly explain it and making some example and comparison between different classic computer vision models, <code>alexnet</code>, <code>vgg16</code> and <code>resnet</code>. Then we will try to better understand a model used in robotics to predict the local distance sensor using only the frontal camera's images.</p>
+<p>Our goal is not to explain in detail how each technique works since this is already done extremely well by each paper, but to use them to help the reader visualize different model with different inputs to better understand and highlight what and how different models react to a given input.</p>
+<p>Later on, we show a workflow in which we utilize some of the techniques you will learn in this journey to test the robustness of a model, this is extremely useful to understand and fix its limitations.</p>
+<p>The curious reader could further improve is understand by looking and the <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/tree/master/visualization/core">source code</a> for each visulization and by reading the references.</p>
+<h1 id="preambula">Preambula</h1>
+<p><strong>Disclaimer</strong> I am not a fan of jupyter. So apologize in advance if there are some warnings in the outputs and some figures are not well made</p>
+<p>Let's start our journey by selecting a network. Our first model will be the old school <code>alexnet</code>. It is already available in the <code>torchvision.models</code> package from Pytorch</p>
+<div class="highlight"><pre><span></span><code><span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">visualization.core.utils</span> <span class="kn">import</span> <span class="n">device</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">alexnet</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>AlexNet(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+    (1): ReLU(inplace)
+    (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (4): ReLU(inplace)
+    (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): ReLU(inplace)
+    (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): ReLU(inplace)
+    (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace)
+    (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (classifier): Sequential(
+    (0): Dropout(p=0.5)
+    (1): Linear(in_features=9216, out_features=4096, bias=True)
+    (2): ReLU(inplace)
+    (3): Dropout(p=0.5)
+    (4): Linear(in_features=4096, out_features=4096, bias=True)
+    (5): ReLU(inplace)
+    (6): Linear(in_features=4096, out_features=1000, bias=True)
+  )
+)
+</code></pre></div>
+<p>Now we need some inputs</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># %matplotlib notebook </span>
+</code></pre></div>
+<p>Now we need some inputs images. We are going to use three pictures, a cat, the beautiful Basilica di San Pietro and an image with a dog and a cat.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span> 
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span><span class="o">=</span> <span class="mi">16</span><span class="p">,</span><span class="mi">8</span>
+</code></pre></div>
+<p>We loaded a few packages. In <code>utils</code> there are several utility function to creates the plots.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">visualization.core.utils</span> <span class="kn">import</span> <span class="n">device</span> 
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">image_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;./images/*.*&#39;</span><span class="p">)</span>
+
+<span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">image_paths</span><span class="p">))</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">rows_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span><span class="s1">&#39;san pietro&#39;</span><span class="p">,</span><span class="s1">&#39;dog_cat&#39;</span><span class="p">],</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_9_0.png" /></p>
+<p>Since all of our models were trained on <a href="http://www.image-net.org/">imagenet</a>, a huge dataset with <code>1000</code> different classes, we need to parse and normalize them.</p>
+<p>In Pytorch, we have to manually send the data to a device. In this case the device if the fist <code>gpu</code> if you have one, otherwise <code>cpu</code> is selected. </p>
+<p>Be aware that jupyter have not a garbage collected so we will need to manually free the gpu memory.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="kn">import</span> <span class="n">ToTensor</span><span class="p">,</span> <span class="n">Resize</span><span class="p">,</span> <span class="n">Compose</span><span class="p">,</span> <span class="n">ToPILImage</span>
+<span class="kn">from</span> <span class="nn">visualization.core</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">visualization.core.utils</span> <span class="kn">import</span> <span class="n">image_net_preprocessing</span>
+
+<span class="n">inputs</span>  <span class="o">=</span> <span class="p">[</span><span class="n">Compose</span><span class="p">([</span><span class="n">Resize</span><span class="p">((</span><span class="mi">224</span><span class="p">,</span><span class="mi">224</span><span class="p">)),</span> <span class="n">ToTensor</span><span class="p">(),</span> <span class="n">image_net_preprocessing</span><span class="p">])(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>  <span class="c1"># add 1 dim for batch</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">]</span>
+</code></pre></div>
+<p>We also define an utility function to clean the gpu cache</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">free</span><span class="p">(</span><span class="n">modules</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">m</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+</code></pre></div>
+<p>As we said, <code>imagenet</code> is a huge dataset with <code>1000</code> classes, represented by an integer not very human interpretable. We can associate each class id to its label by loading the <code>imaganet2human.txt</code> and create a python dictionary.</p>
+<div class="highlight"><pre><span></span><code><span class="n">imagenet2human</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;imaganet2human.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="c1"># I forget how regex works :) </span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">imagenet2human</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">())]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">imagenet2human</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[(0, &#39;tench Tinca tinca&#39;), (1, &#39;goldfish Carassius auratus&#39;)]
+</code></pre></div>
+<h1 id="weights-visualization">Weights Visualization</h1>
+<p>The first straightforward visualization is to just plot the weights of a target Layer. Obviously, the deeper we go the smaller each image becomes while the channels number increases. We are going to show each channel as a grey array image. Unfortunately, each Pytorch module can be nested and nested, so to make our code as general as possible we first need to trace each sub-module that the input traverse and then store each layer in order. We first need to <code>trace</code> our model to get a list of all the layers so we can select a target layer without following the nested structure of a model. In<code>PyTorch</code> models can be infinitely nested. In other words, we are flattering the model's layers, this is implemented in the <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/blob/master/utils.py#"><code>module2traced</code></a> function.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_traced</span> <span class="o">=</span> <span class="n">module2traced</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">model_traced</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2)),
+ ReLU(inplace),
+ MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False),
+ Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2)),
+ ReLU(inplace),
+ MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False),
+ Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)),
+ ReLU(inplace),
+ Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)),
+ ReLU(inplace),
+ Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)),
+ ReLU(inplace),
+ MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False),
+ Dropout(p=0.5),
+ Linear(in_features=9216, out_features=4096, bias=True),
+ ReLU(inplace),
+ Dropout(p=0.5),
+ Linear(in_features=4096, out_features=4096, bias=True),
+ ReLU(inplace),
+ Linear(in_features=4096, out_features=1000, bias=True)]
+</code></pre></div>
+<p>Let's plot the first layer's weight. We also print the shape of the weight to give a correct idea to the reader of the dimensional reduction. </p>
+<div class="highlight"><pre><span></span><code><span class="n">vis</span> <span class="o">=</span> <span class="n">Weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">first_layer</span> <span class="o">=</span> <span class="n">model_traced</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span><span class="o">=</span> <span class="mi">16</span><span class="p">,</span><span class="mi">16</span>
+
+<span class="n">run_vis_plot</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">first_layer</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>torch.Size([1, 55, 55])
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_20_1.png" /></p>
+<p>Let's stop for a minute to explain what those images represent. We traced the input through the computational graph in order to find out all the layers of our models, in this case, <code>alexnet</code>. Then we instantiate the <code>Weights</code> class implemented in <code>visualization.core</code> and we call it by passing the current input, the <strong>cat</strong> image and a <strong>target layer</strong>. As outputs, we get all the current layer's weights as grey images. Then, we plot 16 of them. We can notice that they, in some way, makes sense; for example, some pixels are brighter in the edges of the images.</p>
+<p>Let's plot the first <code>MaxPool</code> layer to better see this effect, dimensional reduction and higher brightness pixels in some interesting areas. </p>
+<p>If you are wondering what the maxpolling operations is doing, check this awesome <a href="https://github.com/vdumoulin/conv_arithmetic">repo</a></p>
+<div class="highlight"><pre><span></span><code><span class="n">first_maxpool_layer</span> <span class="o">=</span> <span class="n">model_traced</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">run_vis_plot</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">first_maxpool_layer</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>torch.Size([1, 27, 27])
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_22_1.png" /></p>
+<p>Let's try with an other input, the San Pietro Basilica</p>
+<div class="highlight"><pre><span></span><code><span class="n">run_vis_plot</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">first_maxpool_layer</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>torch.Size([1, 27, 27])
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_24_1.png" /></p>
+<p>By looking at them, these images make somehow sense; they highlight the basilica layout but it is hard to understand what the model is actually doing. We got the idea that is computing something correctly but we could ask some questions, for example: is it looking at the cupola? Which are the most important features of the Basilica?</p>
+<p>Moreover, the deeper we go the harder it becomes to even recognize the input. </p>
+<div class="highlight"><pre><span></span><code><span class="n">deeper_layer</span> <span class="o">=</span> <span class="n">model_traced</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+<span class="n">run_vis_plot</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">deeper_layer</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>torch.Size([1, 13, 13])
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_26_1.png" /></p>
+<p>In this case, we have no idea of what is going on. It can be argued that weights visualization does not carry any useful information about the model, even if this is almost true, there is one nice reason of plotting the weights especially at the first layer.</p>
+<p>When a model is poorly trained or not trained at all, the first weights have lots of noise, since they are just randomly initialized, and they are a lot more similar to the inputs images than the trained ones. This feature can be useful to understand on the fly is a model is trained or not. However, except for this, weights visualization is not the way to go to understand what your black box is thinking. Below we plot the first layer's weight first for the untrainded version of <code>alexnet</code> and the for the trained one. </p>
+<div class="highlight"><pre><span></span><code><span class="n">alexnet_not_pretrained</span> <span class="o">=</span> <span class="n">alexnet</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">run_vis_plot</span><span class="p">(</span><span class="n">Weights</span><span class="p">(</span><span class="n">alexnet_not_pretrained</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span> 
+             <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+             <span class="n">module2traced</span><span class="p">(</span><span class="n">alexnet_not_pretrained</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span>
+             <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">alexnet_pretrained</span> <span class="o">=</span> <span class="n">alexnet</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">run_vis_plot</span><span class="p">(</span><span class="n">Weights</span><span class="p">(</span><span class="n">alexnet_pretrained</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span> 
+             <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+             <span class="n">module2traced</span><span class="p">(</span><span class="n">alexnet_pretrained</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span>
+             <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="k">del</span> <span class="n">alexnet_not_pretrained</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>torch.Size([1, 55, 55])
+torch.Size([1, 55, 55])
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_28_1.png" /></p>
+<p><img alt="png" src="resources/images/output_28_2.png" /></p>
+<p>You can notice that in the first image is simpler to see the input image. Hoewer, this is not a general rule, but in some cases it can help.</p>
+<h2 id="similarities-with-other-models">Similarities with other models</h2>
+<p>We have seen <code>alexnet</code>'s weights, but are they similar across models? Below we plot the first 4 channel of each first layer's weight for <code>alexnet</code>, <code>vgg</code> and <code>resnet</code> </p>
+<div class="highlight"><pre><span></span><code><span class="n">modules_instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">alexnet</span><span class="p">,</span> <span class="n">vgg16</span><span class="p">,</span> <span class="n">resnet34</span><span class="p">]</span>
+
+<span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules_instances</span><span class="p">)</span> <span class="c1"># make a generator, we don&#39;t want to store in memory all of them at once</span>
+
+<span class="n">run_vis_plot_across_models</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Weights</span> <span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">free</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_31_0.png" /></p>
+<p>The <code>resnet</code> and <code>vgg</code> weights looks more similar to the input images than <code>alexnet</code>. But, again, what does it mean? Remember that at least resnet is initialized in a different way than the other two models.</p>
+<h1 id="saliency-visualization">Saliency visualization</h1>
+<p>One idea proposed by <a href="https://arxiv.org/abs/1312.6034"><em>Deep Inside Convolutional Networks: Visualising Image Classification Models and Saliency Maps</em></a> is to back-prop the output of the network with respect to a target class until the input and plot the computed gradient. This will highligh the part of the image responsible for that class. Let's start with alexnet.</p>
+<p>Let's first print the prediction of the network (this could change if you re-run the cell)</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">_</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;predicted class </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">imagenet2human</span><span class="p">[</span><span class="nb">id</span><span class="o">.</span><span class="n">item</span><span class="p">()]))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>predicted class tiger cat
+</code></pre></div>
+<p>Each visualization is implemented in its own class. You can find the code <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/blob/master/visualization/core/SaliencyMap.py">here</a>. It will backproprop the output with respect to the one hot encoding representation of the number corresponding to <code>class tiger cat</code></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">visualization.core.utils</span> <span class="kn">import</span> <span class="n">image_net_postprocessing</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">vis</span> <span class="o">=</span> <span class="n">SaliencyMap</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+<span class="n">out</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">vis</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+          <span class="n">first_layer</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">([</span><span class="n">image_net_postprocessing</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()),</span> <span class="n">out</span><span class="p">],</span> 
+        <span class="n">rows_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">,</span> <span class="s1">&#39;saliency map&#39;</span><span class="p">],</span>
+        <span class="n">parse</span><span class="o">=</span><span class="n">tensor2img</span><span class="p">,</span> 
+        <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_37_0.png" /></p>
+<p>We can see that <code>alexnet</code> gets exited on the cat. We can even do better! We can set to <code>0</code> each <strong>negative</strong> relu gradient when backprop. This is techinique is called <code>guided</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">out</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">vis</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+          <span class="n">first_layer</span><span class="p">,</span>
+          <span class="n">guide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">([</span><span class="n">image_net_postprocessing</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()),</span> <span class="n">out</span><span class="p">],</span> 
+        <span class="n">rows_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;original&#39;</span><span class="p">,</span> <span class="s1">&#39;guided saliency map&#39;</span><span class="p">],</span>
+        <span class="n">parse</span><span class="o">=</span><span class="n">tensor2img</span><span class="p">,</span> 
+        <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_39_0.png" /></p>
+<p>Now we can clearly see that the network is looking at the eyes and the nose of the cat. We can try to compare different models</p>
+<div class="highlight"><pre><span></span><code><span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules_instances</span><span class="p">)</span> <span class="c1"># make a generator, we don&#39;t want to store in memory all of them at once</span>
+
+<span class="n">run_vis_plot_across_models</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SaliencyMap</span> <span class="p">,</span> <span class="s1">&#39;Saliency&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">target_class</span><span class="o">=</span><span class="mi">231</span><span class="p">,</span> <span class="n">guide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">free</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_41_0.png" /></p>
+<p><code>Alextnet</code> seems more interested to the eyes, while <code>VGG</code> looks at the ears and resnet is similar to <code>alexnet</code>. Now we can clearly understand which part of the inputs help the network gives that prediction.</p>
+<p>While guiding yields a better human interpretable image, the vanilla implementation can be used for localizing an object of interest. In other words, we can find object of interest for free by cropping out of the input image the region corresponding to the gradient. Let's plot each input image for each model.</p>
+<div class="highlight"><pre><span></span><code><span class="n">modules_instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">alexnet</span><span class="p">,</span> <span class="n">vgg16</span><span class="p">,</span> <span class="n">resnet34</span><span class="p">,</span> <span class="n">resnet152</span><span class="p">]</span>
+
+<span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules_instances</span><span class="p">)</span> <span class="c1"># make a generator, we don&#39;t want to store in memory all of them at once</span>
+
+
+<span class="n">run_vis_plot_across_models</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="n">SaliencyMap</span> <span class="p">,</span> <span class="s1">&#39;SaliencyMap&#39;</span><span class="p">,</span>  <span class="n">device</span><span class="p">,</span>
+                           <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                           <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                           <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+                           <span class="n">idx2label</span><span class="o">=</span><span class="n">imagenet2human</span><span class="p">,</span>
+                           <span class="n">annotations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;alexnet&#39;</span><span class="p">,</span> <span class="s1">&#39;vgg16&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet34&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet152&#39;</span><span class="p">],</span>
+                           <span class="n">guide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">free</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_43_0.png" /></p>
+<p>The Basilica is very interesting, all four networks correctly classify it as a <code>dome</code> but only <code>resnet152</code> is more interested in the sky than on the cupola. In the last column, we have an image with two classes, <code>dog</code> and <code>cat</code>. All the networks highlighted booths, like the eyes of the dog and the ears of the cat in <code>vgg16</code>. What if we would like to discover only the region of the inputs that are related to a specific class? With this technique is impossible.</p>
+<h1 id="class-activation-mapping">Class Activation Mapping</h1>
+<p><em>Class Activation Mapping</em> is a techniques presented in <a href="https://arxiv.org/pdf/1512.04150.pdf">Learning Deep Features for Discriminative Localization</a>. The idea is to use the last convolutional layer output and the neurons in the linear layer of the model responsable for a target class, the map is generated by taking the dot product of those. However, to make this work the model has to have some constrains. First of all, the output from the convolution must first go trought an <strong>global average polling</strong> and it requires feature maps to directly precede softmax layers. To make it works with other architecture, such as <code>alexnet</code> and <code>vgg</code> we have to change some layers in the model and retrain it. This is a major drawback that will be solved with the next section. For now, we can use it for free with resnet! Since its architecture is perfect.</p>
+<p><img alt="alt" src="resources/images/class_activation_mapping1.png" /></p>
+<p>The implementation can be found <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/blob/master/visualization/core/ClassActivationMapping.py">here</a>. We can pass to the visualization a <code>target_class</code> parameter to get the relative weights from the fc layer.</p>
+<p>Notice that by changing the target class, we can see different part of the image highlighted. The first image uses the prediction class, while the second an other type of <code>cat</code> and the last one  <code>bookcase</code>, just to see what the model will do with a wrong class. </p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">visualization.core.utils</span> <span class="kn">import</span> <span class="n">imshow</span>
+<span class="c1"># we are using resnet 34 since the model has only one fc layer before the softmax and it is preceded by av avg pool</span>
+<span class="c1"># as required from the paper</span>
+<span class="n">module</span> <span class="o">=</span> <span class="n">resnet34</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">module</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="n">vis</span> <span class="o">=</span> <span class="n">ClassActivationMapping</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">285</span><span class="p">,</span> <span class="mi">453</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">vis_outs2images_classes</span><span class="p">(</span><span class="n">outs</span><span class="p">):</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">outs</span><span class="p">]</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">imagenet2human</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;prediction&#39;</span><span class="p">])]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">outs</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">images</span><span class="p">,</span> <span class="n">classes</span>
+
+<span class="n">outs</span> <span class="o">=</span> <span class="p">[</span><span class="n">vis</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> 
+          <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">,</span> 
+          <span class="n">target_class</span><span class="o">=</span><span class="n">c</span><span class="p">,</span>
+          <span class="n">guide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">]</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="n">vis_outs2images_classes</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> 
+        <span class="n">rows_titles</span><span class="o">=</span><span class="n">classes</span><span class="p">,</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+        <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+        <span class="n">parse</span><span class="o">=</span><span class="n">tensor2img</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_47_0.png" /></p>
+<p>It makes sense, the only thing is that in the last row we still have some part of the cat highlighted for <code>bookcase</code></p>
+<p>Let's plot the CAM on the <code>cat</code> images for different <code>resnet</code> architecture. For resnet &gt; 34 the <code>Bottleneck</code> module is used</p>
+<div class="highlight"><pre><span></span><code><span class="n">modules_instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">resnet18</span><span class="p">,</span> <span class="n">resnet34</span><span class="p">,</span> <span class="n">resnet101</span><span class="p">,</span> <span class="n">resnet152</span><span class="p">]</span>
+
+<span class="n">cat</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules_instances</span><span class="p">)</span> <span class="c1"># make a generator, we don&#39;t want to store in memory all of them at once</span>
+
+<span class="n">run_vis_plot_across_models</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> 
+                           <span class="n">ClassActivationMapping</span> <span class="p">,</span> 
+                           <span class="s1">&#39;ClassActivationMapping&#39;</span><span class="p">,</span>
+                           <span class="n">device</span><span class="p">,</span>
+                           <span class="n">nrows</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">modules_instances</span><span class="p">),</span>
+                           <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">,</span> 
+                           <span class="n">rows_name</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet34&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet101&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet152&#39;</span><span class="p">],</span>
+                           <span class="n">target_class</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">free</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_50_1.png" /></p>
+<p>They are all very similar as expected. One big drawback of this technique is that force you to use a network with a specific architecture, global polling before the decoder part. The next technique generalize this approach by taking advantage of the gradient at one specific layer. Remember that with the <em>class activation</em> we are using the weights of the feature map as a scaling factor for the channels of the last layer. The features map must be before a softmax layer and right after the average pooling. The next technique propose a more general approach.</p>
+<h1 id="grad-cam">Grad Cam</h1>
+<p><strong>Grad Cam</strong> was introduced by <a href="https://arxiv.org/abs/1610.02391">Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization</a>. The idea is actually simple, we backprop the output with respect to a target class while storing the gradient and the output at a given layer, in our case the last convolution. Then we perform a global average of the saved gradient keeping the channel dimension in order to get a 1-d tensor, this will represent the importance of each channel in the target convolutional layer. We then multiply each element of the convolutional layer outputs by the averaged gradients to create the grad cam. This whole procedure is fast and it is architecture independent. Interesting, the authors show that is a generalization of the previous technique.</p>
+<p><img alt="alt" src="resources/images/grad_cam1.png" /></p>
+<p>The code is <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/blob/master/visualization/core/GradCam.py">here</a></p>
+<p>We can use it to higlight what different models are looking at.</p>
+<div class="highlight"><pre><span></span><code><span class="n">modules_instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">alexnet</span><span class="p">,</span> <span class="n">vgg16</span><span class="p">,</span> <span class="n">resnet34</span><span class="p">,</span> <span class="n">resnet152</span><span class="p">]</span>
+
+<span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules_instances</span><span class="p">)</span> <span class="c1"># make a generator, we don&#39;t want to store in memory all of them at once</span>
+
+<span class="n">run_vis_plot_across_models</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="n">GradCam</span> <span class="p">,</span> <span class="s1">&#39;Gradcam&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span>
+                           <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                           <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                           <span class="n">target_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                           <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">)</span>
+<span class="n">free</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_55_0.png" /></p>
+<p>It is really interesting to see how <code>alexnet</code> looks at the nose, while <code>vgg</code> at the ears and <code>resnet</code> at the whole cat. It is interesting to see that the two <code>resnet</code> version looks at different part of the cat.</p>
+<p>Below we plot the same input for <code>resnet34</code> but we change the target class in each column to show the reader how the grad cam change accordingly.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">visualization.core.utils</span> <span class="kn">import</span> <span class="n">imshow</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">vis</span> <span class="o">=</span> <span class="n">GradCam</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">285</span><span class="p">,</span> <span class="mi">453</span><span class="p">]</span>
+<span class="n">outs</span> <span class="o">=</span> <span class="p">[</span><span class="n">vis</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> 
+          <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">,</span> 
+          <span class="n">target_class</span><span class="o">=</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">]</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="n">vis_outs2images_classes</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="n">images</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;resnet34&#39;</span><span class="p">,</span>
+        <span class="n">rows_titles</span><span class="o">=</span><span class="n">classes</span><span class="p">,</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+        <span class="n">ncols</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">outs</span><span class="p">),</span> 
+        <span class="n">parse</span><span class="o">=</span><span class="n">tensor2img</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_57_0.png" /></p>
+<p>Notice how similar to the <code>CAM</code> output they are. To better compore our three models, below we plot the grad cam for each input with respect to each model</p>
+<div class="highlight"><pre><span></span><code><span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modules_instances</span><span class="p">)</span> <span class="c1"># make a generator, we don&#39;t want to store in memory all of them at once</span>
+
+<span class="n">run_vis_plot_across_models</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="n">GradCam</span> <span class="p">,</span> <span class="s1">&#39;Gradcam&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span>
+                           <span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+                           <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+                           <span class="n">target_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                           <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
+                           <span class="n">idx2label</span><span class="o">=</span><span class="n">imagenet2human</span><span class="p">,</span>
+                           <span class="n">annotations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;alexnet&#39;</span><span class="p">,</span> <span class="s1">&#39;vgg16&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet34&#39;</span><span class="p">,</span> <span class="s1">&#39;resnet152&#39;</span><span class="p">],</span>
+                           <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">)</span>
+
+<span class="n">free</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_59_1.png" /></p>
+<p>The reader can immediately notice the difference across the models.</p>
+<h3 id="interesting-region">Interesting region</h3>
+<p>We talk before about interesting region localizations. Grad-cam can be also used to extract the class object out of the image. Easily, once the have the grad-cam image we can used it as mask to crop out form the input image what we want. The reader can play with the <code>TR</code> parameter to see different effects.</p>
+<div class="highlight"><pre><span></span><code><span class="n">TR</span> <span class="o">=</span>  <span class="mf">0.3</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">alexnet_pretrained</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span> 
+
+<span class="n">vis</span> <span class="o">=</span> <span class="n">GradCam</span><span class="p">(</span><span class="n">alexnet_pretrained</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">vis</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> 
+          <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="k">def</span> <span class="nf">gradcam2crop</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">original_img</span><span class="p">):</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">cam</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">cam</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">cam</span><span class="p">)</span>
+    <span class="n">cam</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cam</span><span class="p">)</span> 
+
+    <span class="n">cam</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">))</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">cam</span> <span class="o">&gt;</span> <span class="n">TR</span>
+
+    <span class="n">original_img</span> <span class="o">=</span> <span class="n">tensor2img</span><span class="p">(</span><span class="n">image_net_postprocessing</span><span class="p">(</span><span class="n">original_img</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()))</span>
+
+    <span class="n">crop</span> <span class="o">=</span> <span class="n">original_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">crop</span><span class="p">[</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">crop</span>
+
+<span class="n">crop</span> <span class="o">=</span> <span class="n">gradcam2crop</span><span class="p">(</span><span class="n">vis</span><span class="o">.</span><span class="n">cam</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">crop</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&lt;matplotlib.image.AxesImage at 0x7f79debee048&gt;
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_64_1.png" /></p>
+<p><em>et voilà</em>! We can also change again class, and crop the interest region for that class.</p>
+<div class="highlight"><pre><span></span><code><span class="n">_</span> <span class="o">=</span> <span class="n">vis</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> 
+        <span class="n">target_class</span><span class="o">=</span><span class="mi">231</span><span class="p">,</span>
+          <span class="n">postprocessing</span><span class="o">=</span><span class="n">image_net_postprocessing</span><span class="p">)</span>
+
+<span class="n">crop</span> <span class="o">=</span> <span class="n">gradcam2crop</span><span class="p">(</span><span class="n">vis</span><span class="o">.</span><span class="n">cam</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">crop</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&lt;matplotlib.image.AxesImage at 0x7f79f40c4c18&gt;
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_66_1.png" /></p>
+<h2 id="different-models">Different models</h2>
+<p>We have seen all these techniques used with classic classicification models trained on <code>imagenet</code>. What about use them on a different domain? I have ported this paper to Pytorch and retrain it. The model learn from the frontal camera's image of a robot to predict the local distance sensors in order to avoid obstacles. Let's see what if, by using those techniques, we can understand better what is going on inside the model.</p>
+<h3 id="learning-long-range-perception-using-self-supervision-from-short-range-sensors-and-odometry">Learning Long-range Perception using Self-Supervision from Short-Range Sensors and Odometry</h3>
+<p>The idea is to predict the future outputs of a short-range sensor (such as a proximity sensor) given the current outputs of a long-range sensor (such as a camera). They trained a very simple CNN from the robot's camera images to predict the proximity sensor values. If you are interested in their work, you can read the full paper <a href="https://arxiv.org/abs/1809.07207">here</a></p>
+<p><img alt="alt" src="https://raw.githubusercontent.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/master/resources/images/long_range_perception.png" /></p>
+<p>I have made a PyTorch implementation and retrain the model from scratch. Be awere that I did not fine-tune or try different sets of hyper-parameters so probably my model is not performing as well as the author's one.</p>
+<p>Let's import it</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+
+<span class="n">LONG_RANGE_PERCEPTION_PATH</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./models/long_range_perception/model.pt&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">models.long_range_perception.model</span> <span class="kn">import</span> <span class="n">SimpleCNN</span>
+<span class="kn">from</span> <span class="nn">models.long_range_perception.utils</span> <span class="kn">import</span> <span class="n">get_dl</span><span class="p">,</span> <span class="n">H5_PATH</span><span class="p">,</span> <span class="n">imshow</span><span class="p">,</span> <span class="n">post_processing</span><span class="p">,</span> <span class="n">pre_processing</span><span class="p">,</span> <span class="n">MODEL_PATH</span>
+
+<span class="n">free</span><span class="p">([</span><span class="n">module</span><span class="p">])</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">LONG_RANGE_PERCEPTION_PATH</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="k">lambda</span> <span class="n">storage</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="n">storage</span><span class="p">)</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">module</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>/home/francesco/Documents/A-journey-into-Convolutional-Neural-Network-visualization-/model.pt
+
+
+
+
+
+SimpleCNN(
+  (encoder): Sequential(
+    (0): Conv2d(3, 10, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(10, 10, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): ReLU()
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Conv2d(10, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): ReLU()
+    (8): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (decoder): Sequential(
+    (0): Dropout(p=0.2)
+    (1): Linear(in_features=640, out_features=256, bias=True)
+    (2): ReLU()
+    (3): Linear(in_features=256, out_features=325, bias=True)
+    (4): Sigmoid()
+  )
+)
+</code></pre></div>
+<p>We know need some inputs to test the model, they are taken directly from the <strong>test set</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span> 
+
+<span class="k">def</span> <span class="nf">make_and_show_inputs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+    <span class="n">image_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">image_paths</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">image_paths</span><span class="p">)</span>
+
+    <span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">),</span> <span class="n">image_paths</span><span class="p">))</span>
+
+    <span class="n">subplot</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">rows_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">],</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="n">inputs</span>  <span class="o">=</span> <span class="p">[</span><span class="n">pre_processing</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>  <span class="c1"># add 1 dim for batch</span>
+
+    <span class="n">subplot</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">parse</span><span class="o">=</span><span class="n">tensor2img</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">rows_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">],</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">images</span><span class="p">,</span> <span class="n">inputs</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">inputs</span> <span class="o">=</span> <span class="n">make_and_show_inputs</span><span class="p">(</span><span class="s1">&#39;images/long_range_perception/*&#39;</span><span class="p">,</span> <span class="n">pre_processing</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_73_0.png" /></p>
+<div class="highlight"><pre><span></span><code>Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_73_2.png" /></p>
+<p>Then author normalize each image, this is done by callind <code>pre_processing</code>. For some reason the inpupts images are different on mac and ubuntu, they should not be like these if you run the notebook on mac the result is different. This is probably due to the warning message.</p>
+<p>We are going to use the <code>SaliencyMap</code> and the <code>GradCam</code> since those are the best</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">Variable</span>
+
+<span class="n">module</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">run_long_range_vis</span><span class="p">():</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">GradCam</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+    <span class="n">all_true</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">65</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">outs_grad</span> <span class="o">=</span> <span class="p">[</span><span class="n">grad</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">target_class</span><span class="o">=</span><span class="n">all_true</span><span class="p">,</span> 
+                      <span class="n">postprocessing</span><span class="o">=</span><span class="n">post_processing</span><span class="p">,</span> 
+                      <span class="n">regression</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">]</span>
+
+    <span class="n">sal</span> <span class="o">=</span> <span class="n">SaliencyMap</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+    <span class="n">outs_saliency</span> <span class="o">=</span> <span class="p">[</span><span class="n">sal</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">guide</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">target_class</span><span class="o">=</span><span class="n">all_true</span><span class="p">,</span>
+                        <span class="n">regression</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">]</span>
+
+    <span class="n">subplot</span><span class="p">([</span><span class="o">*</span><span class="n">outs_grad</span><span class="p">,</span> <span class="o">*</span><span class="n">outs_saliency</span><span class="p">],</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;long_range&#39;</span><span class="p">,</span>
+            <span class="n">cols_titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">],</span>
+            <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+            <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
+            <span class="n">parse</span><span class="o">=</span><span class="n">tensor2img</span><span class="p">)</span>
+
+<span class="n">run_long_range_vis</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_76_0.png" /></p>
+<p>We can clearly see that the model looks at the objects. In the <code>GradCam</code> row, on the second picture, the plan is basically segmented by the heatmap. There is one problem, if you look at the third picture, the white box in front of the camera is not clearly highlighted. This is probably due to the white color of the floor that is very similar to the box's color. Let's investigate this problem. </p>
+<p>In the second row, the <code>SaliencyMaps</code> highlights all the objects, including the white box. The reader can notice that the reflection in the first picture on the left seems to excite the network in that region. We should also investigate this case but due to time limitations, we will leave it as an exercise for the curious reader.</p>
+<p>For completeness, let's also print the predicted sensor output. The model tries to predict five frontal distance sensors give the image camera.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span> 
+
+<span class="n">module</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f79d26dc240&gt;
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_78_1.png" /></p>
+<p>If you compare with the authors pictures, my prediction are worse. This is due to the fact that to speed up everything I did not used all the training set and I did not perform any hyper paramater optimisation. All the code con be found <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/tree/master/models/long_range_perception">here</a>. Let's now investigate the first problem, object with a similar color to the ground.</p>
+<h4 id="similar-colors">Similar colors</h4>
+<p>To test if the model has a problem with obstacles with a the same color of the ground, we created in blender four different scenarios with an obstacle. They are showed in the picture below.</p>
+<div class="highlight"><pre><span></span><code><span class="n">image_paths</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;images/long_range_perception/equal_color/*&#39;</span><span class="p">)),</span> 
+                          <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;images/long_range_perception/different_color/*&#39;</span><span class="p">))]</span>
+
+<span class="n">image_paths</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">image_paths</span><span class="p">)</span>
+
+<span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">),</span> <span class="n">image_paths</span><span class="p">))</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_81_0.png" /></p>
+<p>There are four different lights configuration and two differents cube colors, one equal to the ground and the second different. The first column represents a realistic situation, while the second has a really strong light from behind that generates a shadow in front of the camera. The third column has a shadow on the left and the last one has a little shadow on the left. </p>
+<p>This is a perfect scenario to use gradcam to see what the model is looking in each image. In the picture below we plotted the gradcam results.</p>
+<div class="highlight"><pre><span></span><code><span class="n">inputs</span>  <span class="o">=</span> <span class="p">[</span><span class="n">pre_processing</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>  <span class="c1"># add 1 dim for batch</span>
+
+
+<span class="n">run_long_range_vis</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="resources/images/output_83_0.png" /></p>
+<p>The big black shadow in the second column definitly confuses the model. In the first and last column, the grad cam highlights better the corners of the red cube, especially in the first picture. We can definitely say that this model has some hard time with the object of the same colour as the ground. Thanks to this consideration, we could improve the number equal object/ground in the dataset, perform a better preprocessing, change the model structure etc and hopefully increase the robustness of the network.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this article, we present different convolutional neural network visualization techniques. In the first section, we introduced each one by applying to a set of famous classification networks. We compared different networks on different inputs and highlight the similarities and difference between them. Then we apply them to a model adopted in robotics to test its robustness and we were able to successfully reveal a problem in the network.</p>
+<p>Moreover, as a side project, I developed an interactive convolutional neural network visualization application called <a href="https://github.com/FrancescoSaverioZuppichini/mirror">mirro</a> that receives in just a few days more than a hundred stars on GitHub reflecting the interest of the deep learning community on this topic.</p>
+<p>All these visualizations are implemented using a common interface and there are available as <a href="https://github.com/FrancescoSaverioZuppichini/A-journey-into-Convolutional-Neural-Network-visualization-/tree/master/visualization">python module</a> so they can be used in any other module.</p>
+<p>Thank you for reading</p>
+<p>Francesco Saverio Zuppichini</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../../..", "features": ["content.code.annotate"], "search": "../../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

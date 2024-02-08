@@ -1,0 +1,3416 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/">
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Forward Ensemble (Hill Climbing) - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#convert-oofs-and-ground-truth-to-numpy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Forward Ensemble (Hill Climbing)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Forward Ensemble (Hill Climbing)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Forward Ensemble (Hill Climbing)
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#convert-oofs-and-ground-truth-to-numpy" class="md-nav__link">
+    Convert OOFs and Ground Truth to NumPy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-scores-of-oofs-and-find-the-best-score" class="md-nav__link">
+    Compute Scores of OOFs and Find the Best Score
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    The Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-round-blending-model-2-with-model-0" class="md-nav__link">
+    First Round - Blending Model 2 with Model 0
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-round-blending-model-2-and-model-1" class="md-nav__link">
+    First Round - Blending Model 2 and Model 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-round-save-results-for-loop-1" class="md-nav__link">
+    First Round - Save Results for Loop 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-round-blend-oof" class="md-nav__link">
+    Second Round - Blend OOF
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-round-blending-blended_oof_1-with-model-0" class="md-nav__link">
+    Second Round - Blending blended_oof_1 with Model 0
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensembling-model-predictions-with-the-found-optimal-weights" class="md-nav__link">
+    Ensembling Model Predictions with the Found Optimal Weights
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forward-ensemble-with-siim-isic-melanoma-classification" class="md-nav__link">
+    Forward Ensemble with SIIM-ISIC Melanoma Classification
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#convert-oofs-and-ground-truth-to-numpy" class="md-nav__link">
+    Convert OOFs and Ground Truth to NumPy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-scores-of-oofs-and-find-the-best-score" class="md-nav__link">
+    Compute Scores of OOFs and Find the Best Score
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    The Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#first-round-blending-model-2-with-model-0" class="md-nav__link">
+    First Round - Blending Model 2 with Model 0
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-round-blending-model-2-and-model-1" class="md-nav__link">
+    First Round - Blending Model 2 and Model 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-round-save-results-for-loop-1" class="md-nav__link">
+    First Round - Save Results for Loop 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-round-blend-oof" class="md-nav__link">
+    Second Round - Blend OOF
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#second-round-blending-blended_oof_1-with-model-0" class="md-nav__link">
+    Second Round - Blending blended_oof_1 with Model 0
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensembling-model-predictions-with-the-found-optimal-weights" class="md-nav__link">
+    Ensembling Model Predictions with the Found Optimal Weights
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forward-ensemble-with-siim-isic-melanoma-classification" class="md-nav__link">
+    Forward Ensemble with SIIM-ISIC Melanoma Classification
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/machine_learning_and_deep_learning/ensemble_theory/forward_ensemble.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Forward Ensemble (Hill Climbing)</h1>
+
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span>
+</code></pre></div>
+<h2 id="convert-oofs-and-ground-truth-to-numpy">Convert OOFs and Ground Truth to NumPy</h2>
+<p>First, we define a function <code>return_list_of_dataframes</code> to return either the OOFs or the SUBs. At this point, one should be clear what are OOFs, if not, please read the post <a href="https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/175614">here</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">return_list_of_dataframes</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_oof</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of dataframes from a directory of files.</span>
+
+<span class="sd">    The boolean is_oof is used to determine whether the list of dataframes contains oof or subs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): The path to the directory containing the files.</span>
+<span class="sd">        is_oof (bool, optional): Determine whether the list of dataframes contains oof or subs. Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[pd.DataFrame]: The list of dataframes for either oof or subs.</span>
+<span class="sd">        int: The number of files in the directory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">oof_and_subs_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">is_oof</span><span class="p">:</span>
+        <span class="n">oof_files_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">oof_and_subs_files</span> <span class="k">if</span> <span class="s2">&quot;oof&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">oof_files_sorted</span>
+        <span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_files_sorted</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sub_files_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">oof_and_subs_files</span> <span class="k">if</span> <span class="s2">&quot;sub&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">sub_files_sorted</span>
+        <span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_files_sorted</span><span class="p">)</span>
+</code></pre></div>
+<p>This function is first applied to <code>is_oof=True</code>. For now, we just want all our OOFs converted to a pandas dataframe, and stored in a list.</p>
+<p>Note, we also conveniently returned the number of files in the director for OOFs and SUBs respectively, it should be clear in this context that the number of files for OOF is the same as the number of files for SUB.</p>
+<div class="highlight"><pre><span></span><code><span class="n">oof_and_subs_path</span> <span class="o">=</span> <span class="s2">&quot;./oof_and_subs/toy_examples&quot;</span>
+<span class="n">oof_dfs_list</span><span class="p">,</span> <span class="n">num_oofs</span> <span class="o">=</span> <span class="n">return_list_of_dataframes</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">oof_and_subs_path</span><span class="p">,</span> <span class="n">is_oof</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">oof_dfs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">oof_dfs_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">oof_dfs_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;We have </span><span class="si">{</span><span class="n">num_oofs</span><span class="si">}</span><span class="s2"> oof files.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>image_id</th>
+      <th>y_trues</th>
+      <th>class_0_oof</th>
+      <th>class_1_oof</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0.70</td>
+      <td>0.30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0.70</td>
+      <td>0.30</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0.65</td>
+      <td>0.35</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>image_id</th>
+      <th>y_trues</th>
+      <th>class_0_oof</th>
+      <th>class_1_oof</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0.6</td>
+      <td>0.4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0.8</td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0.4</td>
+      <td>0.6</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>image_id</th>
+      <th>y_trues</th>
+      <th>class_0_oof</th>
+      <th>class_1_oof</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0.1</td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0.4</td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0.9</td>
+      <td>0.7</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="highlight"><pre><span></span><code>We have 3 oof files.
+</code></pre></div>
+<p>At this junction, we need to be clear of a few things. Let us use an example to illustrate.</p>
+<p>Let us say we trained our model over 5 folds and get our OOF predictions in terms of the <strong>Macro-AUROC</strong> with respect to the positive <strong>class 1</strong>. We then need to calculate our OOF scores with our corresponding y_trues.</p>
+<p>Just by eyeballing, we can deduce the <strong>Macro-AUROC</strong> score for the positive class as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="n">oof_1_auroc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="mf">0.25</span>
+<span class="n">oof_2_auroc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>  <span class="o">-&gt;</span> <span class="mf">0.5</span>
+<span class="n">oof_3_auroc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>  <span class="o">-&gt;</span> <span class="mf">0.75</span>
+</code></pre></div>
+<p>To compute the above, we can manually hardcode them, but for larger data, we will have to maintain a better data structure. We will store them into matrices and vectors (numpy) to compute the OOF scores efficiently.</p>
+<p>To do so, we define two variables:</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">ground_truth_column_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;y_trues&quot;</span><span class="p">]</span>
+<span class="n">positive_class_oof_column_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class_1_oof&quot;</span><span class="p">]</span>
+</code></pre></div>
+where the first variable is the name of the column(s) for the ground truth, while the second is the name of the column(s) that we will be using to compute the OOF scores.</p>
+<p>We will then create a function <code>stack_oofs</code> to convert the list of OOF dataframes into an array.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">stack_oofs</span><span class="p">(</span>
+    <span class="n">oof_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pred_column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stack all oof predictions horziontally.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        oof_dfs (List[pd.DataFrame]): The list of oof predictions in dataframes.</span>
+<span class="sd">        pred_column_names (List[str]): The list of prediction column names.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        all_oof_preds (np.ndarray): The stacked oof predictions of shape (num_samples, num_oofs * num_pred_columns).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; oof_1 = pd.DataFrame([1,2,3], columns=[&#39;class_1_oof&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; oof_2 = pd.DataFrame([4,5,6], columns=[&#39;class_1_oof&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; all_oof_preds = stack_oofs([oof_1, oof_2], [&#39;class_1_oof&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; all_oof_preds = np.array([1, 4], [2, 5], [3, 6])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_oofs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">num_target_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_column_names</span><span class="p">)</span>
+    <span class="n">all_oof_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">num_oofs</span> <span class="o">*</span> <span class="n">num_target_cols</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">num_target_cols</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">oof_df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">):</span>
+            <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">index</span> <span class="p">:</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">oof_df</span><span class="p">[</span>
+                <span class="n">pred_column_names</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">elif</span> <span class="n">num_target_cols</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Used in RANZCR where there are 11 target columns</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">oof_df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">):</span>
+            <span class="n">all_oof_preds</span><span class="p">[</span>
+                <span class="p">:,</span> <span class="n">index</span> <span class="o">*</span> <span class="n">num_target_cols</span> <span class="p">:</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_target_cols</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">oof_df</span><span class="p">[</span><span class="n">pred_column_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">return</span> <span class="n">all_oof_preds</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">ground_truth_column_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;y_trues&quot;</span><span class="p">]</span>
+<span class="n">positive_class_oof_column_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class_1_oof&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>In my oof files, I also saved the corresponding <code>y_trues</code> as a column, we thus take the first <code>oof_df</code> from <code>oof_dfs_list</code> and use it to get the <code>y_trues</code>, assuming they are the same for all oof files. Note of caution, if you use different resampling methods, you will need to change the <code>y_trues</code> accordingly.</p>
+<div class="highlight"><pre><span></span><code><span class="n">y_trues</span> <span class="o">=</span> <span class="n">oof_dfs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ground_truth_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">all_oof_preds</span> <span class="o">=</span> <span class="n">stack_oofs</span><span class="p">(</span><span class="n">oof_dfs_list</span><span class="p">,</span> <span class="n">positive_class_oof_column_name</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;y_trues shape: </span><span class="si">{</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">This variable is global and holds all ground truth.</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;all_oof_preds shape: </span><span class="si">{</span><span class="n">all_oof_preds</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">This variable is global and holds all oof predictions stacked horizontally.</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>y_trues shape: (3, 1)
+This variable is global and holds all ground truth.
+
+all_oof_preds shape: (3, 3)
+This variable is global and holds all oof predictions stacked horizontally.
+</code></pre></div>
+<p>After converting to numpy, we should have this following representation:</p>
+<div class="arithmatex">\[
+\textbf{y_true} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} \in \mathbb{R}^3 \quad \textbf{all_oof_preds} = \begin{bmatrix} 0.3 &amp; 0.4 &amp; 0.8 \\ 0.3 &amp; 0.2 &amp; 0.8 \\ 0.35 &amp; 0.6 &amp; 0.7 \end{bmatrix} \in \mathbb{R}^{3 \times 3}
+\]</div>
+<p>where <strong>y_true</strong> is a <span class="arithmatex">\(3 \times 1\)</span> column vector, each row entry is the corresponding ground truth for sample <span class="arithmatex">\(i\)</span> (i.e <code>y_true[0]</code> is ground truth for sample 1). </p>
+<p>For <strong>all_oof_preds</strong>, this is a <span class="arithmatex">\(3 \times 3\)</span> matrix, where each <strong>column</strong> <span class="arithmatex">\(i\)</span> represents the OOF predictions made by model <span class="arithmatex">\(i\)</span>. In other words, the first column <span class="arithmatex">\(\begin{bmatrix} 0.3 \\ 0.35 \\ 0.3 \end{bmatrix}\)</span> is the OOF predictions made by the first model. It is important to note that we are dealing with classification (binary or multiclass), so it is usually the case that both our target and predicted columns are just <span class="arithmatex">\(1\)</span>. In <strong>multi-label</strong> however, we will have multiple target columns, and will be the focus in part II.</p>
+<h2 id="compute-scores-of-oofs-and-find-the-best-score">Compute Scores of OOFs and Find the Best Score</h2>
+<p>This part is very crucial, when we apply our <strong>Hill Climbing (Forward Ensembling)</strong> technique here, we want to initialize with the best models first and <strong>iteratively blend with the rest</strong>.</p>
+<p>In other words</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_best_oof</span><span class="p">(</span>
+    <span class="n">all_oof_preds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_trues</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">num_oofs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">performance_metric</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the oof score of all models using a performance metric and return the best model index and score.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        all_oof_preds (np.ndarray): The stacked oof predictions of shape (num_samples, num_oofs * num_pred_columns). Taken from stack_oofs.</span>
+<span class="sd">        y_trues (np.ndarray): The true labels of shape (num_samples, num_target_cols).</span>
+<span class="sd">        num_oofs (int): The number of oof predictions.</span>
+<span class="sd">        performance_metric (Callable): The performance metric to use, this is a function.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        best_oof_metric_score (float): The best oof score.</span>
+<span class="sd">        best_model_index (int): The index of the best model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_oof_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_oofs</span><span class="p">):</span>
+        <span class="n">oof_k</span> <span class="o">=</span> <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">metric_score</span> <span class="o">=</span> <span class="n">performance_metric</span><span class="p">(</span>
+            <span class="n">y_trues</span><span class="p">,</span>
+            <span class="n">oof_k</span><span class="p">,</span>
+            <span class="n">num_target_cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">multilabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">all_oof_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric_score</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> has OOF AUC = </span><span class="si">{</span><span class="n">metric_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="n">best_oof_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_oof_scores</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span>
+        <span class="n">all_oof_scores</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="n">best_oof_index</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">macro_multilabel_auc</span><span class="p">(</span>
+    <span class="n">label</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">num_target_cols</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">multilabel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Also works for binary AUC like Melanoma&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multilabel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">aucs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_target_cols</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">label</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+        <span class="n">aucs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">aucs</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="n">best_oof_index</span> <span class="o">=</span> <span class="n">compute_best_oof</span><span class="p">(</span>
+    <span class="n">all_oof_preds</span><span class="o">=</span><span class="n">all_oof_preds</span><span class="p">,</span>
+    <span class="n">y_trues</span><span class="o">=</span><span class="n">y_trues</span><span class="p">,</span>
+    <span class="n">num_oofs</span><span class="o">=</span><span class="n">num_oofs</span><span class="p">,</span>
+    <span class="n">performance_metric</span><span class="o">=</span><span class="n">macro_multilabel_auc</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Computing Best OOF scores among all models ###</span><span class="se">\n</span><span class="s2">The best OOF AUC score is </span><span class="si">{</span><span class="n">best_oof_metric_score</span><span class="si">}</span><span class="s2"> and the best model index is </span><span class="si">{</span><span class="n">best_oof_index</span><span class="si">}</span><span class="s2"> corresponding to the oof file </span><span class="si">{</span><span class="n">best_oof_index</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Model 0 has OOF AUC = 0.25
+Model 1 has OOF AUC = 0.5
+Model 2 has OOF AUC = 0.75
+
+### Computing Best OOF scores among all models ###
+The best OOF AUC score is 0.75 and the best model index is 2 corresponding to the oof file 2
+</code></pre></div>
+<h2 id="the-algorithm">The Algorithm</h2>
+<p>Now the logic flows as follows:</p>
+<ul>
+<li>Start with the model with the best OOF score: we get that from <code>compute_best_oof</code> which yields us the key variables <code>best_oof_index</code>. <ul>
+<li><code>best_oof_index</code>: 2 indicates that our oof_2 (model 2) has the best OOF score amongst the 3 OOFs (models), as we can see from above, it is indeed the case since Model 2 has OOF AUC of <span class="arithmatex">\(0.75\)</span>.</li>
+</ul>
+</li>
+<li>We now need to blend <strong>Model 2</strong> with <strong>Model 0</strong> and <strong>Model 1</strong> respectively to find out which weight combination gives a better OOF score.<ul>
+<li>We need to define a variable <code>weight_interval</code>, which tells us the weights to sample from. For example, if <code>weight_interval</code> is <span class="arithmatex">\(3\)</span>, then we will uniformly sample the weights <span class="arithmatex">\(\frac{0}{3}, \frac{1}{3}, \frac{2}{3}\)</span>. Let us see a concrete example.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">weight_interval</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">patience_counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">model_0_oof</span> <span class="o">=</span> <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">model_1_oof</span> <span class="o">=</span> <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">model_2_oof</span> <span class="o">=</span> <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">best_oof_index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="c1"># best_oof_index=2</span>
+</code></pre></div>
+<p>We define</p>
+<div class="highlight"><pre><span></span><code><span class="n">best_oof_index_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">best_oof_index</span><span class="p">]</span>
+<span class="n">best_weights_list</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div>
+<p>which keeps track two lists which holds the best OOFs to blend with and their corresponding weights.</p>
+<p>We use a naive example to illustrate:</p>
+<div class="highlight"><pre><span></span><code><span class="n">best_oof_index_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">best_weights_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]</span>
+<span class="n">all_oof_preds_matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]]</span>
+<span class="n">initial_best_vector</span> <span class="o">=</span> <span class="n">A_matrix</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+</code></pre></div>
+<p>In other words, if after our Hill Climbing algorithm, we have the above variables and to calculate the <strong>final blended OOF</strong> using the above optimal weights, we have:</p>
+<p>Let <span class="arithmatex">\(\mathbf{c_i}\)</span> be the columns of the matrix <strong>all_oof_preds_matrix</strong>, you can think <span class="arithmatex">\(\mathbf{c_i}\)</span> as the Model <span class="arithmatex">\(i\)</span>'s OOFs predictions, since in this naive example, we see that our initial best model is Model 2.</p>
+<div class="arithmatex">\[
+((1-0.3) \times \mathbf{c_2} + 0.3 \times \mathbf{c_0}) \times (1-0.8) + 0.8 \times \mathbf{c_1}
+\]</div>
+<ol>
+<li>To dissect clearly, we start with the first index, which is Model 2, and blend with the next index, which is Model 0, they will be blended with weights of <span class="arithmatex">\(0.3\)</span>, which means <span class="arithmatex">\((1-0.3) \times \mathbf{c_2} + 0.3 \times \mathbf{c_0}\)</span>. We call it <strong>oof_blend_1</strong> which indicates the linear combination of the weights of the first blend. Note that this results in a new and better "OOF predictions".</li>
+<li>The next blend will be of <strong>oof_blend_1</strong> with Model 1, with a weight of <span class="arithmatex">\(0.8\)</span> and the assignment is <span class="arithmatex">\((1-0.8) \times \textbf{oof_blend_1} + 0.8 \times \mathbf{c_0}\)</span>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">best_oof_index_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">best_oof_index</span><span class="p">]</span>
+<span class="n">best_weights_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Tracked Model List: </span><span class="si">{</span><span class="n">best_oof_index_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Weights List: </span><span class="si">{</span><span class="n">best_weights_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Current Tracked Model List: [2]
+Current Weights List: []
+</code></pre></div>
+<h3 id="first-round-blending-model-2-with-model-0">First Round - Blending Model 2 with Model 0</h3>
+<ul>
+<li>We check the blending results of Model 2 and Model 0 over 3 weights: <span class="arithmatex">\(0, \frac{1}{3}, \frac{2}{3}\)</span>. </li>
+<li>We also assign 3 variables
+<div class="highlight"><pre><span></span><code><span class="n">running_best_score</span><span class="p">,</span> <span class="n">running_best_weight</span><span class="p">,</span> <span class="n">running_best_oof_index</span> <span class="o">=</span> <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+</code></pre></div>
+such that whenever a blend of <span class="arithmatex">\(w_1 \times \textbf{model_i_oof} + (1-w_2) \times \textbf{model_j_oof}\)</span> produces a better OOF score, then we will assign </li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">temp_ensemble_oof_score</span> <span class="o">&gt;=</span> <span class="n">running_best_score</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The blend of weight </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2"> of model 2 and model 0 led to a greater or equals to OOF score = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">running_best_score</span> <span class="o">=</span> <span class="n">temp_ensemble_oof_score</span>
+    <span class="n">running_best_weight</span> <span class="o">=</span> <span class="n">temp_weight</span>
+    <span class="n">running_best_oof_index</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>
+<p>Notice that we <strong>hardcoded</strong> the <code>running_best_oof_index</code> to be <span class="arithmatex">\(0\)</span> since we know we are only looking at the interaction of Model 2 and Model 0. In proper code, this part should not be hardcoded and you can refer to my full code for clarity.</p>
+<div class="highlight"><pre><span></span><code><span class="n">running_best_score</span><span class="p">,</span> <span class="n">running_best_weight</span><span class="p">,</span> <span class="n">running_best_oof_index</span> <span class="o">=</span> <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">weight_interval</span><span class="p">):</span>
+    <span class="n">temp_weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">weight_interval</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;weight = </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">temp_ensemble_oof_preds</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">temp_weight</span> <span class="o">*</span> <span class="n">model_0_oof</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">temp_weight</span><span class="p">)</span> <span class="o">*</span> <span class="n">model_2_oof</span>
+    <span class="p">)</span>
+
+    <span class="n">temp_ensemble_oof_score</span> <span class="o">=</span> <span class="n">macro_multilabel_auc</span><span class="p">(</span>
+        <span class="n">y_trues</span><span class="p">,</span>
+        <span class="n">temp_ensemble_oof_preds</span><span class="p">,</span>
+        <span class="n">num_target_cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">multilabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;blended OOF score with model_0_oof = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">temp_ensemble_oof_score</span> <span class="o">&gt;=</span> <span class="n">running_best_score</span><span class="p">:</span>
+        <span class="n">running_best_score</span> <span class="o">=</span> <span class="n">temp_ensemble_oof_score</span>
+        <span class="n">running_best_weight</span> <span class="o">=</span> <span class="n">temp_weight</span>
+        <span class="n">running_best_oof_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The blend of weight </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2"> of model 2 and model </span><span class="si">{</span><span class="n">running_best_oof_index</span><span class="si">}</span><span class="s2"> led to a greater or equals to OOF score = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>weight = 0.0
+blended OOF score with model_0_oof = 0.75
+The blend of weight 0.0 of model 2 and model 0 led to a greater or equals to OOF score = 0.75
+
+weight = 0.3333333333333333
+blended OOF score with model_0_oof = 0.75
+The blend of weight 0.3333333333333333 of model 2 and model 0 led to a greater or equals to OOF score = 0.75
+
+weight = 0.6666666666666666
+blended OOF score with model_0_oof = 0.5
+</code></pre></div>
+<p>So now we finished blending Model 2 and Model 0 and we have:</p>
+<div class="highlight"><pre><span></span><code><span class="n">running_best_score</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="n">running_best_weight</span> <span class="o">=</span> <span class="mf">0.333</span><span class="o">...</span>
+</code></pre></div>
+<p>We need to blend Model 2 and Model 1 now to see if Model 2 and Model 1 can give better OOF scores when blended! We repeat the exact same loop as above, but bear in mind that the <code>running_best_score</code> and <code>running_best_weight</code> is already updated to the ones we got in the blend of Model 2 and Model 0 because we want to check if Model 2 and Model 1's blend can give better results than the previous <code>running_best_score</code>. </p>
+<h3 id="first-round-blending-model-2-and-model-1">First Round - Blending Model 2 and Model 1</h3>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">weight_interval</span><span class="p">):</span>
+    <span class="n">temp_weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">weight_interval</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;weight = </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">temp_ensemble_oof_preds</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">temp_weight</span> <span class="o">*</span> <span class="n">model_1_oof</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">temp_weight</span><span class="p">)</span> <span class="o">*</span> <span class="n">model_2_oof</span>
+    <span class="p">)</span>
+
+    <span class="n">temp_ensemble_oof_score</span> <span class="o">=</span> <span class="n">macro_multilabel_auc</span><span class="p">(</span>
+        <span class="n">y_trues</span><span class="p">,</span>
+        <span class="n">temp_ensemble_oof_preds</span><span class="p">,</span>
+        <span class="n">num_target_cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">multilabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;blended OOF score with model_1_oof = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">temp_ensemble_oof_score</span> <span class="o">&gt;=</span> <span class="n">running_best_score</span><span class="p">:</span>
+        <span class="n">running_best_score</span> <span class="o">=</span> <span class="n">temp_ensemble_oof_score</span>
+        <span class="n">running_best_weight</span> <span class="o">=</span> <span class="n">temp_weight</span>
+        <span class="n">running_best_oof_index</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The blend of weight </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2"> of model 2 and model </span><span class="si">{</span><span class="n">running_best_oof_index</span><span class="si">}</span><span class="s2"> led to a greater or equals to OOF score = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>weight = 0.0
+blended OOF score with model_1_oof = 0.75
+The blend of weight 0.0 of model 2 and model 1 led to a greater or equals to OOF score = 0.75
+
+weight = 0.3333333333333333
+blended OOF score with model_1_oof = 1.0
+The blend of weight 0.3333333333333333 of model 2 and model 1 led to a greater or equals to OOF score = 1.0
+
+weight = 0.6666666666666666
+blended OOF score with model_1_oof = 0.5
+</code></pre></div>
+<p>So now we finished blending Model 2 and Model 1 and we have:</p>
+<div class="highlight"><pre><span></span><code><span class="n">running_best_score</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">running_best_weight</span> <span class="o">=</span> <span class="mf">0.333</span><span class="o">...</span>
+</code></pre></div>
+<p>and we have a new winner in town! After our first round of iterating our <strong>initial best OOF Model 2</strong> with the rest (Model 0 and 1), we found out that if we take <span class="arithmatex">\(w_1 = 1 - \frac{2}{3}\)</span> and <span class="arithmatex">\(w_2 = \frac{1}{3}\)</span>, Model 2 and 1 gives us a better overall score.</p>
+<p>That is to say:</p>
+<div class="arithmatex">\[
+w_1 * \textbf{OOF_2} + w_2 \times \textbf{OOF_1}
+\]</div>
+<p>leads to the greatest increase in our OOF score!</p>
+<p>Notice that we <strong>hardcoded</strong> the <code>running_best_oof_index</code> to be <span class="arithmatex">\(1\)</span> since we know we are only looking at the interaction of Model 2 and Model 1. In proper code, this part should not be hardcoded and you can refer to my full code for clarity.</p>
+<p>Technically, we can stop the algorithm now since the metric <strong>Macro-AUROC</strong> is capped at <span class="arithmatex">\(1\)</span>, but for the sake of explanation, let us continue.</p>
+<h3 id="first-round-save-results-for-loop-1">First Round - Save Results for Loop 1</h3>
+<p>We then append the best OOF index and the corresponding weight to the <code>best_oof_index_list</code> and <code>best_weights_list</code> respectively.</p>
+<div class="highlight"><pre><span></span><code><span class="n">best_oof_index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">running_best_oof_index</span><span class="p">)</span>
+<span class="n">best_weights_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">running_best_weight</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Tracked Model List: </span><span class="si">{</span><span class="n">best_oof_index_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Weights List: </span><span class="si">{</span><span class="n">best_weights_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Current Tracked Model List: [2, 1]
+Current Weights List: [0.3333333333333333]
+</code></pre></div>
+<h3 id="second-round-blend-oof">Second Round - Blend OOF</h3>
+<p>Now we have a brand new OOF after blending Model 2 and Model 1, we call it <strong>blended_oof_1</strong> and note that this is our new best OOF!</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># blended_oof_1 = all_oof_preds[:, best_oof_index_list[0]].reshape(-1, 1) * (1 - best_weights_list[0]) + all_oof_preds[:, best_oof_index_list[1]].reshape(-1, 1) * best_weights_list[0]</span>
+<span class="n">blended_oof_1</span> <span class="o">=</span> <span class="n">model_2_oof</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">model_1_oof</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">macro_multilabel_auc</span><span class="p">(</span><span class="n">y_trues</span><span class="p">,</span> <span class="n">blended_oof_1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div>
+<h3 id="second-round-blending-blended_oof_1-with-model-0">Second Round - Blending blended_oof_1 with Model 0</h3>
+<p>We continue to try out <strong>blended_oof_1</strong> with the rest of the models that were not selected. This means we have to check our <strong>Current Tracked Model List</strong> <code>best_oof_index_list</code> and see that we already have <span class="arithmatex">\([2, 1]\)</span> being used up, in our simple example here, there only left with Model 0 to try! So make sure in your code you do not try <strong>blended_oof_1</strong> with Model 0, 1 and 2 again since the <strong>blended_oof_1</strong> is already made up with Model 1 and 2!</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">weight_interval</span><span class="p">):</span>
+    <span class="n">temp_weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">weight_interval</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">weight = </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">temp_ensemble_oof_preds</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">temp_weight</span> <span class="o">*</span> <span class="n">model_0_oof</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">temp_weight</span><span class="p">)</span> <span class="o">*</span> <span class="n">blended_oof_1</span>
+    <span class="p">)</span>
+
+    <span class="n">temp_ensemble_oof_score</span> <span class="o">=</span> <span class="n">macro_multilabel_auc</span><span class="p">(</span>
+        <span class="n">y_trues</span><span class="p">,</span>
+        <span class="n">temp_ensemble_oof_preds</span><span class="p">,</span>
+        <span class="n">num_target_cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">multilabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;blended OOF score with model_0_oof = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">temp_ensemble_oof_score</span> <span class="o">&gt;=</span> <span class="n">running_best_score</span><span class="p">:</span>
+        <span class="n">running_best_score</span> <span class="o">=</span> <span class="n">temp_ensemble_oof_score</span>
+        <span class="n">running_best_weight</span> <span class="o">=</span> <span class="n">temp_weight</span>
+        <span class="n">running_best_oof_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The blend of weight </span><span class="si">{</span><span class="n">temp_weight</span><span class="si">}</span><span class="s2"> of model 2 and model </span><span class="si">{</span><span class="n">running_best_oof_index</span><span class="si">}</span><span class="s2"> led to a greater or equals to OOF score = </span><span class="si">{</span><span class="n">temp_ensemble_oof_score</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>weight = 0.0
+blended OOF score with model_0_oof = 1.0
+The blend of weight 0.0 of model 2 and model 0 led to a greater or equals to OOF score = 1.0
+
+
+weight = 0.3333333333333333
+blended OOF score with model_0_oof = 0.5
+
+weight = 0.6666666666666666
+blended OOF score with model_0_oof = 0.5
+</code></pre></div>
+<p>Since we have done checking <strong>blended_oof_1</strong> with the last remaining Model 0 and found that blending Model 0 with a weight of 0 (what a surprise haha!) yields the best result, we once again update the <code>running</code> metrics and also append to our global lists below.</p>
+<div class="highlight"><pre><span></span><code><span class="n">best_oof_index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">running_best_oof_index</span><span class="p">)</span>
+<span class="n">best_weights_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">running_best_weight</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Tracked Model List: </span><span class="si">{</span><span class="n">best_oof_index_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Weights List: </span><span class="si">{</span><span class="n">best_weights_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Current Tracked Model List: [2, 1, 0]
+Current Weights List: [0.3333333333333333, 0.0]
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># blended_oof_2 = blended_oof_1 * (1 - best_weights_list[1]) + all_oof_preds[:, best_oof_index_list[2]].reshape(-1, 1) * best_weights_list[1]</span>
+<span class="n">blended_oof_2</span> <span class="o">=</span> <span class="n">blended_oof_1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">model_0_oof</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.0</span>
+<span class="k">assert</span> <span class="n">macro_multilabel_auc</span><span class="p">(</span><span class="n">y_trues</span><span class="p">,</span> <span class="n">blended_oof_2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div>
+<h2 id="ensembling-model-predictions-with-the-found-optimal-weights">Ensembling Model Predictions with the Found Optimal Weights</h2>
+<p>So we end the discussion with what to do with the weights we got. We already established to the readers that our <strong>Initial Best OOF is Model 2</strong> with a <strong>Macro-AUROC</strong> score of <span class="arithmatex">\(0.75\)</span>, and by way of Hill Climbing, we found out that we can blend the 3 Models with some weights such that their new OOF produces a <strong>Macro-AUROC</strong> score of <span class="arithmatex">\(1.0\)</span>, a huge improvement. We aren't done yet! We want to apply these optimal weights to our <strong>test set predictions</strong> as well. Note that our <strong>test set predictions</strong> are <strong>unseen</strong> and our usual ensemble methods can be as simple as mean averaging.</p>
+<p>More concretely, let us check out the example below.</p>
+<div class="highlight"><pre><span></span><code><span class="n">oof_and_subs_path</span> <span class="o">=</span> <span class="s2">&quot;./oof_and_subs/toy_examples&quot;</span>
+<span class="n">sub_dfs_list</span><span class="p">,</span> <span class="n">num_subs</span> <span class="o">=</span> <span class="n">return_list_of_dataframes</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">oof_and_subs_path</span><span class="p">,</span> <span class="n">is_oof</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">sub_dfs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">sub_dfs_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">sub_dfs_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;We have </span><span class="si">{</span><span class="n">num_subs</span><span class="si">}</span><span class="s2"> sub files.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>image_id</th>
+      <th>class_0_preds</th>
+      <th>class_1_preds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4</td>
+      <td>0.2</td>
+      <td>0.8</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>0.3</td>
+      <td>0.7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6</td>
+      <td>0.6</td>
+      <td>0.4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>image_id</th>
+      <th>class_0_preds</th>
+      <th>class_1_preds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4</td>
+      <td>0.3</td>
+      <td>0.7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>0.9</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6</td>
+      <td>0.2</td>
+      <td>0.8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>image_id</th>
+      <th>class_0_preds</th>
+      <th>class_1_preds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4</td>
+      <td>0.3</td>
+      <td>0.7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>0.7</td>
+      <td>0.3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6</td>
+      <td>0.8</td>
+      <td>0.2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="highlight"><pre><span></span><code>We have 3 sub files.
+</code></pre></div>
+<p>The <code>stack_subs</code> function does the same thing as <code>stack_oofs</code> so they can be combined into one function for code clarity.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">stack_subs</span><span class="p">(</span>
+    <span class="n">sub_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pred_column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stack all sub predictions horziontally.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sub_dfs (List[pd.DataFrame]): The list of sub predictions in dataframes.</span>
+<span class="sd">        pred_column_names (List[str]): The list of prediction column names.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        all_sub_preds (np.ndarray): The stacked oof predictions of shape (num_samples, num_subs * num_pred_columns).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_subs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_dfs</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">num_target_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_column_names</span><span class="p">)</span>
+    <span class="n">all_sub_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">num_subs</span> <span class="o">*</span> <span class="n">num_target_cols</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">num_target_cols</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">sub_df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sub_dfs</span><span class="p">):</span>
+            <span class="n">all_sub_preds</span><span class="p">[:,</span> <span class="n">index</span> <span class="p">:</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_df</span><span class="p">[</span>
+                <span class="n">pred_column_names</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">elif</span> <span class="n">num_target_cols</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Used in RANZCR where there are 11 target columns</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">sub_df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sub_dfs</span><span class="p">):</span>
+            <span class="n">all_sub_preds</span><span class="p">[</span>
+                <span class="p">:,</span> <span class="n">index</span> <span class="o">*</span> <span class="n">num_target_cols</span> <span class="p">:</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_target_cols</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">sub_df</span><span class="p">[</span><span class="n">pred_column_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">return</span> <span class="n">all_sub_preds</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">test_set_target_column_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class_1_preds&quot;</span><span class="p">]</span>
+<span class="n">all_subs_preds</span> <span class="o">=</span> <span class="n">stack_subs</span><span class="p">(</span><span class="n">sub_dfs_list</span><span class="p">,</span> <span class="n">test_set_target_column_name</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">model_0_sub</span> <span class="o">=</span> <span class="n">all_subs_preds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">model_1_sub</span> <span class="o">=</span> <span class="n">all_subs_preds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">model_2_sub</span> <span class="o">=</span> <span class="n">all_subs_preds</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y_trues</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> 
+</code></pre></div>
+<p>Recall the optimal weights earlier:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Current</span> <span class="n">Tracked</span> <span class="n">Model</span> <span class="n">List</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">Current</span> <span class="n">Weights</span> <span class="n">List</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3333333333333333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+</code></pre></div>
+<p>and we now have a way to ensemble our model subs accordingly.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># blended_oof_1 = all_oof_preds[:, best_oof_index_list[0]].reshape(-1, 1) * (1 - best_weights_list[0]) + all_oof_preds[:, best_oof_index_list[1]].reshape(-1, 1) * best_weights_list[0]</span>
+<span class="n">blended_sub_1</span> <span class="o">=</span> <span class="n">model_2_sub</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">model_1_sub</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">blended_sub_2</span> <span class="o">=</span> <span class="n">blended_sub_1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">model_0_sub</span> <span class="o">*</span> <span class="mf">0.0</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">blended_sub_2</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>array([[0.7       ],
+       [0.23333333],
+       [0.4       ]])
+</code></pre></div>
+<p>Then <code>blended_sub_2</code> should be our final <strong>test set predictions</strong>!</p>
+<h2 id="forward-ensemble-with-siim-isic-melanoma-classification">Forward Ensemble with SIIM-ISIC Melanoma Classification</h2>
+<p>This is taken from my repo.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span>
+
+<span class="k">def</span> <span class="nf">stack_oofs</span><span class="p">(</span>
+    <span class="n">oof_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">pred_column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stack all oof predictions horziontally.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        oof_dfs (List[pd.DataFrame]): The list of oof predictions in dataframes.</span>
+<span class="sd">        pred_column_names (List[str]): The list of prediction column names.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        all_oof_preds (np.ndarray): The stacked oof predictions of shape (num_samples, num_oofs * num_pred_columns).</span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; oof_1 = pd.DataFrame([1,2,3], columns=[&#39;class_1_oof&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; oof_2 = pd.DataFrame([4,5,6], columns=[&#39;class_1_oof&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; all_oof_preds = stack_oofs([oof_1, oof_2], [&#39;class_1_oof&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; all_oof_preds = np.array([1, 4], [2, 5], [3, 6])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_oofs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">)</span>
+    <span class="n">num_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">num_target_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_column_names</span><span class="p">)</span>
+    <span class="n">all_oof_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_samples</span><span class="p">,</span> <span class="n">num_oofs</span> <span class="o">*</span> <span class="n">num_target_cols</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">num_target_cols</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">oof_df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">):</span>
+            <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">index</span> <span class="p">:</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">oof_df</span><span class="p">[</span>
+                <span class="n">pred_column_names</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">elif</span> <span class="n">num_target_cols</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Used in RANZCR where there are 11 target columns</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">oof_df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">oof_dfs</span><span class="p">):</span>
+            <span class="n">all_oof_preds</span><span class="p">[</span>
+                <span class="p">:,</span> <span class="n">index</span> <span class="o">*</span> <span class="n">num_target_cols</span> <span class="p">:</span> <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_target_cols</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">oof_df</span><span class="p">[</span><span class="n">pred_column_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="k">return</span> <span class="n">all_oof_preds</span>
+
+
+<span class="k">def</span> <span class="nf">macro_multilabel_auc</span><span class="p">(</span>
+    <span class="n">label</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">num_target_cols</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">multilabel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Also works for binary AUC like Melanoma&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multilabel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">aucs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_target_cols</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">label</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+        <span class="n">aucs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">aucs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">compute_best_oof</span><span class="p">(</span>
+    <span class="n">all_oof_preds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_trues</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">num_oofs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">performance_metric</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the oof score of all models using a performance metric and return the best model index and score.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        all_oof_preds (np.ndarray): The stacked oof predictions of shape (num_samples, num_oofs * num_pred_columns). Taken from stack_oofs.</span>
+<span class="sd">        y_trues (np.ndarray): The true labels of shape (num_samples, num_target_cols).</span>
+<span class="sd">        num_oofs (int): The number of oof predictions.</span>
+<span class="sd">        performance_metric (Callable): The performance metric to use, this is a function.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        best_oof_metric_score (float): The best oof score.</span>
+<span class="sd">        best_model_index (int): The index of the best model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_oof_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_oofs</span><span class="p">):</span>
+        <span class="n">metric_score</span> <span class="o">=</span> <span class="n">performance_metric</span><span class="p">(</span>
+            <span class="n">y_trues</span><span class="p">,</span>
+            <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span>
+            <span class="n">num_target_cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">multilabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">all_oof_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric_score</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> has OOF AUC = </span><span class="si">{</span><span class="n">metric_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="n">best_oof_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_oof_scores</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span>
+        <span class="n">all_oof_scores</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="n">best_oof_index</span>
+
+
+<span class="k">def</span> <span class="nf">calculate_best_score_over_weight_interval</span><span class="p">(</span>
+    <span class="n">weight_interval</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">model_i_oof</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">model_j_oof</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_trues</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">performance_metric</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">running_best_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">running_best_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">patience</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the best score over a weight interval.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        weight_interval (float): _description_</span>
+<span class="sd">        model_i_oof (np.ndarray): _description_</span>
+<span class="sd">        model_j_oof (np.ndarray): _description_</span>
+<span class="sd">        y_trues (np.ndarray): _description_</span>
+<span class="sd">        performance_metric (Callable): _description_</span>
+<span class="sd">        running_best_score (float): _description_</span>
+<span class="sd">        running_best_weight (float): _description_</span>
+<span class="sd">        patience (int): _description_</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[float, float]: _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">patience_counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">weight_interval</span><span class="p">):</span>
+        <span class="n">temp_weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">weight_interval</span>
+
+        <span class="n">temp_ensemble_oof_preds</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">temp_weight</span> <span class="o">*</span> <span class="n">model_j_oof</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">temp_weight</span><span class="p">)</span> <span class="o">*</span> <span class="n">model_i_oof</span>
+        <span class="p">)</span>
+
+        <span class="n">temp_ensemble_oof_score</span> <span class="o">=</span> <span class="n">performance_metric</span><span class="p">(</span>
+            <span class="n">y_trues</span><span class="p">,</span>
+            <span class="n">temp_ensemble_oof_preds</span><span class="p">,</span>
+            <span class="n">num_target_cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">multilabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># in the first loop, if any of the blending is more than best_oof_metric_score, we will assign it to running_best_score.</span>
+
+        <span class="k">if</span> <span class="n">temp_ensemble_oof_score</span> <span class="o">&gt;</span> <span class="n">running_best_score</span><span class="p">:</span>
+            <span class="n">running_best_score</span> <span class="o">=</span> <span class="n">temp_ensemble_oof_score</span>
+            <span class="n">running_best_weight</span> <span class="o">=</span> <span class="n">temp_weight</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">patience_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">patience_counter</span> <span class="o">&gt;</span> <span class="n">patience</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">running_best_score</span><span class="p">,</span> <span class="n">running_best_weight</span>
+
+
+<span class="k">def</span> <span class="nf">get_blended_oof</span><span class="p">(</span>
+    <span class="n">initial_best_model_oof</span><span class="p">,</span> <span class="n">best_oof_index_list</span><span class="p">,</span> <span class="n">best_weights_list</span>
+<span class="p">):</span>
+    <span class="c1"># can be used on both oof and subs</span>
+
+    <span class="n">curr_model_oof</span> <span class="o">=</span> <span class="n">initial_best_model_oof</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">best_oof_index_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">model_j_index</span> <span class="o">=</span> <span class="n">best_oof_index_list</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">curr_model_oof</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">best_weights_list</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">*</span> <span class="n">curr_model_oof</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="n">best_weights_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">model_j_index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">curr_model_oof</span>
+
+
+<span class="k">def</span> <span class="nf">return_list_of_dataframes</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_oof</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of dataframes from a directory of files.</span>
+<span class="sd">    The boolean is_oof is used to determine whether the list of dataframes contains oof or subs.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): The path to the directory containing the files.</span>
+<span class="sd">        is_oof (bool, optional): Determine whether the list of dataframes contains oof or subs. Defaults to True.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        List[pd.DataFrame]: The list of dataframes for either oof or subs.</span>
+<span class="sd">        int: The number of files in the directory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">oof_and_subs_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">is_oof</span><span class="p">:</span>
+        <span class="n">oof_files_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">oof_and_subs_files</span> <span class="k">if</span> <span class="s2">&quot;oof&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">oof_files_sorted</span>
+        <span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_files_sorted</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sub_files_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">oof_and_subs_files</span> <span class="k">if</span> <span class="s2">&quot;sub&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">sub_files_sorted</span>
+        <span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_files_sorted</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">oof_and_subs_path</span> <span class="o">=</span> <span class="s2">&quot;./oof_and_subs/melanoma&quot;</span>
+
+    <span class="c1"># [&quot;oof_1.csv&quot;, &quot;sub_1.csv&quot;, &quot;oof_2.csv&quot;, &quot;sub_2.csv&quot;]</span>
+    <span class="n">oof_and_subs_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">oof_and_subs_path</span><span class="p">)</span>
+
+    <span class="c1"># [&quot;oof_1.csv&quot;, &quot;oof_2.csv&quot;, &quot;sub_1.csv&quot;, &quot;sub_2.csv&quot;] sorted</span>
+    <span class="n">oof_files_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">oof_and_subs_files</span> <span class="k">if</span> <span class="s2">&quot;oof&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">])</span>
+
+    <span class="c1"># [oof_1_df, oof_2_df, sub_1_df, sub_2_df] in dataframe</span>
+    <span class="n">oof_dfs_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">oof_and_subs_path</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">oof_files_sorted</span>
+    <span class="p">]</span>
+    <span class="n">num_oofs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oof_dfs_list</span><span class="p">)</span>
+
+    <span class="c1"># in my oof files, I also saved the corresponding y_trues, we thus take the first oof_df and use it to get the y_trues, assuming they are the same for all oof files.</span>
+    <span class="c1"># note of caution, if you use different resampling methods, you will need to change the y_trues accordingly.</span>
+
+    <span class="n">y_trues_df</span> <span class="o">=</span> <span class="n">oof_dfs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][[</span><span class="s2">&quot;oof_trues&quot;</span><span class="p">]]</span>
+    <span class="n">y_trues</span> <span class="o">=</span> <span class="n">y_trues_df</span><span class="o">.</span><span class="n">values</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;We have </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">oof_files_sorted</span><span class="p">)</span><span class="si">}</span><span class="s2"> oof files.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">target_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;oof_trues&quot;</span><span class="p">]</span>
+    <span class="n">pred_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;class_1_oof&quot;</span><span class="p">]</span>
+    <span class="n">num_target_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_cols</span><span class="p">)</span>
+    <span class="n">all_oof_preds</span> <span class="o">=</span> <span class="n">stack_oofs</span><span class="p">(</span>
+        <span class="n">oof_dfs</span><span class="o">=</span><span class="n">oof_dfs_list</span><span class="p">,</span> <span class="n">pred_column_names</span><span class="o">=</span><span class="n">pred_cols</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;all_oof_preds shape: </span><span class="si">{</span><span class="n">all_oof_preds</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">This variable is global and holds all oof predictions stacked horizontally.</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">best_oof_metric_score</span><span class="p">,</span> <span class="n">best_oof_index</span> <span class="o">=</span> <span class="n">compute_best_oof</span><span class="p">(</span>
+        <span class="n">all_oof_preds</span><span class="o">=</span><span class="n">all_oof_preds</span><span class="p">,</span>
+        <span class="n">y_trues</span><span class="o">=</span><span class="n">y_trues</span><span class="p">,</span>
+        <span class="n">num_oofs</span><span class="o">=</span><span class="n">num_oofs</span><span class="p">,</span>
+        <span class="n">performance_metric</span><span class="o">=</span><span class="n">macro_multilabel_auc</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Computing Best OOF scores among all models ###</span><span class="se">\n</span><span class="s2">The best OOF AUC score is </span><span class="si">{</span><span class="n">best_oof_metric_score</span><span class="si">}</span><span class="s2"> and the best model index is </span><span class="si">{</span><span class="n">best_oof_index</span><span class="si">}</span><span class="s2"> corresponding to the oof file </span><span class="si">{</span><span class="n">oof_files_sorted</span><span class="p">[</span><span class="n">best_oof_index</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">weight_interval</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># 200</span>
+    <span class="n">patience</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># 10</span>
+    <span class="n">min_increase</span> <span class="o">=</span> <span class="mf">0.0003</span>  <span class="c1"># 0.00003</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### HyperParameters ###</span><span class="se">\n</span><span class="s2">weight_interval = </span><span class="si">{</span><span class="n">weight_interval</span><span class="si">}</span><span class="se">\n</span><span class="s2">patience = </span><span class="si">{</span><span class="n">patience</span><span class="si">}</span><span class="se">\n</span><span class="s2">min_increase = </span><span class="si">{</span><span class="n">min_increase</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># keep track of oof index that are blended</span>
+    <span class="n">best_oof_index_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">best_oof_index</span><span class="p">]</span>
+    <span class="n">best_weights_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Tracked Model List: </span><span class="si">{</span><span class="n">best_oof_index_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Weights List: </span><span class="si">{</span><span class="n">best_weights_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Initially, this curr_model_oof is the single best model that we got above from [oof_1, oof_2,...]</span>
+    <span class="n">initial_best_model_oof</span> <span class="o">=</span> <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">best_oof_index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">old_best_score</span> <span class="o">=</span> <span class="n">best_oof_metric_score</span>
+    <span class="n">model_i_best_score</span><span class="p">,</span> <span class="n">model_i_index</span><span class="p">,</span> <span class="n">model_i_weights</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Denote model i as the current model, and model j as the model that we are blending with.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">outer_oof_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_oofs</span><span class="p">):</span>
+
+        <span class="c1"># basically in the first loop, we already know the current model&#39;s oof and we assign it by subsetting the all_oof_preds with the best oof index.</span>
+        <span class="n">curr_model_oof</span> <span class="o">=</span> <span class="n">initial_best_model_oof</span>
+
+        <span class="k">if</span> <span class="n">counter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">curr_model_oof</span> <span class="o">=</span> <span class="n">get_blended_oof</span><span class="p">(</span>
+                <span class="n">initial_best_model_oof</span><span class="p">,</span> <span class="n">best_oof_index_list</span><span class="p">,</span> <span class="n">best_weights_list</span>
+            <span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="n">curr_model_oof</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">inner_oof_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_oofs</span><span class="p">):</span>
+            <span class="c1"># If we have [oof_1, oof_2] and best_oof_index = 1 (oof_2), then we do not need to blend oof_2 and itself.</span>
+
+            <span class="k">if</span> <span class="n">inner_oof_index</span> <span class="ow">in</span> <span class="n">best_oof_index_list</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># in the first loop, our running_best_score is the best_oof_metric_score</span>
+            <span class="c1"># also our old_best_score is the best_oof_metric_score in the first loop</span>
+            <span class="p">(</span><span class="n">running_best_score</span><span class="p">,</span> <span class="n">running_best_weight</span><span class="p">,</span> <span class="n">patience_counter</span><span class="p">,)</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># what we are doing here is to find the best oof score among all models that we have not blended yet.</span>
+            <span class="c1"># for example, if we have [oof_1, oof_2, oof_3], and we know oof_2 is our initial_best_model_oof,</span>
+            <span class="c1"># then we need to blend oof_2 with oof_1, then oof_2 with oof_3 to find out which of them yields the best overall oof when blended.</span>
+            <span class="p">(</span>
+                <span class="n">running_best_score</span><span class="p">,</span>
+                <span class="n">running_best_weight</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">calculate_best_score_over_weight_interval</span><span class="p">(</span>
+                <span class="n">weight_interval</span><span class="p">,</span>
+                <span class="n">curr_model_oof</span><span class="p">,</span>
+                <span class="n">all_oof_preds</span><span class="p">[:,</span> <span class="n">inner_oof_index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">y_trues</span><span class="p">,</span>
+                <span class="n">macro_multilabel_auc</span><span class="p">,</span>
+                <span class="n">running_best_score</span><span class="p">,</span>
+                <span class="n">running_best_weight</span><span class="p">,</span>
+                <span class="n">patience</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">running_best_score</span> <span class="o">&gt;</span> <span class="n">model_i_best_score</span><span class="p">:</span>
+                <span class="n">model_i_index</span> <span class="o">=</span> <span class="n">inner_oof_index</span>
+                <span class="n">model_i_best_score</span> <span class="o">=</span> <span class="n">running_best_score</span>
+                <span class="n">model_i_weights</span> <span class="o">=</span> <span class="n">running_best_weight</span>
+
+        <span class="n">increment</span> <span class="o">=</span> <span class="n">model_i_best_score</span> <span class="o">-</span> <span class="n">old_best_score</span>
+        <span class="k">if</span> <span class="n">increment</span> <span class="o">&lt;=</span> <span class="n">min_increase</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Increment is too small, stop blending&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="c1"># DISPLAY RESULTS</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Ensemble AUC = </span><span class="si">%.4f</span><span class="s2"> after adding model </span><span class="si">%i</span><span class="s2"> with weight </span><span class="si">%.3f</span><span class="s2">. Increase of </span><span class="si">%.4f</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span>
+                <span class="n">model_i_best_score</span><span class="p">,</span>
+                <span class="n">model_i_index</span><span class="p">,</span>
+                <span class="n">model_i_weights</span><span class="p">,</span>
+                <span class="n">increment</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+        <span class="n">old_best_score</span> <span class="o">=</span> <span class="n">model_i_best_score</span>
+        <span class="n">best_oof_index_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_i_index</span><span class="p">)</span>
+
+        <span class="n">best_weights_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_i_weights</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Tracked Model List: </span><span class="si">{</span><span class="n">best_oof_index_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Weights List: </span><span class="si">{</span><span class="n">best_weights_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Current Best Score: </span><span class="si">{</span><span class="n">model_i_best_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">curr_model_oof</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Ensemble OOF predictions&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># apply on submission</span>
+    <span class="n">sub_files_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">oof_and_subs_files</span> <span class="k">if</span> <span class="s2">&quot;sub&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">])</span>
+    <span class="n">sub_dfs_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">oof_and_subs_path</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">sub_files_sorted</span>
+    <span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">We have </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sub_files_sorted</span><span class="p">)</span><span class="si">}</span><span class="s2"> submission files...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sub_files_sorted</span><span class="p">)</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sub_dfs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_files_sorted</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sub_files_sorted</span><span class="p">)):</span>
+        <span class="n">y</span><span class="p">[</span>
+            <span class="p">:,</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">))</span> <span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">))</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">sub_dfs_list</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">md2</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span>
+        <span class="p">:,</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">best_oof_index_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">))</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">best_oof_index_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">md2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">best_oof_index_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="n">md2</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">best_weights_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="o">*</span> <span class="n">y</span><span class="p">[:,</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">))</span> <span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_cols</span><span class="p">))]</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">best_weights_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">md2</span>
+        <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">md2</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">sub_dfs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;target&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">md2</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;submission.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>We have 6 oof files.
+
+all_oof_preds shape: (33126, 6)
+This variable is global and holds all oof predictions stacked horizontally.
+
+Model 0 has OOF AUC = 0.8967598406021975
+Model 1 has OOF AUC = 0.897338308007439
+Model 2 has OOF AUC = 0.8969099101014242
+Model 3 has OOF AUC = 0.8997782002268091
+Model 4 has OOF AUC = 0.9021602904318382
+Model 5 has OOF AUC = 0.9035525112752076
+
+### Computing Best OOF scores among all models ###
+The best OOF AUC score is 0.9035525112752076 and the best model index is 5 corresponding to the oof file oof_tf_efficientnet_b2_ns_tf_efficientnet_b2_ns_5_folds_3c0odinh.csv
+
+### HyperParameters ###
+weight_interval = 1000
+patience = 20
+min_increase = 0.0003
+
+Current Tracked Model List: [5]
+Current Weights List: []
+Denote model i as the current model, and model j as the model that we are blending with.
+
+Ensemble AUC = 0.9141 after adding model 2 with weight 0.452. Increase of 0.0106
+
+Current Tracked Model List: [5, 2]
+Current Weights List: [0.452]
+Current Best Score: 0.9141475652539226
+[[4.50905440e-03]
+ [3.01906102e-05]
+ [1.43342172e-03]
+ ...
+ [6.48897682e-05]
+ [1.05257292e-02]
+ [9.18150437e-03]]
+
+Ensemble AUC = 0.9175 after adding model 3 with weight 0.290. Increase of 0.0034
+
+Current Tracked Model List: [5, 2, 3]
+Current Weights List: [0.452, 0.29]
+Current Best Score: 0.9175226556534317
+[[3.58108299e-03]
+ [2.45987573e-05]
+ [1.03199503e-03]
+ ...
+ [4.75034868e-05]
+ [9.02447451e-03]
+ [6.67390628e-03]]
+
+Ensemble AUC = 0.9193 after adding model 4 with weight 0.273. Increase of 0.0018
+
+Current Tracked Model List: [5, 2, 3, 4]
+Current Weights List: [0.452, 0.29, 0.273]
+Current Best Score: 0.9193341713090691
+[[2.65875346e-03]
+ [2.51985486e-05]
+ [8.82538860e-04]
+ ...
+ [4.77394006e-05]
+ [1.76098008e-02]
+ [5.30504798e-03]]
+
+Ensemble AUC = 0.9201 after adding model 0 with weight 0.161. Increase of 0.0008
+
+Current Tracked Model List: [5, 2, 3, 4, 0]
+Current Weights List: [0.452, 0.29, 0.273, 0.161]
+Current Best Score: 0.9201217730848145
+[[2.68508770e-03]
+ [3.33216799e-05]
+ [7.54874316e-04]
+ ...
+ [1.12230140e-04]
+ [2.00920893e-02]
+ [1.02248122e-02]]
+Increment is too small, stop blending
+</code></pre></div>
+<p><img alt="png" src="../forward_ensemble_files/forward_ensemble_52_1.png" /></p>
+<div class="highlight"><pre><span></span><code>We have 6 submission files...
+
+[&#39;sub_tf_efficientnet_b0_ns_tf_efficientnet_b0_ns_5_folds_2dcluilj.csv&#39;
+ &#39;sub_tf_efficientnet_b0_ns_tf_efficientnet_b0_ns_5_folds_3725vib5.csv&#39;
+ &#39;sub_tf_efficientnet_b0_ns_tf_efficientnet_b0_ns_5_folds_kh6lm0mc.csv&#39;
+ &#39;sub_tf_efficientnet_b1_ns_tf_efficientnet_b1_ns_5_folds_9qhxwbbq.csv&#39;
+ &#39;sub_tf_efficientnet_b2_ns_tf_efficientnet_b2_ns_5_folds_1lvjyja0.csv&#39;
+ &#39;sub_tf_efficientnet_b2_ns_tf_efficientnet_b2_ns_5_folds_3c0odinh.csv&#39;]
+(10982, 6)
+[[1.10712990e-03 4.36813570e-04 5.27769700e-04 5.15609340e-04
+  7.12666400e-04 4.17358470e-04]
+ [2.20565100e-04 1.78343150e-04 9.28863160e-05 1.78823610e-05
+  1.48618330e-04 3.16100000e-05]
+ [1.81065010e-04 7.23641860e-05 2.92848130e-04 7.86881400e-05
+  9.41391550e-05 9.77370900e-05]
+ ...
+ [6.67065500e-02 1.14237880e-01 1.26132040e-01 1.13317326e-01
+  6.87497260e-02 7.28674750e-02]
+ [6.35771550e-03 6.06310670e-04 8.84217040e-04 9.36840800e-04
+  5.04250900e-04 5.87228570e-05]
+ [1.41756660e-02 2.95386670e-02 1.08320400e-02 2.21859530e-02
+  1.42423960e-02 9.72992800e-02]]
+[[4.1735847e-04]
+ [3.1610000e-05]
+ [9.7737090e-05]
+ ...
+ [7.2867475e-02]
+ [5.8722857e-05]
+ [9.7299280e-02]]
+</code></pre></div>
+<p><img alt="png" src="../forward_ensemble_files/forward_ensemble_52_3.png" /></p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Image Normalization" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Image Normalization
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-footer__link md-footer__link--next" aria-label="Next: RANZCR CLiP - Catheter and Line Position Challenge" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              RANZCR CLiP - Catheter and Line Position Challenge
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

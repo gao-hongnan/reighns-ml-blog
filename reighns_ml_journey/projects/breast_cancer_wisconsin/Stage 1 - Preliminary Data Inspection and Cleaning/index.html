@@ -1,0 +1,3012 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/">
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Preliminary Data Inspection and Cleaning - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dependencies-and-configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Preliminary Data Inspection and Cleaning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Preliminary Data Inspection and Cleaning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Preliminary Data Inspection and Cleaning
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-and-configuration" class="md-nav__link">
+    Dependencies and Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-1-preliminary-data-inspection-and-cleaning" class="md-nav__link">
+    Stage 1: Preliminary Data Inspection and Cleaning
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 1: Preliminary Data Inspection and Cleaning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-the-dataset" class="md-nav__link">
+    Load the dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-brief-look-at-the-dataset" class="md-nav__link">
+    A brief look at the dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-drop-drop-the-columns" class="md-nav__link">
+    Drop, drop, drop the columns!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    Data Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-statistics" class="md-nav__link">
+    Summary Statistics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-data" class="md-nav__link">
+    Missing Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-data" class="md-nav__link">
+    Save data
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-and-configuration" class="md-nav__link">
+    Dependencies and Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-1-preliminary-data-inspection-and-cleaning" class="md-nav__link">
+    Stage 1: Preliminary Data Inspection and Cleaning
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 1: Preliminary Data Inspection and Cleaning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-the-dataset" class="md-nav__link">
+    Load the dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-brief-look-at-the-dataset" class="md-nav__link">
+    A brief look at the dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drop-drop-drop-the-columns" class="md-nav__link">
+    Drop, drop, drop the columns!
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    Data Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-statistics" class="md-nav__link">
+    Summary Statistics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-data" class="md-nav__link">
+    Missing Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-data" class="md-nav__link">
+    Save data
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/projects/breast_cancer_wisconsin/Stage 1 - Preliminary Data Inspection and Cleaning.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<div align="center">
+<h1>Stage 1: Preliminary Data Inspection and Clearning</a></h1>
+by Hongnan Gao
+<br>
+</div>
+
+<p><a id="top"></a></p>
+<p><a id = '1.0'></a></p>
+<h1 style = "font-family: garamond; font-size: 40px; font-style: normal;background-color: #2ab7ca; color : #fed766; border-radius: 5px 5px;padding:5px;text-align:center; font-weight: bold" >Quick Navigation</h1>
+
+<ul>
+<li><a href="#1">Dependencies and Configuration</a></li>
+<li><a href="#2">Stage 1: Preliminary Data Inspection and Cleaning</a><ul>
+<li><a href="#31">Load the dataset</a></li>
+<li><a href="#31">A brief look at the dataset</a></li>
+<li><a href="#31">Drop, drop, drop the columns!</a></li>
+<li><a href="#31">Data Types</a></li>
+<li><a href="#31">Summary Statistics</a></li>
+<li><a href="#31">Missing Data</a></li>
+<li><a href="#31">Save Data</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="dependencies-and-configuration">Dependencies and Configuration</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">config</span><span class="p">:</span>
+    <span class="n">raw_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/breast-cancer-wisconsin/data/raw/data.csv&quot;</span>
+    <span class="n">processed_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/breast-cancer-wisconsin/data/processed/processed.csv&quot;</span>
+    <span class="n">train_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1992</span>
+    <span class="n">num_folds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">cv_schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;StratifiedKFold&quot;</span>
+    <span class="n">classification_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span>
+
+    <span class="n">target_col</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;diagnosis&quot;</span><span class="p">])</span>
+    <span class="n">unwanted_cols</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;Unnamed: 32&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Plotting</span>
+    <span class="n">colors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;#fe4a49&quot;</span><span class="p">,</span> <span class="s2">&quot;#2ab7ca&quot;</span><span class="p">,</span> <span class="s2">&quot;#fed766&quot;</span><span class="p">,</span> <span class="s2">&quot;#59981A&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">cmap_reversed</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;mako_r&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the config object to a dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The config object as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;raw_data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="p">,</span>
+            <span class="s2">&quot;processed_data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">processed_data</span><span class="p">,</span>
+            <span class="s2">&quot;train_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span><span class="p">,</span>
+            <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
+            <span class="s2">&quot;num_folds&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_folds</span><span class="p">,</span>
+            <span class="s2">&quot;cv_schema&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_schema</span><span class="p">,</span>
+            <span class="s2">&quot;classification_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_type</span><span class="p">,</span>
+            <span class="s2">&quot;target_col&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_col</span><span class="p">,</span>
+            <span class="s2">&quot;unwanted_cols&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">unwanted_cols</span><span class="p">,</span>
+            <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">,</span>
+            <span class="s2">&quot;cmap_reversed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmap_reversed</span><span class="p">,</span>
+        <span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_seeds</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set seeds for reproducibility.&quot;&quot;&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># set config</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+
+<span class="c1"># set seeding for reproducibility</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">set_seeds</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="stage-1-preliminary-data-inspection-and-cleaning">Stage 1: Preliminary Data Inspection and Cleaning</h2>
+<h3 id="load-the-dataset">Load the dataset</h3>
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">raw_data</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="a-brief-look-at-the-dataset">A brief look at the dataset</h3>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>
+<p>We will query the first five rows of the dataframe to get a feel on the dataset we are working on. </p>
+</li>
+<li>
+<p>We also call <code>df.info()</code> to see the data types of the columns, and to briefly check if there is any missing values in our data (more on that later). </p>
+</li>
+</ul>
+</div>
+<div class="highlight"><pre><span></span><code> <span class="c1">#   Column                   Non-Null Count  Dtype  </span>
+<span class="o">---</span>  <span class="o">------</span>                   <span class="o">--------------</span>  <span class="o">-----</span>  
+ <span class="mi">0</span>   <span class="n">diagnosis</span>                <span class="mi">569</span> <span class="n">non</span><span class="o">-</span><span class="n">null</span>    <span class="n">int64</span>  
+ <span class="mi">1</span>   <span class="n">radius_mean</span>              <span class="mi">569</span> <span class="n">non</span><span class="o">-</span><span class="n">null</span>    <span class="n">float64</span>
+ <span class="mi">2</span>   <span class="n">texture_mean</span>             <span class="mi">569</span> <span class="n">non</span><span class="o">-</span><span class="n">null</span>    <span class="n">float64</span>
+ <span class="mi">3</span>   <span class="n">perimeter_mean</span>           <span class="mi">569</span> <span class="n">non</span><span class="o">-</span><span class="n">null</span>    <span class="n">float64</span>
+</code></pre></div>
+<hr />
+<div class="admonition danger">
+<p class="admonition-title">Importance of data types</p>
+<p>We must be sharp and ensure that each column is indeed stored in their respective data types! In the real world, we may often query "dirty" data from say, the database, where numeric data are represented in string. It is now our duty to ensure sanity checks are in place!</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>diagnosis</th>
+      <th>radius_mean</th>
+      <th>texture_mean</th>
+      <th>perimeter_mean</th>
+      <th>area_mean</th>
+      <th>smoothness_mean</th>
+      <th>compactness_mean</th>
+      <th>concavity_mean</th>
+      <th>concave points_mean</th>
+      <th>symmetry_mean</th>
+      <th>fractal_dimension_mean</th>
+      <th>radius_se</th>
+      <th>texture_se</th>
+      <th>perimeter_se</th>
+      <th>area_se</th>
+      <th>smoothness_se</th>
+      <th>compactness_se</th>
+      <th>concavity_se</th>
+      <th>concave points_se</th>
+      <th>symmetry_se</th>
+      <th>fractal_dimension_se</th>
+      <th>radius_worst</th>
+      <th>texture_worst</th>
+      <th>perimeter_worst</th>
+      <th>area_worst</th>
+      <th>smoothness_worst</th>
+      <th>compactness_worst</th>
+      <th>concavity_worst</th>
+      <th>concave points_worst</th>
+      <th>symmetry_worst</th>
+      <th>fractal_dimension_worst</th>
+      <th>Unnamed: 32</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>842302</td>
+      <td>M</td>
+      <td>17.99</td>
+      <td>10.38</td>
+      <td>122.80</td>
+      <td>1001.0</td>
+      <td>0.11840</td>
+      <td>0.27760</td>
+      <td>0.3001</td>
+      <td>0.14710</td>
+      <td>0.2419</td>
+      <td>0.07871</td>
+      <td>1.0950</td>
+      <td>0.9053</td>
+      <td>8.589</td>
+      <td>153.40</td>
+      <td>0.006399</td>
+      <td>0.04904</td>
+      <td>0.05373</td>
+      <td>0.01587</td>
+      <td>0.03003</td>
+      <td>0.006193</td>
+      <td>25.38</td>
+      <td>17.33</td>
+      <td>184.60</td>
+      <td>2019.0</td>
+      <td>0.1622</td>
+      <td>0.6656</td>
+      <td>0.7119</td>
+      <td>0.2654</td>
+      <td>0.4601</td>
+      <td>0.11890</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>842517</td>
+      <td>M</td>
+      <td>20.57</td>
+      <td>17.77</td>
+      <td>132.90</td>
+      <td>1326.0</td>
+      <td>0.08474</td>
+      <td>0.07864</td>
+      <td>0.0869</td>
+      <td>0.07017</td>
+      <td>0.1812</td>
+      <td>0.05667</td>
+      <td>0.5435</td>
+      <td>0.7339</td>
+      <td>3.398</td>
+      <td>74.08</td>
+      <td>0.005225</td>
+      <td>0.01308</td>
+      <td>0.01860</td>
+      <td>0.01340</td>
+      <td>0.01389</td>
+      <td>0.003532</td>
+      <td>24.99</td>
+      <td>23.41</td>
+      <td>158.80</td>
+      <td>1956.0</td>
+      <td>0.1238</td>
+      <td>0.1866</td>
+      <td>0.2416</td>
+      <td>0.1860</td>
+      <td>0.2750</td>
+      <td>0.08902</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>84300903</td>
+      <td>M</td>
+      <td>19.69</td>
+      <td>21.25</td>
+      <td>130.00</td>
+      <td>1203.0</td>
+      <td>0.10960</td>
+      <td>0.15990</td>
+      <td>0.1974</td>
+      <td>0.12790</td>
+      <td>0.2069</td>
+      <td>0.05999</td>
+      <td>0.7456</td>
+      <td>0.7869</td>
+      <td>4.585</td>
+      <td>94.03</td>
+      <td>0.006150</td>
+      <td>0.04006</td>
+      <td>0.03832</td>
+      <td>0.02058</td>
+      <td>0.02250</td>
+      <td>0.004571</td>
+      <td>23.57</td>
+      <td>25.53</td>
+      <td>152.50</td>
+      <td>1709.0</td>
+      <td>0.1444</td>
+      <td>0.4245</td>
+      <td>0.4504</td>
+      <td>0.2430</td>
+      <td>0.3613</td>
+      <td>0.08758</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>84348301</td>
+      <td>M</td>
+      <td>11.42</td>
+      <td>20.38</td>
+      <td>77.58</td>
+      <td>386.1</td>
+      <td>0.14250</td>
+      <td>0.28390</td>
+      <td>0.2414</td>
+      <td>0.10520</td>
+      <td>0.2597</td>
+      <td>0.09744</td>
+      <td>0.4956</td>
+      <td>1.1560</td>
+      <td>3.445</td>
+      <td>27.23</td>
+      <td>0.009110</td>
+      <td>0.07458</td>
+      <td>0.05661</td>
+      <td>0.01867</td>
+      <td>0.05963</td>
+      <td>0.009208</td>
+      <td>14.91</td>
+      <td>26.50</td>
+      <td>98.87</td>
+      <td>567.7</td>
+      <td>0.2098</td>
+      <td>0.8663</td>
+      <td>0.6869</td>
+      <td>0.2575</td>
+      <td>0.6638</td>
+      <td>0.17300</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>84358402</td>
+      <td>M</td>
+      <td>20.29</td>
+      <td>14.34</td>
+      <td>135.10</td>
+      <td>1297.0</td>
+      <td>0.10030</td>
+      <td>0.13280</td>
+      <td>0.1980</td>
+      <td>0.10430</td>
+      <td>0.1809</td>
+      <td>0.05883</td>
+      <td>0.7572</td>
+      <td>0.7813</td>
+      <td>5.438</td>
+      <td>94.44</td>
+      <td>0.011490</td>
+      <td>0.02461</td>
+      <td>0.05688</td>
+      <td>0.01885</td>
+      <td>0.01756</td>
+      <td>0.005115</td>
+      <td>22.54</td>
+      <td>16.67</td>
+      <td>152.20</td>
+      <td>1575.0</td>
+      <td>0.1374</td>
+      <td>0.2050</td>
+      <td>0.4000</td>
+      <td>0.1625</td>
+      <td>0.2364</td>
+      <td>0.07678</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="highlight"><pre><span></span><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 569 entries, 0 to 568
+Data columns (total 33 columns):
+ #   Column                   Non-Null Count  Dtype  
+---  ------                   --------------  -----  
+ 0   id                       569 non-null    int64  
+ 1   diagnosis                569 non-null    object 
+ 2   radius_mean              569 non-null    float64
+ 3   texture_mean             569 non-null    float64
+ 4   perimeter_mean           569 non-null    float64
+ 5   area_mean                569 non-null    float64
+ 6   smoothness_mean          569 non-null    float64
+ 7   compactness_mean         569 non-null    float64
+ 8   concavity_mean           569 non-null    float64
+ 9   concave points_mean      569 non-null    float64
+ 10  symmetry_mean            569 non-null    float64
+ 11  fractal_dimension_mean   569 non-null    float64
+ 12  radius_se                569 non-null    float64
+ 13  texture_se               569 non-null    float64
+ 14  perimeter_se             569 non-null    float64
+ 15  area_se                  569 non-null    float64
+ 16  smoothness_se            569 non-null    float64
+ 17  compactness_se           569 non-null    float64
+ 18  concavity_se             569 non-null    float64
+ 19  concave points_se        569 non-null    float64
+ 20  symmetry_se              569 non-null    float64
+ 21  fractal_dimension_se     569 non-null    float64
+ 22  radius_worst             569 non-null    float64
+ 23  texture_worst            569 non-null    float64
+ 24  perimeter_worst          569 non-null    float64
+ 25  area_worst               569 non-null    float64
+ 26  smoothness_worst         569 non-null    float64
+ 27  compactness_worst        569 non-null    float64
+ 28  concavity_worst          569 non-null    float64
+ 29  concave points_worst     569 non-null    float64
+ 30  symmetry_worst           569 non-null    float64
+ 31  fractal_dimension_worst  569 non-null    float64
+ 32  Unnamed: 32              0 non-null      float64
+dtypes: float64(31), int64(1), object(1)
+memory usage: 146.8+ KB
+
+
+
+None
+</code></pre></div>
+<p>A brief overview tells us our data is alright! There is, however, a column which is unnamed and has no values. This can be of various data source issues, for now, we quickly check the definition given by the dataset from <a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29">UCI's Breast Cancer Wisconsin (Diagnostic) Data Set</a> and confirm that there should only be 32 columns. With this in mind, we can safely delete the column. </p>
+<hr />
+<p>We also note that from the above, that the <strong>id</strong> column is the identifier for each patient. We will also drop this column as it holds no predictive power.</p>
+<div class="admonition info">
+<p class="admonition-title">When can ID be important?</p>
+<ul>
+<li>We should try to question our move and justify it. In this dataset, we have to ensure that each <b>ID</b> is unique, if it is not, it may suggest that there are patient records with multiple observation, which is a violation of <b>i.i.d</b> assumption and we may take note when doing cross-validation, so as to avoid information leakage.</li>
+<li>Since the ID column is unique, we will delete it. We will keep this at the back of our mind in the event that we ever need them for feature engineering.</li>
+</ul>
+</div>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The ID column is unique : </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_unique</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>The ID column is unique : True
+</code></pre></div>
+<h3 id="drop-drop-drop-the-columns">Drop, drop, drop the columns!</h3>
+<p>Here we define a <code>drop_columns</code> function to drop the unwanted columns.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">drop_columns</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drop unwanted columns from dataframe.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): Dataframe to be cleaned</span>
+<span class="sd">        columns (List): list of columns to be dropped</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        df_copy (pd.DataFrame): Dataframe with unwanted columns dropped.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df_copy</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df_copy</span> <span class="o">=</span> <span class="n">df_copy</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_copy</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">drop_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">unwanted_cols</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="data-types">Data Types</h3>
+<p>Let us split the data types into a few unbrellas:</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><strong>Categorical Variables:</strong>
+diagnosis: The target variable diagnosis, although represented as a string in the dataframe, should be categorical! This is because machines do not really like working with "strings" and prefer your type to be of "numbers". We will map them to 0 and 1, representing benign and malignant respectively. Since the target variable is just two unique values, we can use a simple map from pandas to do the job.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="n">class_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;B&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;diagnosis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;diagnosis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">class_dict</span><span class="p">)</span>
+</code></pre></div>
+<p>We will make sure that our mapping is accurate by asserting the following.</p>
+<div class="highlight"><pre><span></span><code><span class="k">assert</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;diagnosis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">357</span>
+<span class="k">assert</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;diagnosis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">212</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><strong>Continuous Variables:</strong>
+A preliminary look seems to suggest all our predictors are continuous.</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title">Success</p>
+<p>From the brief overview, there does not seem to be any Ordinal or Nominal Predictors. This suggest that we may not need to perform encoding in our preprocessing.</p>
+</div>
+<h3 id="summary-statistics">Summary Statistics</h3>
+<p>We will use a simple, yet powerful function call to check on the summary statistics of our dataframe. We note to the readers that there are much more powerful libraries like <a href="https://pandas-profiling.github.io/pandas-profiling/docs/master/rtd/">pandas-profiling</a> to give us an even more thorough summary, but for our purpose, we will use the good ol' <code>df.describe()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">))</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>diagnosis</th>
+      <th>radius_mean</th>
+      <th>texture_mean</th>
+      <th>perimeter_mean</th>
+      <th>area_mean</th>
+      <th>smoothness_mean</th>
+      <th>compactness_mean</th>
+      <th>concavity_mean</th>
+      <th>concave points_mean</th>
+      <th>symmetry_mean</th>
+      <th>fractal_dimension_mean</th>
+      <th>radius_se</th>
+      <th>texture_se</th>
+      <th>perimeter_se</th>
+      <th>area_se</th>
+      <th>smoothness_se</th>
+      <th>compactness_se</th>
+      <th>concavity_se</th>
+      <th>concave points_se</th>
+      <th>symmetry_se</th>
+      <th>fractal_dimension_se</th>
+      <th>radius_worst</th>
+      <th>texture_worst</th>
+      <th>perimeter_worst</th>
+      <th>area_worst</th>
+      <th>smoothness_worst</th>
+      <th>compactness_worst</th>
+      <th>concavity_worst</th>
+      <th>concave points_worst</th>
+      <th>symmetry_worst</th>
+      <th>fractal_dimension_worst</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+      <td>569.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>0.372583</td>
+      <td>14.127292</td>
+      <td>19.289649</td>
+      <td>91.969033</td>
+      <td>654.889104</td>
+      <td>0.096360</td>
+      <td>0.104341</td>
+      <td>0.088799</td>
+      <td>0.048919</td>
+      <td>0.181162</td>
+      <td>0.062798</td>
+      <td>0.405172</td>
+      <td>1.216853</td>
+      <td>2.866059</td>
+      <td>40.337079</td>
+      <td>0.007041</td>
+      <td>0.025478</td>
+      <td>0.031894</td>
+      <td>0.011796</td>
+      <td>0.020542</td>
+      <td>0.003795</td>
+      <td>16.269190</td>
+      <td>25.677223</td>
+      <td>107.261213</td>
+      <td>880.583128</td>
+      <td>0.132369</td>
+      <td>0.254265</td>
+      <td>0.272188</td>
+      <td>0.114606</td>
+      <td>0.290076</td>
+      <td>0.083946</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.483918</td>
+      <td>3.524049</td>
+      <td>4.301036</td>
+      <td>24.298981</td>
+      <td>351.914129</td>
+      <td>0.014064</td>
+      <td>0.052813</td>
+      <td>0.079720</td>
+      <td>0.038803</td>
+      <td>0.027414</td>
+      <td>0.007060</td>
+      <td>0.277313</td>
+      <td>0.551648</td>
+      <td>2.021855</td>
+      <td>45.491006</td>
+      <td>0.003003</td>
+      <td>0.017908</td>
+      <td>0.030186</td>
+      <td>0.006170</td>
+      <td>0.008266</td>
+      <td>0.002646</td>
+      <td>4.833242</td>
+      <td>6.146258</td>
+      <td>33.602542</td>
+      <td>569.356993</td>
+      <td>0.022832</td>
+      <td>0.157336</td>
+      <td>0.208624</td>
+      <td>0.065732</td>
+      <td>0.061867</td>
+      <td>0.018061</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>6.981000</td>
+      <td>9.710000</td>
+      <td>43.790000</td>
+      <td>143.500000</td>
+      <td>0.052630</td>
+      <td>0.019380</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.106000</td>
+      <td>0.049960</td>
+      <td>0.111500</td>
+      <td>0.360200</td>
+      <td>0.757000</td>
+      <td>6.802000</td>
+      <td>0.001713</td>
+      <td>0.002252</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.007882</td>
+      <td>0.000895</td>
+      <td>7.930000</td>
+      <td>12.020000</td>
+      <td>50.410000</td>
+      <td>185.200000</td>
+      <td>0.071170</td>
+      <td>0.027290</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.156500</td>
+      <td>0.055040</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.000000</td>
+      <td>11.700000</td>
+      <td>16.170000</td>
+      <td>75.170000</td>
+      <td>420.300000</td>
+      <td>0.086370</td>
+      <td>0.064920</td>
+      <td>0.029560</td>
+      <td>0.020310</td>
+      <td>0.161900</td>
+      <td>0.057700</td>
+      <td>0.232400</td>
+      <td>0.833900</td>
+      <td>1.606000</td>
+      <td>17.850000</td>
+      <td>0.005169</td>
+      <td>0.013080</td>
+      <td>0.015090</td>
+      <td>0.007638</td>
+      <td>0.015160</td>
+      <td>0.002248</td>
+      <td>13.010000</td>
+      <td>21.080000</td>
+      <td>84.110000</td>
+      <td>515.300000</td>
+      <td>0.116600</td>
+      <td>0.147200</td>
+      <td>0.114500</td>
+      <td>0.064930</td>
+      <td>0.250400</td>
+      <td>0.071460</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>0.000000</td>
+      <td>13.370000</td>
+      <td>18.840000</td>
+      <td>86.240000</td>
+      <td>551.100000</td>
+      <td>0.095870</td>
+      <td>0.092630</td>
+      <td>0.061540</td>
+      <td>0.033500</td>
+      <td>0.179200</td>
+      <td>0.061540</td>
+      <td>0.324200</td>
+      <td>1.108000</td>
+      <td>2.287000</td>
+      <td>24.530000</td>
+      <td>0.006380</td>
+      <td>0.020450</td>
+      <td>0.025890</td>
+      <td>0.010930</td>
+      <td>0.018730</td>
+      <td>0.003187</td>
+      <td>14.970000</td>
+      <td>25.410000</td>
+      <td>97.660000</td>
+      <td>686.500000</td>
+      <td>0.131300</td>
+      <td>0.211900</td>
+      <td>0.226700</td>
+      <td>0.099930</td>
+      <td>0.282200</td>
+      <td>0.080040</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.000000</td>
+      <td>15.780000</td>
+      <td>21.800000</td>
+      <td>104.100000</td>
+      <td>782.700000</td>
+      <td>0.105300</td>
+      <td>0.130400</td>
+      <td>0.130700</td>
+      <td>0.074000</td>
+      <td>0.195700</td>
+      <td>0.066120</td>
+      <td>0.478900</td>
+      <td>1.474000</td>
+      <td>3.357000</td>
+      <td>45.190000</td>
+      <td>0.008146</td>
+      <td>0.032450</td>
+      <td>0.042050</td>
+      <td>0.014710</td>
+      <td>0.023480</td>
+      <td>0.004558</td>
+      <td>18.790000</td>
+      <td>29.720000</td>
+      <td>125.400000</td>
+      <td>1084.000000</td>
+      <td>0.146000</td>
+      <td>0.339100</td>
+      <td>0.382900</td>
+      <td>0.161400</td>
+      <td>0.317900</td>
+      <td>0.092080</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1.000000</td>
+      <td>28.110000</td>
+      <td>39.280000</td>
+      <td>188.500000</td>
+      <td>2501.000000</td>
+      <td>0.163400</td>
+      <td>0.345400</td>
+      <td>0.426800</td>
+      <td>0.201200</td>
+      <td>0.304000</td>
+      <td>0.097440</td>
+      <td>2.873000</td>
+      <td>4.885000</td>
+      <td>21.980000</td>
+      <td>542.200000</td>
+      <td>0.031130</td>
+      <td>0.135400</td>
+      <td>0.396000</td>
+      <td>0.052790</td>
+      <td>0.078950</td>
+      <td>0.029840</td>
+      <td>36.040000</td>
+      <td>49.540000</td>
+      <td>251.200000</td>
+      <td>4254.000000</td>
+      <td>0.222600</td>
+      <td>1.058000</td>
+      <td>1.252000</td>
+      <td>0.291000</td>
+      <td>0.663800</td>
+      <td>0.207500</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>The table does give us a good overview: for example, a brief glance give me the following observations:</p>
+<ol>
+<li>
+<p>The features <strong>do not seem to be of the same scale</strong>. This is going to be a problem as some models do not perform well if your features are not on the same scale. A prime example is a KNN model with Euclidean Distance as the distance metric, the difference in range of different features will be amplified with the squared term, and the feature with wider range will dominate the one with smaller range. </p>
+</li>
+<li>
+<p>From our dataset it we see that <strong>area_mean</strong> is very large and there is likely to be a squared term (possibly from <strong>radius_mean</strong>), we can look into them later through EDA.</p>
+</li>
+</ol>
+<p>Humans are more visual and that is why we still need EDA later to capture our attention on any anomaly from the dataset, and of course, if the dataset has many columns, then this summary statistics may even clog your progress if you were to read it line by line.</p>
+<h3 id="missing-data">Missing Data</h3>
+<div class="admonition danger">
+<p class="admonition-title">Missing Alert?</p>
+<p>Although from our analysis, we did not see any missing data, it is always good to remind ourselves to check it. A simple function that does the job is as follows.</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">report_missing</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to check for missing data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): The DataFrame to check.</span>
+<span class="sd">        columns (List): The columns to check.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        missing_data_df (pd.DataFrame): Returns a DataFrame that reports missing data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">missing_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;missing num&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;missing percentage&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="n">num_missing</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">percentage_missing</span> <span class="o">=</span> <span class="n">num_missing</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">missing_dict</span><span class="p">[</span><span class="s2">&quot;missing num&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num_missing</span><span class="p">)</span>
+        <span class="n">missing_dict</span><span class="p">[</span><span class="s2">&quot;missing percentage&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">percentage_missing</span><span class="p">)</span>
+
+    <span class="n">missing_data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">missing_dict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">missing_data_df</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">missing_df</span> <span class="o">=</span> <span class="n">report_missing</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">missing_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>missing num</th>
+      <th>missing percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>diagnosis</th>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>radius_mean</th>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>texture_mean</th>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>perimeter_mean</th>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>area_mean</th>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="save-data">Save data</h3>
+<p>We save the data to processed and we can call it later on in subsequent notebooks.</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Introduction
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../Stage%202%20-%20Preliminary%20EDA/" class="md-footer__link md-footer__link--next" aria-label="Next: EDA" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              EDA
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

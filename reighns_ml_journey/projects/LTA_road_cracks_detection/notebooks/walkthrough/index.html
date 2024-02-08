@@ -1,0 +1,2747 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/projects/LTA_road_cracks_detection/notebooks/walkthrough/">
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>LTA - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data-collection-and-label" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              LTA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          LTA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        LTA
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-collection-and-label" class="md-nav__link">
+    Data Collection and Label
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Collection and Label">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#original-dataset" class="md-nav__link">
+    Original Dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#labelling" class="md-nav__link">
+    Labelling
+  </a>
+  
+    <nav class="md-nav" aria-label="Labelling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semi-supervised-learning" class="md-nav__link">
+    Semi-Supervised Learning
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#establish-metrics" class="md-nav__link">
+    Establish Metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Establish Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iou" class="md-nav__link">
+    IOU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-typical-brothers-tp-fp-tn-fn" class="md-nav__link">
+    The Typical Brothers (TP, FP, TN, FN)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-iconic-duo-precision-and-recall" class="md-nav__link">
+    The Iconic DUO (Precision and Recall)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#precision" class="md-nav__link">
+    Precision
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall" class="md-nav__link">
+    Recall
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall-vs-precision" class="md-nav__link">
+    Recall vs Precision
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-objectness-confidence-score" class="md-nav__link">
+    The Objectness Confidence Score
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#average-precision" class="md-nav__link">
+    Average Precision
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-architecture" class="md-nav__link">
+    Model Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rcnn" class="md-nav__link">
+    RCNN
+  </a>
+  
+    <nav class="md-nav" aria-label="RCNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-architecture" class="md-nav__link">
+    Basic Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons" class="md-nav__link">
+    Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast-rcnn" class="md-nav__link">
+    Fast-RCNN
+  </a>
+  
+    <nav class="md-nav" aria-label="Fast-RCNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-architecture_1" class="md-nav__link">
+    Basic Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons_1" class="md-nav__link">
+    Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#faster-rcnn" class="md-nav__link">
+    Faster-RCNN
+  </a>
+  
+    <nav class="md-nav" aria-label="Faster-RCNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-architecture_2" class="md-nav__link">
+    Basic Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons_2" class="md-nav__link">
+    Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yolo" class="md-nav__link">
+    Yolo
+  </a>
+  
+    <nav class="md-nav" aria-label="Yolo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons-vs-faster-rcnn" class="md-nav__link">
+    Pros and Cons VS faster rcnn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yolo-v3" class="md-nav__link">
+    Yolo V3
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screenshots" class="md-nav__link">
+    Screenshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#augmentations" class="md-nav__link">
+    Augmentations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-collection-and-label" class="md-nav__link">
+    Data Collection and Label
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Collection and Label">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#original-dataset" class="md-nav__link">
+    Original Dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#labelling" class="md-nav__link">
+    Labelling
+  </a>
+  
+    <nav class="md-nav" aria-label="Labelling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semi-supervised-learning" class="md-nav__link">
+    Semi-Supervised Learning
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#establish-metrics" class="md-nav__link">
+    Establish Metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Establish Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iou" class="md-nav__link">
+    IOU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-typical-brothers-tp-fp-tn-fn" class="md-nav__link">
+    The Typical Brothers (TP, FP, TN, FN)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-iconic-duo-precision-and-recall" class="md-nav__link">
+    The Iconic DUO (Precision and Recall)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#precision" class="md-nav__link">
+    Precision
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall" class="md-nav__link">
+    Recall
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall-vs-precision" class="md-nav__link">
+    Recall vs Precision
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-objectness-confidence-score" class="md-nav__link">
+    The Objectness Confidence Score
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#average-precision" class="md-nav__link">
+    Average Precision
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-architecture" class="md-nav__link">
+    Model Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rcnn" class="md-nav__link">
+    RCNN
+  </a>
+  
+    <nav class="md-nav" aria-label="RCNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-architecture" class="md-nav__link">
+    Basic Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons" class="md-nav__link">
+    Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast-rcnn" class="md-nav__link">
+    Fast-RCNN
+  </a>
+  
+    <nav class="md-nav" aria-label="Fast-RCNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-architecture_1" class="md-nav__link">
+    Basic Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons_1" class="md-nav__link">
+    Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#faster-rcnn" class="md-nav__link">
+    Faster-RCNN
+  </a>
+  
+    <nav class="md-nav" aria-label="Faster-RCNN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-architecture_2" class="md-nav__link">
+    Basic Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons_2" class="md-nav__link">
+    Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yolo" class="md-nav__link">
+    Yolo
+  </a>
+  
+    <nav class="md-nav" aria-label="Yolo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pros-and-cons-vs-faster-rcnn" class="md-nav__link">
+    Pros and Cons VS faster rcnn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yolo-v3" class="md-nav__link">
+    Yolo V3
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screenshots" class="md-nav__link">
+    Screenshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#augmentations" class="md-nav__link">
+    Augmentations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/projects/LTA_road_cracks_detection/notebooks/walkthrough.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>LTA</h1>
+
+<div class="arithmatex">\[
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\yhat}{\mathbf{\hat{y}}}
+\newcommand{\iou}{\textbf{IOU}}
+\]</div>
+<h2 id="data-collection-and-label">Data Collection and Label</h2>
+<h3 id="original-dataset">Original Dataset</h3>
+<ul>
+<li>
+<p>500 images of size <span class="arithmatex">\(4032 \times 3024\)</span> provided by LTA:</p>
+<ul>
+<li>150 positive class 1 where 1 means defective;</li>
+<li>350 negative class 0 where 0 means non-defective;</li>
+<li>Class labels are subjected to changes depending on model used (i.e. F-RCNN treats background as 0 while Yolo does not care)</li>
+</ul>
+</li>
+<li>
+<p>There is some slight class imbalance:</p>
+<ul>
+<li>We checked if we can garner more data;</li>
+<li>We were given the green light;</li>
+<li>We collected about 1500 more photos.</li>
+</ul>
+</li>
+</ul>
+<h3 id="labelling">Labelling</h3>
+<ul>
+<li>The total number of images is <span class="arithmatex">\(2000\)</span>;</li>
+<li>We need to label all of them as labels were not provided;</li>
+<li>Shortage of manpower prompted us to think of ways to reduce manual labour.</li>
+</ul>
+<h4 id="semi-supervised-learning">Semi-Supervised Learning</h4>
+<blockquote>
+<p><strong>Semi-supervised learning is an approach to machine learning that combines a small amount of labeled data with a large amount of unlabeled data during training. Semi-supervised learning falls between unsupervised learning (with no labeled training data) and supervised learning (with only labeled training data). It is a special instance of weak supervision.</strong></p>
+</blockquote>
+<p><strong>High-level overview</strong></p>
+<ul>
+<li>We manually labour <span class="arithmatex">\(500\)</span> images of 50-50 ratio with class balanced;</li>
+<li>We train on the <span class="arithmatex">\(500\)</span> images using an Object Detection Model <span class="arithmatex">\(\M_1\)</span> until convergence (i.e. an acceptable result say MAP &gt; 0.8, but more importantly, we <strong>do not care</strong> the class accuracy, rather, we want the localization error to be low);</li>
+<li>We use <span class="arithmatex">\(\M_1\)</span> and perform inference on the remaining <span class="arithmatex">\(1500\)</span> images so that <span class="arithmatex">\(\M_1\)</span> can return us each image's bounding box coordinates, during this process we can discard bounding boxes with low confidences if we feel that an image won't contain more than say, 5 tactile tiles;</li>
+<li>Note that we emphasized on a low localization error from <span class="arithmatex">\(\M_1\)</span> and therefore expect that at the very least the bounding boxes of the tactile tiles are accurate as drawing bounding boxes manually is more time consuming than labelling whether a given bounding box is of class 0 or 1;</li>
+<li>We then run through manually over the predicted <span class="arithmatex">\(1500\)</span> images to see if the predicted bounding boxes by <span class="arithmatex">\(\M_1\)</span> makes sense, and also to correct them if need be.</li>
+</ul>
+<h2 id="establish-metrics">Establish Metrics</h2>
+<p>After understanding the problem better, we should probably define a metric to optimize. We adopt the commonly used metrics for object detection.</p>
+<h3 id="iou">IOU</h3>
+<p>The concept of <strong>Intersection over Union (IOU)</strong>, also known as the <strong>Jaccard Index</strong> is used to decide whether the predicted bounding box is giving us a good outcome. </p>
+<p>It is defined by the formula: <span class="arithmatex">\(<span class="arithmatex">\(J(A,B) = \dfrac{|(A \cap B)|}{|(A \cup B)|}\)</span>\)</span></p>
+<p>where A and B are the area of the ground truth bounding box and predicted ground truth bounding box respectively as shown in figure below.</p>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/lta_2.PNG" width="500"/>
+</div>
+
+<h3 id="the-typical-brothers-tp-fp-tn-fn">The Typical Brothers (TP, FP, TN, FN)</h3>
+<p>Object Detection at its core is a complicated algorithm comprising of both regression and classification. We first define the 4 good brothers that we see in a typical <strong>classification problem</strong>.</p>
+<p>Note in usual classification problem, we will have a probabality logit at the end of a softmax/sigmoid layer, which aids us in determining whether a classification belongs to TP, FP, TN or FN.
+In object detection, we use the <strong>IOU</strong> to determine if a given a bounding box prediction belongs to the four brothers.</p>
+<p>Let us define:</p>
+<ul>
+<li><span class="arithmatex">\(\y\)</span>: 1 single ground truth bbox;</li>
+<li><span class="arithmatex">\(\yhat\)</span>: 1 single predicted bbox;</li>
+<li><span class="arithmatex">\(\iou(\y, \yhat)\)</span>: The IOU between them.</li>
+<li><span class="arithmatex">\(t\)</span>: The threshold for IOU to cross for it to be a positive, defaults to <span class="arithmatex">\(0.5\)</span>.</li>
+</ul>
+<p>Then:</p>
+<ul>
+<li>TP: The model classified it as positive and it indeed is positive; <span class="arithmatex">\(\yhat\)</span> is TP iff <span class="arithmatex">\(\iou(\y, \yhat) &gt; t\)</span>; both the predictor and the ground truth are in agreement;</li>
+<li>FP: The model classified it as positive but it is negative; <span class="arithmatex">\(\yhat\)</span> is FP iff <span class="arithmatex">\(\iou(\y, \yhat) &lt; t\)</span>; the predictor raised a false alarm that there is an object but there actually isn't;</li>
+<li>FN: The model classified it as negative but it is positive; <span class="arithmatex">\(\yhat\)</span> is FN iff there exists a ground truth <span class="arithmatex">\(\y\)</span> that is not detected by our model;</li>
+<li>TN: This is usually ignored since it means that both the predictor and the annotator ground truth did not have a bounding box; it is often termed as <strong>correct rejections</strong> because there exist infinite places on an image where there are no bounding boxes from both the predictor and the annotator.</li>
+</ul>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/lta_1.PNG" width="500"/>
+</div>
+
+<h3 id="the-iconic-duo-precision-and-recall">The Iconic DUO (Precision and Recall)</h3>
+<p>As with any other classification problem, we will see this iconic duo. Let us recap these 2 metrics in the settings of object detection.</p>
+<h3 id="precision">Precision</h3>
+<blockquote>
+<p><strong>Precision measures how many of the samples predicted as positive are actually positive. Mathematically, it is expressed as:</strong></p>
+</blockquote>
+<div class="arithmatex">\[
+\text{Precision} = \dfrac{\text{TP}}{\text{TP} + \text{FP}}=P(Y=1 | \hat{Y} = 1)
+\]</div>
+<hr />
+<blockquote>
+<p>A Probablistic Interpretation
+    Notice that the above definition has a probabilitic interpretation <span class="arithmatex">\(P(Y = 1 | \hat{Y} = 1)\)</span>, where <span class="arithmatex">\(Y\)</span> and <span class="arithmatex">\(\hat{Y}\)</span> refers to the actual label and predicted labels respectively. We interpreted precision and recall not as ratios but as <a href="https://en.wikipedia.org/wiki/Precision_and_recall">estimations of probabilities</a>.
+    Precision is then the estimated probability that a random point selected from the samples are positive. This might be a tough pill to swallow as someone who was never good in statistics but it is just conditional probability. If you try to think a bit further, you can form an intuition as follows:
+    &gt; If your classifier <span class="arithmatex">\(h\)</span> is trained and the last layer is say, sigmoid, which in binary classification, calibrates the logits and turn them into probabilities. Then it can be interpretated that given a randomly chosen point <span class="arithmatex">\(x \in X_{train}\)</span>, what is the probability of this point <span class="arithmatex">\(x\)</span> to be positive given that it is predicted as positive by the classifer?</p>
+</blockquote>
+<hr />
+<p>Informally, precision answers the question <strong>what proportion of positive predictions was actually correct</strong>? In other words, out of all the positive predictions made by the model, how many of those positive predictions were actually positive when compared to the ground truth?</p>
+<blockquote>
+<p><strong>In object detection, precision can be throught of as the fraction of correct object predictions among all objects detected by the model</strong></p>
+</blockquote>
+<h3 id="recall">Recall</h3>
+<blockquote>
+<p><strong>Recall measures the following: out of all the actual positives (say, the real cancer patients), how many of them were identified correctly by the classifier? Mathematically, it is expressed as:</strong></p>
+</blockquote>
+<div class="arithmatex">\[
+\text{Recall}= \dfrac{\text{TP}}{\text{TP} + \text{FN}}= P(\hat{Y}=1 | Y = 1)=1-FNR
+\]</div>
+<p>From the formula, we see the denominator to be defined as TP + FN, which is unsurprising as this gives you the actual number of positives. The dynamics is also similar to the one in precision.</p>
+<blockquote>
+<p><strong>In object detection, recall can be thought of as the fraction of ground truth objects that are correctly detected by the model.</strong></p>
+</blockquote>
+<h3 id="recall-vs-precision">Recall vs Precision</h3>
+<p>The tug of war between this duo is still present, that is to say, as precision goes down, recall might go up and vice versa.</p>
+<p>Note that precision and recall are parametrized by the IOU threshold <span class="arithmatex">\(t\)</span>, that means, for each threshold <span class="arithmatex">\(t\)</span>, we can calculate the pair of precision and recall score.</p>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/lta_3.PNG" width="500"/>
+</div>
+
+<h3 id="the-objectness-confidence-score">The Objectness Confidence Score</h3>
+<p>Before we proceed to the behemoth <strong>Mean Average Precision</strong>, we should take a step back and recall that an usual object detection model is parametrized by:</p>
+<ul>
+<li>predicted bbox: [[...], [...]] 2 predictions;</li>
+<li>associated objectness confidence score: [0.2, 0.9] how confident that the predicted bbox really do contains an object;</li>
+<li>predicted labels: [1, 2]</li>
+<li>associated labels confidence score: [0.3, 0.8] how confident that the predicted label is correct, usually this is the probability logits.</li>
+</ul>
+<p>Before we even get to IOU calculation, we have another threshold to worry about, which is the objectness confidence score <span class="arithmatex">\(\tau\)</span>; that is, if the predicted bboxes has confidence score below <span class="arithmatex">\(\tau\)</span>, then we immediately discard the predictions and do not even consider it a valid prediction. So if you are have a high <span class="arithmatex">\(\tau\)</span> threshold, then you may have a high precision at the cost of low recall. Let us breakdown why:</p>
+<ul>
+<li>If you raise <span class="arithmatex">\(\tau\)</span>, then we have a stringent requirement such that more objects might be missed by the model. A high FN ensues.</li>
+<li>If you decrease <span class="arithmatex">\(\tau\)</span>, then we may have many predictions, say a ground truth image has 2 gt bbox, but since we loosen <span class="arithmatex">\(\tau\)</span>, we have 10 predicted bboxes, this causes a lot of FPs.</li>
+</ul>
+<blockquote>
+<p><strong>So a precision recall curve is a plot of precision vs recall at various thresholds <span class="arithmatex">\(\tau\)</span>. Note very carefully that the pr-curve is parametrized by <span class="arithmatex">\(\tau\)</span> and not <span class="arithmatex">\(t\)</span> (the IOU threshold).</strong></p>
+</blockquote>
+<h3 id="average-precision">Average Precision</h3>
+<blockquote>
+<p><strong>The big picture, precison-recall curve can be understood as y = f(x) where y is precision and recall x. More simply, it is just plotting pairs of precision-recall for each threshold <span class="arithmatex">\(\tau\)</span> and summing the area under the curve.</strong></p>
+<p>At each confidence level (threshold), we ask what is the precision-recall score of the predictions of <strong>all bounding boxes at a specific IOU</strong> while discarding off those below the threshold, then average them over all thresholds? That's MAP</p>
+</blockquote>
+<h2 id="model-architecture">Model Architecture</h2>
+<h3 id="rcnn">RCNN</h3>
+<h4 id="basic-architecture">Basic Architecture</h4>
+<ol>
+<li>Perform <strong>selective search</strong> to extract multiple high-quality region proposals on the input image. These proposed regions are usually selected at multiple scales with different shapes and sizes. Each region proposal will be labeled with a class and a ground-truth bounding box. <em>I believe out of the 2000 proposals, some of them won't even enclose any ground truth and so they should be discarded</em>.</li>
+<li>Choose a pretrained CNN and truncate it before the output layer. Resize each region proposal to the input size required by the network, and output the extracted features for the region proposal through forward propagation. </li>
+<li>Take the extracted features and labeled class of each region proposal as an example. Train multiple support vector machines to classify objects, where each support vector machine individually determines whether the example contains a specific class.</li>
+<li>Take the extracted features and labeled bounding box of each region proposal as an example. Train a linear regression model to predict the ground-truth bounding box.</li>
+</ol>
+<p><img alt="The R-CNN model." src="https://github.com/d2l-ai/d2l-pytorch-colab/blob/master/img/r-cnn.svg?raw=1" /></p>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/rcnn.PNG" width="500"/>
+</div>
+
+<blockquote>
+<p><strong>Own words:</strong></p>
+</blockquote>
+<ul>
+<li><strong>Propose say 2000 regions (anchor boxes) then for each of the 2000 regions, we discard the ones with no IOU with ground truth;</strong></li>
+<li><strong>Run a CNN on each the remaining region proposals and take the output and:</strong><ul>
+<li>Feed into SVMs to classify the region;</li>
+<li>A linear regressor to regress the bboxes;</li>
+</ul>
+</li>
+</ul>
+<h4 id="pros-and-cons">Pros and Cons</h4>
+<p><strong>Cons</strong>:
+- Too slow as if 2000 proposals need to run 2000 CNNs on it.</p>
+<h3 id="fast-rcnn">Fast-RCNN</h3>
+<p>To resolve the 2000 proposals = 2000 CNNs issue, one can envision that we just use 1 CNN for the image and using this 1 CNN we "inference on the 2000 proposals".</p>
+<h4 id="basic-architecture_1">Basic Architecture</h4>
+<ol>
+<li>Compared with the R-CNN, in the fast R-CNN the input of the CNN for feature extraction is the entire image, rather than individual region proposals. Moreover, this CNN is trainable. Given an input image, let the shape of the CNN output be <span class="arithmatex">\(1 \times c \times h_1  \times w_1\)</span>.</li>
+<li>Suppose that selective search generates <span class="arithmatex">\(n\)</span> region proposals. These region proposals (of different shapes) mark regions of interest (of different shapes) on the CNN output. Then these regions of interest further extract features of the same shape (say height <span class="arithmatex">\(h_2\)</span> and width <span class="arithmatex">\(w_2\)</span> are specified) in order to be easily concatenated. To achieve this, the fast R-CNN introduces the <em>region of interest (RoI) pooling</em> layer: the CNN output and region proposals are input into this layer, outputting concatenated features of shape <span class="arithmatex">\(n \times c \times h_2 \times w_2\)</span> that are further extracted for all the region proposals.</li>
+<li>Using a fully-connected layer, transform the concatenated features into an output of shape <span class="arithmatex">\(n \times d\)</span>, where <span class="arithmatex">\(d\)</span> depends on the model design.</li>
+<li>Predict the class and bounding box for each of the <span class="arithmatex">\(n\)</span> region proposals. More concretely, in class and bounding box prediction, transform the fully-connected layer output into an output of shape <span class="arithmatex">\(n \times q\)</span> (<span class="arithmatex">\(q\)</span> is the number of classes) and an output of shape <span class="arithmatex">\(n \times 4\)</span>, respectively. The class prediction uses softmax regression.</li>
+</ol>
+<p><img alt="The fast R-CNN model." src="https://github.com/d2l-ai/d2l-pytorch-colab/blob/master/img/fast-rcnn.svg?raw=1" /></p>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/fast_rcnn.PNG" width="500"/>
+</div>
+
+<blockquote>
+<p><strong>Own words:</strong></p>
+</blockquote>
+<ul>
+<li><strong>Decide on a CNN and truncate head</strong></li>
+<li><strong>Here say the CNN output feature map is shape (1, 128, 7, 7) with 128 filters of 7 by 7</strong></li>
+<li><strong>Use proposal method to get say n=200 regions</strong>, these regions can be mapped to the CNN output in previous step.</li>
+<li><strong>Each region can be shaped differently, so we use ROI pooling to shape all n of them into same width and height say 3 by 3. So now our shape is <span class="arithmatex">\((200, 128, 3, 3)\)</span> where 200 is stacked region proposals.</strong></li>
+<li><strong>Then use the traditional FC with 2 heads to predict</strong></li>
+</ul>
+<h4 id="pros-and-cons_1">Pros and Cons</h4>
+<p><strong>Pros</strong>:
+- Solved 2000 CNN issue.</p>
+<p><strong>Cons</strong>:
+- Selective search still slow.</p>
+<h3 id="faster-rcnn">Faster-RCNN</h3>
+<p>Basically solved selective search with RPN.</p>
+<h4 id="basic-architecture_2">Basic Architecture</h4>
+<ol>
+<li>Use a <span class="arithmatex">\(3\times 3\)</span> convolutional layer with padding of 1 to transform the CNN output to a new output with <span class="arithmatex">\(c\)</span> channels. In this way, each unit along the spatial dimensions of the CNN-extracted feature maps gets a new feature vector of length <span class="arithmatex">\(c\)</span>.</li>
+<li>Centered on each pixel of the feature maps, generate multiple anchor boxes of different scales and aspect ratios and label them.</li>
+<li>Using the length-<span class="arithmatex">\(c\)</span> feature vector at the center of each anchor box, predict the binary class (background or objects) and bounding box for this anchor box.</li>
+<li>Consider those predicted bounding boxes whose  predicted classes are objects. Remove overlapped results using non-maximum suppression. The remaining  predicted bounding boxes for objects are the region proposals required by the region of interest pooling layer.</li>
+</ol>
+<p><img alt="The faster R-CNN model." src="https://github.com/d2l-ai/d2l-pytorch-colab/blob/master/img/faster-rcnn.svg?raw=1" /></p>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/faster_rcnn.PNG" width="500"/>
+</div>
+
+<p>RPN like this, basically take feature map and connect to 2k and 4k mappings and compare with gt anchor boxes, can be learned so it is powerful and can predict better proposals.</p>
+<div class="highlight"><pre><span></span><code><span class="n">in_channels</span> <span class="o">=</span> <span class="mi">512</span>  <span class="c1"># depends on the output feature map. in vgg 16 it is equal to 512</span>
+
+<span class="n">mid_channels</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">n_anchor</span> <span class="o">=</span> <span class="mi">9</span>  <span class="c1"># Number of anchors at each location</span>
+
+<span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">mid_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">conv1</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">conv1</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+
+<span class="n">reg_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">mid_channels</span><span class="p">,</span> <span class="n">n_anchor</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">reg_layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">reg_layer</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+
+<span class="n">cls_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">mid_channels</span><span class="p">,</span> <span class="n">n_anchor</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># I will be going to use softmax here. you can equally use sigmoid if u replace 2 with 1.</span>
+<span class="n">cls_layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">cls_layer</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">();</span>
+</code></pre></div>
+<p>It is worth noting that, as part of the faster R-CNN model, the region proposal network is jointly trained with the rest of the model. In other words, the objective function of the faster R-CNN includes not only the class and bounding box prediction in object detection, but also the binary class and bounding box prediction of anchor boxes in the region proposal network. As a result of the end-to-end training, the region proposal network learns how to generate high-quality region proposals, so as to stay accurate in object detection with a reduced number of region proposals that are learned from data.</p>
+<h4 id="pros-and-cons_2">Pros and Cons</h4>
+<ul>
+<li>Still considered 2-stage, accurate but slow.</li>
+</ul>
+<h3 id="yolo">Yolo</h3>
+<h4 id="pros-and-cons-vs-faster-rcnn">Pros and Cons VS faster rcnn</h4>
+<p><strong>Cons</strong>
+- Yolo v1 7 by 7 grid, each grid 2 bbox so total 98 bounding boxes.
+    - In each grid cell one image is detected even though 2 bounding boxes proposed.
+    - This means if objects in an image lie closely in a grid cell then will have issue detecting all of them.
+    - It doesn’t generalize well when objects in the image show rare aspects of ratio.</p>
+<ul>
+<li>Faster RCNN on the other hand, do detect small objects well since it has nine anchors in a single grid, however it fails to do real-time detection with its two step architecture cause too slow.</li>
+</ul>
+<h4 id="yolo-v3">Yolo V3</h4>
+<p>While YOLOv2 uses the DarkNet-19 as the model architecture, YOLOv3 uses a much more complex DarkNet-53 as the model backbone— a 106 layer neural network complete with residual blocks and upsampling networks.</p>
+<p>YOLOv3’s architectural novelty allows it to predict at 3 different scales, with the feature maps being extracted at layers 82, 94, and 106 for these predictions..</p>
+<p>By detecting features at 3 different scales, YOLOv3 makes up for the shortcomings of YOLOv2 and YOLO, particularly in the detection of smaller objects. With the architecture allowing the concatenation of the upsampled layer outputs with the features from previous layers, the fine-grained features that have been extracted are preserved thus making the detection of smaller objects easier.</p>
+<p>YOLOv3 only predicts 3 bounding boxes per cell (compared to 5 in YOLOv2) but it makes three predictions at different scales, totaling up to 9 anchor boxes.</p>
+<h4 id="screenshots">Screenshots</h4>
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/yolov1_vs_fasterrcnn.PNG" width="800"/>
+</div>
+
+<div>
+<img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/LTA/images/yolov123_comparison.PNG" width="800"/>
+</div>
+
+<h2 id="augmentations">Augmentations</h2>
+<ul>
+<li>Augmentation techniques. This helps artificially expanding the dataset, intuition is in each training iteration (batch), the model sees a slightly different version of the original image, and thus helps to generalize.
+        - Normal flips and rotational geometrical transformation, that is a given since photos can be upside down, left-right flipped.
+        - Hue, Saturation and Color to match dusk, noon and dawn.
+        - Random Eraser, similar to dropout, we mask certain parts of the image to force the model to learn with less information, a regularization to overfitting and memorization.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-footer__link md-footer__link--prev" aria-label="Previous: SIIM-ISIC Melanoma Classification" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              SIIM-ISIC Melanoma Classification
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../../breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Introduction
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate"], "search": "../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3156 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/sp_ppe/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>SP PPE - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gearing-up-for-development" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SP PPE
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          SP PPE
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        SP PPE
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gearing-up-for-development" class="md-nav__link">
+    Gearing Up For Development
+  </a>
+  
+    <nav class="md-nav" aria-label="Gearing Up For Development">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-up-main-directory-ide" class="md-nav__link">
+    Set Up Main Directory (IDE)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-up-virtual-environment" class="md-nav__link">
+    Set Up Virtual Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requirements-and-setup" class="md-nav__link">
+    Requirements and Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-raw-data" class="md-nav__link">
+    Get Raw Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convert-raw-data-into-required-formats" class="md-nav__link">
+    Convert Raw Data into Required Formats
+  </a>
+  
+    <nav class="md-nav" aria-label="Convert Raw Data into Required Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pascal-voc" class="md-nav__link">
+    Pascal VOC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-weights" class="md-nav__link">
+    Download Weights
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train-cli" class="md-nav__link">
+    Train CLI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#label-tools" class="md-nav__link">
+    Label Tools
+  </a>
+  
+    <nav class="md-nav" aria-label="Label Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cvat" class="md-nav__link">
+    CVAT
+  </a>
+  
+    <nav class="md-nav" aria-label="CVAT">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos-m1" class="md-nav__link">
+    macOS M1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#end-to-end-ml-workflow" class="md-nav__link">
+    End-to-End ML Workflow
+  </a>
+  
+    <nav class="md-nav" aria-label="End-to-End ML Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clarify-the-problem-and-constrains" class="md-nav__link">
+    Clarify the Problem and Constrains
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#establish-metrics" class="md-nav__link">
+    Establish Metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-data-data" class="md-nav__link">
+    Data, Data, Data
+  </a>
+  
+    <nav class="md-nav" aria-label="Data, Data, Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-collection" class="md-nav__link">
+    Data Collection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-cleaning" class="md-nav__link">
+    Data Cleaning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    Data Preparation
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#coco-dataset" class="md-nav__link">
+    COCO Dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pascal-voc-dataset" class="md-nav__link">
+    Pascal VOC Dataset
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-training" class="md-nav__link">
+    Model Training
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config-exp-file" class="md-nav__link">
+    Config (Exp) File
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weights-biases" class="md-nav__link">
+    Weights &amp; Biases
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-capability" class="md-nav__link">
+    Model Capability
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gearing-up-for-development" class="md-nav__link">
+    Gearing Up For Development
+  </a>
+  
+    <nav class="md-nav" aria-label="Gearing Up For Development">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-up-main-directory-ide" class="md-nav__link">
+    Set Up Main Directory (IDE)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-up-virtual-environment" class="md-nav__link">
+    Set Up Virtual Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requirements-and-setup" class="md-nav__link">
+    Requirements and Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-raw-data" class="md-nav__link">
+    Get Raw Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convert-raw-data-into-required-formats" class="md-nav__link">
+    Convert Raw Data into Required Formats
+  </a>
+  
+    <nav class="md-nav" aria-label="Convert Raw Data into Required Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pascal-voc" class="md-nav__link">
+    Pascal VOC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-weights" class="md-nav__link">
+    Download Weights
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train-cli" class="md-nav__link">
+    Train CLI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#label-tools" class="md-nav__link">
+    Label Tools
+  </a>
+  
+    <nav class="md-nav" aria-label="Label Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cvat" class="md-nav__link">
+    CVAT
+  </a>
+  
+    <nav class="md-nav" aria-label="CVAT">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macos-m1" class="md-nav__link">
+    macOS M1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    Windows
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#end-to-end-ml-workflow" class="md-nav__link">
+    End-to-End ML Workflow
+  </a>
+  
+    <nav class="md-nav" aria-label="End-to-End ML Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clarify-the-problem-and-constrains" class="md-nav__link">
+    Clarify the Problem and Constrains
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#establish-metrics" class="md-nav__link">
+    Establish Metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-data-data" class="md-nav__link">
+    Data, Data, Data
+  </a>
+  
+    <nav class="md-nav" aria-label="Data, Data, Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-collection" class="md-nav__link">
+    Data Collection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-cleaning" class="md-nav__link">
+    Data Cleaning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    Data Preparation
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#coco-dataset" class="md-nav__link">
+    COCO Dataset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pascal-voc-dataset" class="md-nav__link">
+    Pascal VOC Dataset
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-training" class="md-nav__link">
+    Model Training
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config-exp-file" class="md-nav__link">
+    Config (Exp) File
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    Steps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weights-biases" class="md-nav__link">
+    Weights &amp; Biases
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-capability" class="md-nav__link">
+    Model Capability
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/sp_ppe.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>SP PPE</h1>
+
+<h2 id="gearing-up-for-development">Gearing Up For Development</h2>
+<h3 id="set-up-main-directory-ide">Set Up Main Directory (IDE)</h3>
+<p>Let us assume that we are residing in our root folder <code>~/gaohn</code> and
+we want to create a new project called <strong>YOLOX</strong>, we can do as follows:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">creating main directory</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn<span class="w">       </span>$<span class="w"> </span>mkdir<span class="w"> </span>YOLOX
+~/gaohn<span class="w">       </span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>YOLOX
+~/gaohn/YOLOX<span class="w"> </span>$<span class="w"> </span>code<span class="w"> </span>.<span class="w">                      </span><span class="c1"># (1)</span>
+</code></pre></div></td></tr></table></div>
+<ol>
+<li>Open the project directory in Visual Studio Code. To change appropriately if using different IDE.</li>
+</ol>
+<p>If you are cloning a repository to your local folder <strong>YOLOX</strong>, you can further do:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">cloning repository</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Megvii-BaseDetection/YOLOX.git<span class="w"> </span>.
+</code></pre></div></td></tr></table></div>
+<p>where <code>.</code> means cloning to the current directory.</p>
+<h3 id="set-up-virtual-environment">Set Up Virtual Environment</h3>
+<p>Follow the steps below to set up a virtual environment for your development.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">macOS M1</label><label for="__tabbed_1_3">Linux</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">venv</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>&lt;name<span class="w"> </span>of<span class="w"> </span>virtual<span class="w"> </span>env&gt;<span class="w">                      </span><span class="c1"># (1)</span>
+~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span>.<span class="se">\v</span>env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate<span class="w">                                   </span><span class="c1"># (2)</span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>setuptools<span class="w"> </span>wheel<span class="w">      </span><span class="c1"># (3)</span>
+</code></pre></div></td></tr></table></div>
+<ol>
+<li>Create virtual environment named <code>venv</code> in the current directory.</li>
+<li>Activate virtual environment.</li>
+<li>Upgrade pip, setuptools and wheel.</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">venv</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>virtualenv<span class="w"> </span>
+~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span>virtualenv<span class="w"> </span>&lt;name<span class="w"> </span>of<span class="w"> </span>virtual<span class="w"> </span>env&gt;<span class="w">                                          </span>
+~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>.<span class="se">\v</span>env<span class="se">\b</span>in<span class="se">\a</span>ctivate
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>setuptools<span class="w"> </span>wheel
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">venv</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.8<span class="w"> </span>python3.8-venv<span class="w"> </span>python3-venv<span class="w"> </span>
+~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>&lt;name<span class="w"> </span>of<span class="w"> </span>virtual<span class="w"> </span>env&gt;<span class="w">                                 </span>
+~/gaohn/YOLOX<span class="w">        </span>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>.<span class="se">\v</span>env<span class="se">\b</span>in<span class="se">\a</span>ctivate<span class="w">                                 </span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>setuptools<span class="w"> </span>wheel<span class="w">      </span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<p>You should see the following directory structure:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">main directory tree</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>📁<span class="w"> </span>YOLOX/
+📄<span class="w"> </span>└──<span class="w"> </span>venv/
+</code></pre></div></td></tr></table></div>
+<h3 id="requirements-and-setup">Requirements and Setup</h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For small projects, we can have <code>requirements.txt</code> and just run <code>pip install -r requirements.txt</code>.
+For larger projects, we can add a <code>setup.py</code> file.</p>
+<p>In short, <code>requirements.txt</code> specifies the dependencies of your project, and <a href="https://
+stackoverflow.com/questions/60145069/what-is-the-purpose-of-setup-py"><code>setup.py</code></a> file informs you about the 
+module or package-dependencies you are about to install has been packaged and distributed with
+Distutils, which is the standard for distributing Python Modules. You can skip <code>setup.py</code> if you
+are just using <code>requirements.txt</code> to install dependencies.</p>
+<p>Refer to <a href="https://madewithml.com/courses/mlops/packaging/">madewithml</a>'s
+<strong>requirements</strong> and <strong>setup</strong> section for more details.      </p>
+</div>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">creating requirements</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w">  </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>touch<span class="w"> </span>requirements.txt<span class="w"> </span>setup.py<span class="w">                                  </span>
+~/gaohn/YOLOX<span class="w">  </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w">                           </span>
+</code></pre></div></td></tr></table></div>
+<p>Something worth taking note is when you download PyTorch Library, there is a dependency link since we are downloading cuda directly, you may execute as such:</p>
+<div class="highlight"><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>-f<span class="w"> </span>https://download.pytorch.org/whl/torch_stable.html
+</code></pre></div>
+<p>If you further specify packages for <strong>development</strong>, <strong>testing</strong> and <strong>documentation</strong> in <code>setup.py</code>,
+you can choose which version to install:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">installing packages</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span><span class="w">                       </span><span class="c1"># installs required + dev packages</span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[test]&quot;</span><span class="w">                      </span><span class="c1"># installs required + test packages</span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[docs_packages]&quot;</span><span class="w">             </span><span class="c1"># installs required documentation packages</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition danger">
+<p class="admonition-title">TODO</p>
+<p>To add in new examples here.</p>
+</div>
+<p>You should see the following directory structure:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">main directory tree</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>📁<span class="w"> </span>YOLOX/
+📄<span class="w"> </span>├──<span class="w"> </span>venv/
+📄<span class="w"> </span>├──<span class="w"> </span>requirements.txt
+📄<span class="w"> </span>└──<span class="w"> </span>setup.py
+</code></pre></div></td></tr></table></div>
+<p>For this version of YOLOX, use the commands below to do installation:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Windows</label><label for="__tabbed_2_2">macOS M1</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">install</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pip<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.<span class="w">  </span><span class="c1"># or  python setup.py develop</span>
+pip<span class="w"> </span>install<span class="w"> </span>cython
+<span class="c1"># can install pycocotools==2.0.2 manually</span>
+pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/philferriere/cocoapi.git#subdirectory<span class="o">=</span>PythonAPI
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">pycocotools</span><span class="o">==</span><span class="m">2</span>.0.2
+<span class="c1"># not sure why my com not playing nice with cuda 11.6 but only work with this for now</span>
+<span class="c1"># even cu102 will not work</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">1</span>.10.0+cu113<span class="w"> </span><span class="nv">torchvision</span><span class="o">==</span><span class="m">0</span>.11.1+cu113<span class="w"> </span>-f<span class="w"> </span>https://download.pytorch.org/whl/torch_stable.html
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">setuptools</span><span class="o">==</span><span class="m">59</span>.5.0<span class="w"> </span><span class="c1"># for https://stackoverflow.com/questions/70520120/attributeerror-module-setuptools-distutils-has-no-attribute-version</span>
+pip<span class="w"> </span>install<span class="w"> </span>tensorboard
+pip<span class="w"> </span>install<span class="w"> </span>wandb
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">install</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>...
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<h2 id="get-raw-data">Get Raw Data</h2>
+<p>The incoming raw data is a zip file named <code>sp_ppe_all_combination_images.zip</code> and contains 1,600 images
+alongside a csv file named <code>all_annotations.csv</code> which contains the bounding box coordinates and
+its corresponding class labels.</p>
+<p>Our goal is to download these data to our local machine (main directory).</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">main directory tree</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code>📁<span class="w"> </span>YOLOX/
+📄<span class="w"> </span>├──<span class="w"> </span>venv/
+📁<span class="w"> </span>├──<span class="w"> </span>datasets/
+└──<span class="w"> </span>📁<span class="w"> </span>└──<span class="w"> </span>sp_ppe_data/
+<span class="w">    </span>└──<span class="w"> </span>📁<span class="w"> </span>└──<span class="w"> </span>raw/<span class="w">     </span>
+<span class="w">        </span>├──<span class="w"> </span>📄<span class="w"> </span>├──<span class="w"> </span>sp_ppe_all_images/
+<span class="w">        </span>└──<span class="w"> </span>📄<span class="w"> </span>└──<span class="w"> </span>sp_ppe_all_annotations/
+📄<span class="w"> </span><span class="p">|</span>──<span class="w"> </span>...
+📄<span class="w"> </span>├──<span class="w"> </span>requirements.txt
+📄<span class="w"> </span>└──<span class="w"> </span>setup.py
+</code></pre></div></td></tr></table></div>
+<p>where <code>sp_ppe_all_images</code> contains 1,600 images and <code>sp_ppe_all_annotations</code> contains 1,600
+corresponding annotations in <code>.xml</code> format. We will touch on that later.</p>
+<ol>
+<li>
+<p>First, we create a folder named <code>datasets</code> in the root directory of the project alongside
+    its sub-folder <code>sp_ppe_data/raw</code> and <code>sp_ppe_all_images</code> and <code>sp_ppe_all_annotations</code>.</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">creating datasets folder</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>datasets/sp_ppe_data<span class="w"> </span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_images
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_annotations<span class="w"> </span>
+</code></pre></div></td></tr></table></div>
+<p>Take note that in this YOLOX repo, the <code>datasets</code> folder is already there when
+you clone the repo, but having the command <code>-p</code> allows you to create the subfolder
+without raising an error.</p>
+</li>
+<li>
+<p>To download the data into <code>datasets/sp_ppe_data</code>, we can issue the below commands:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Windows</label><label for="__tabbed_3_2">macOS M1</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">download raw data</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>wget<span class="w"> </span>-P<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;<span class="w"> </span>&lt;url&gt;<span class="w"> </span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>tar<span class="w"> </span>xf<span class="w"> </span>&lt;zip<span class="w"> </span>file&gt;<span class="w"> </span>-C<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">download raw data</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>wget<span class="w"> </span>-P<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;<span class="w"> </span>&lt;url&gt;<span class="w"> </span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>unzip<span class="w"> </span>&lt;zip<span class="w"> </span>file&gt;<span class="w"> </span>-d<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<p>where the <code>&lt;url&gt;</code> for the raw data is 
+<code>https://storage.googleapis.com/reighns/datasets/sp_ppe_all_combination_images.zip</code>.</p>
+<p>More concretely, we have:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">download raw data windows</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>wget<span class="w"> </span>-P<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_images<span class="w"> </span>https://storage.googleapis.com/reighns/datasets/sp_ppe_all_combination_images.zip<span class="w"> </span><span class="c1"># https://storage.googleapis.com/peekingduck/data/sp_ppe_all_combination_images.zip</span>
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>tar<span class="w"> </span>xf<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_images/sp_ppe_all_combination_images.zip<span class="w"> </span>-C<span class="w"> </span>datasets/sp_ppe_data/sp_ppe_all_images
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>rm<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_images/sp_ppe_all_combination_images.zip
+</code></pre></div></td></tr></table></div>
+</li>
+<li>
+<p>Now we want to move our <code>all_annotations.csv</code> file into <code>datasets/sp_ppe_data/raw/sp_ppe_all_annotations</code>.
+    We can do this by issuing the following command:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Windows</label><label for="__tabbed_4_2">macOS</label><label for="__tabbed_4_3">Linux</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">move files</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>move<span class="w"> </span>&lt;<span class="nb">source</span><span class="w"> </span>file&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">move files</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mv<span class="w"> </span>&lt;<span class="nb">source</span><span class="w"> </span>file&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">move files filesnv</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mv<span class="w"> </span>&lt;<span class="nb">source</span><span class="w"> </span>file&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>folder&gt;<span class="w"> </span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<p>So in our case, it is simply:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">move files windows</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>move<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_images/all_annotations.csv<span class="w"> </span>datasets/sp_ppe_data/raw/sp_ppe_all_annotations
+</code></pre></div></td></tr></table></div>
+</li>
+<li>
+<p>The above steps can be a good opportunity to introduce a very basic shell script.</p>
+</li>
+</ol>
+<h2 id="convert-raw-data-into-required-formats">Convert Raw Data into Required Formats</h2>
+<p>Even though we have the raw images and annotations, we need to convert them into the required format
+for most out of the box models. This is because when we load the data into our deep learning model,
+it will expect the data to be in a certain format. </p>
+<p>The format is <strong>largely determined</strong> by how we write the <code>dataset</code> class in PyTorch (or TensorFlow).</p>
+<h3 id="pascal-voc">Pascal VOC</h3>
+<p>Assume that we already have downloaded pascal voc format data from roboflow in this format:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">main directory tree</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>📁<span class="w"> </span>YOLOX/
+📄<span class="w"> </span>├──<span class="w"> </span>venv/
+📁<span class="w"> </span>├──<span class="w"> </span>datasets/
+└──<span class="w"> </span>📁<span class="w"> </span>└──<span class="w"> </span>sp_ppe_data/
+<span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>└──<span class="w"> </span>raw/<span class="w">     </span>
+<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>📄<span class="w"> </span>├──<span class="w"> </span>sp_ppe_all_images/
+<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span>📄<span class="w"> </span>└──<span class="w"> </span>sp_ppe_all_annotations/
+<span class="w">    </span>└──<span class="w"> </span>📁<span class="w"> </span>└──<span class="w"> </span>pascal_voc/<span class="w">     </span>
+<span class="w">        </span>├──<span class="w"> </span>📄<span class="w"> </span>├──<span class="w"> </span>images/
+<span class="w">        </span>└──<span class="w"> </span>📄<span class="w"> </span>└──<span class="w"> </span>annotations/<span class="w">     </span>
+📄<span class="w"> </span><span class="p">|</span>──<span class="w"> </span>...
+📄<span class="w"> </span>├──<span class="w"> </span>requirements.txt
+📄<span class="w"> </span>└──<span class="w"> </span>setup.py
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">download pascal voc</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>datasets/sp_ppe_data
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>datasets/sp_ppe_data/pascal_voc/images
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>datasets/sp_ppe_data/pascal_voc/annotations
+</code></pre></div></td></tr></table></div>
+<p>Then move all the images to the <code>images</code> folder and all the annotations to the <code>annotations</code> folder.</p>
+<p>Note that the annotations are already in <code>.xml</code> pascal voc format.</p>
+<p>For YOLOX however, we need to strictly adhere to their VOC format, as follows</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YOLOX Pascal VOC</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>📁<span class="w"> </span>YOLOX/
+📄<span class="w"> </span>├──<span class="w"> </span>datasets/
+📄<span class="w"> </span>│<span class="w">   </span>├──<span class="w"> </span>VOCdevkit/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>VOC2012/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>sp_ppe_voc_helmet_mask_vest/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>Annotations/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>ImageSets/
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>Main/
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>train.txt
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>val.txt
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>test.txt
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>trainval.txt
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>JPEGImages/
+</code></pre></div></td></tr></table></div>
+<h2 id="download-weights">Download Weights</h2>
+<p>Download weights to weights folder <code>YOLOX/weights</code></p>
+<div class="highlight"><pre><span></span><code>~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>weights
+~/gaohn/YOLOX<span class="w"> </span><span class="o">(</span>venv<span class="o">)</span><span class="w"> </span>$<span class="w"> </span>wget.exe<span class="w"> </span>-P<span class="w"> </span>weights<span class="w"> </span>https://github.com/Megvii-BaseDetection/storage/releases/download/0.0.1/yolox_s.pth
+</code></pre></div>
+<h2 id="train-cli">Train CLI</h2>
+<ol>
+<li>Tricky part is to convert the images to COCO or VOC format, if you convert to COCO format and then ask Roboflow to convert to voc format, you need to use the script below to do so:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">train_p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+    <span class="s2">&quot;./datasets/VOCdevkit/VOC2012/sp_ppe_voc_all_combinations/train&quot;</span>
+<span class="p">)</span>
+<span class="n">valid_p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+    <span class="s2">&quot;./datasets/VOCdevkit/VOC2012/sp_ppe_voc_all_combinations/valid&quot;</span>
+<span class="p">)</span>
+<span class="n">test_p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./datasets/VOCdevkit/VOC2012/sp_ppe_voc_all_combinations/test&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;train.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">train_p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.jpg&quot;</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;valid.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">valid_p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.jpg&quot;</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">test_p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.jpg&quot;</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<ol>
+<li>Then run the training</li>
+</ol>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>tools/train.py<span class="w"> </span>-f<span class="w"> </span>.<span class="se">\e</span>xps<span class="se">\c</span>ustom<span class="se">\s</span>p_ppe<span class="se">\s</span>p_ppe_voc_all_combinations.py<span class="w"> </span>-d<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span><span class="m">16</span><span class="w"> </span>--fp16<span class="w"> </span>-o<span class="w"> </span>-c<span class="w"> </span>.<span class="se">\w</span>eights<span class="se">\y</span>olox_s.pth
+</code></pre></div>
+<p>and infer whole folder:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>tools/demo.py<span class="w"> </span>image<span class="w"> </span>-f<span class="w"> </span>.<span class="se">\e</span>xps<span class="se">\c</span>ustom<span class="se">\s</span>p_ppe<span class="se">\s</span>p_ppe_voc_all_combinations.py<span class="w"> </span>-c<span class="w"> </span>.<span class="se">\Y</span>OLOX_outputs<span class="se">\s</span>p_ppe_voc_all_combinations<span class="se">\b</span>est_ckpt.pth<span class="w"> </span>--path<span class="w"> </span>.<span class="se">\d</span>atasets<span class="se">\V</span>OCdevkit<span class="se">\V</span>OC2012<span class="se">\s</span>p_ppe_voc_all_combinations<span class="se">\t</span>est<span class="se">\ </span>--conf<span class="w"> </span><span class="m">0</span>.25<span class="w"> </span>--nms<span class="w"> </span><span class="m">0</span>.45<span class="w"> </span>--tsize<span class="w"> </span><span class="m">640</span><span class="w"> </span>--save_result<span class="w"> </span>--device<span class="w"> </span>gpu
+</code></pre></div>
+<ol>
+<li>Important rmb change both voc and coco class file because later demo py uses coco class lame.</li>
+</ol>
+<h2 id="label-tools">Label Tools</h2>
+<h3 id="cvat">CVAT</h3>
+<h4 id="macos-m1">macOS M1</h4>
+<p>Follow the <a href="https://opencv.github.io/cvat/docs/administration/basics/installation/">installation guide</a>:</p>
+<ol>
+<li>Download Docker for Mac M1 (without Rosetta), as mentioned in <a href="https://github.com/docker/for-mac/issues/6232">issue</a> opened on GitHub, we need to select <strong>use docker compose v2</strong> in the settings of docker as it is unselected by default, causing an error when using <code>docker compose</code>.</li>
+<li>
+<p>Download and install CVAT:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/opencv/cvat
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cvat
+$<span class="w"> </span><span class="nv">CVAT_VERSION</span><span class="o">=</span>dev<span class="w"> </span>docker-compose<span class="w"> </span>pull
+$<span class="w"> </span><span class="nv">CVAT_VERSION</span><span class="o">=</span>dev<span class="w"> </span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<p>Note that the commands above are <strong>unique to macOS M1</strong> as the CVAT installation guide does not fully support M1 yet, so have to go through some loops and hoops.</p>
+<p>See <a href="https://github.com/opencv/cvat/issues/4816">issue</a> here for reference.</p>
+</li>
+<li>
+<p>You can register a user but by default it will not have rights even to view list of tasks. Thus you should create a superuser. A superuser can use an admin panel to assign correct groups to other users. Please use the command below:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>cvat_server<span class="w"> </span>bash<span class="w"> </span>-ic<span class="w"> </span><span class="s1">&#39;python3 ~/manage.py createsuperuser&#39;</span>
+</code></pre></div>
+<p>username: django/django2</p>
+<p>password: ZGRu3pUsCw66HGa</p>
+</li>
+<li>
+<p>Somehow you need to re-run steps 2-3 when you restart you computer?</p>
+</li>
+<li>See my short video clip for annotation steps.</li>
+</ol>
+<h4 id="windows">Windows</h4>
+<ol>
+<li>
+<p>Install WSL2</p>
+<p>Newer windows can directly call the following command in <strong>adminstrator</strong> Powershell:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>wsl<span class="w"> </span>--install
+</code></pre></div>
+<p>If not, the safe choice is to follow the guide <a href="https://docs.microsoft.com/en-gb/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package">here</a>, starting from step 4.</p>
+</li>
+<li>
+<p>Install Docker</p>
+<p>Download and install docker <strong><a href="https://docs.docker.com/desktop/install/windows-install/">here</a></strong>.</p>
+</li>
+<li>
+<p>Install Git</p>
+<p>Make sure there is Git for Windows.</p>
+</li>
+<li>
+<p>Run CVAT</p>
+<ol>
+<li>
+<p>Clone CVAT to local machine.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/opencv/cvat
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cvat
+</code></pre></div>
+</li>
+<li>
+<p>Run docker containers.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="c1"># run below since now latest version has issues</span>
+$<span class="w"> </span>docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>build
+</code></pre></div>
+<p>However, there is an issue opened just 2 weeks ago:</p>
+<ul>
+<li>See https://github.com/opencv/cvat/issues/4888 and https://github.com/opencv/cvat/issues/4816<ol>
+<li>Create username and password:</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># enter docker image first</span>
+$<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>cvat_server<span class="w"> </span>/bin/bash
+<span class="c1"># then run</span>
+$<span class="w"> </span>python3<span class="w"> </span>~/manage.py<span class="w"> </span>createsuperuser
+</code></pre></div>
+<p>username: django</p>
+<p>password: ZGRu3pUsCw66HGa</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Open the installed Google Chrome browser and go to <a href="http://localhost:8080/">localhost:8080</a>. Type your login/password for the superuser on the login page and press the <em>Login</em> button. Now you should be able to create a new annotation task. Please read the <a href="https://opencv.github.io/cvat/docs/manual/">CVAT manual</a> for more details.</p>
+</li>
+</ol>
+<hr />
+<h2 id="end-to-end-ml-workflow">End-to-End ML Workflow</h2>
+<h3 id="clarify-the-problem-and-constrains">Clarify the Problem and Constrains</h3>
+<p>This one can ask Lucas more when the time comes, we will assume that this is a 
+real life problem that requires a solution.</p>
+<p>We can then ask the below potential questions.</p>
+<ul>
+<li>What is the problem?</li>
+<li>How do end users use the product and benefit from it?</li>
+<li>Benefit Structure?</li>
+<li>Ethical issues (e.g. discrimination, privacy, etc.)</li>
+<li>Deployment: latency vs accuracy etc;</li>
+<li>Where we deploy the model on?</li>
+<li>...... etc</li>
+</ul>
+<p>We can then form a problem statement along with a summary, where we will constantly 
+refer to it as we move along.</p>
+<h3 id="establish-metrics">Establish Metrics</h3>
+<p>Once we are clear on the problem statement, we can define our metrics:</p>
+<p><strong>Model Performance Metrics</strong></p>
+<ul>
+<li>The typical metrics such as accuracy, precision, recall, F1 score, etc.</li>
+<li>More sophisticated usage includes AUC, ROC, etc.</li>
+<li>Constrainment includes <span class="arithmatex">\(\max \textbf{Mean Average Precision}@\textbf{Mean Recall} 0.8\)</span><ul>
+<li>which means you constrain mean recall to be at least 0.8 while maximizing mean average precision.</li>
+</ul>
+</li>
+<li>Model Performance is not everything to stakeholder, sometimes may need to consider their KPIs.</li>
+</ul>
+<p><strong>Business Performance Metrics</strong></p>
+<ul>
+<li>Unsure, need some product sense, but I guess our project is not too clear yet.</li>
+</ul>
+<h3 id="data-data-data">Data, Data, Data</h3>
+<p>We can further split this into 3 parts:</p>
+<ul>
+<li>Data Collection</li>
+<li>Data Cleaning</li>
+<li>Data Preparation</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Arguably, the most important part of the whole process is the data, as we move from a <strong>model-centric</strong>
+approach to a <strong>data-centric</strong> approach (re: Andrew NG), we really need to ensure the quality of the data.</p>
+</div>
+<h4 id="data-collection">Data Collection</h4>
+<p>Place holder.</p>
+<h4 id="data-cleaning">Data Cleaning</h4>
+<p>Place holder.</p>
+<h4 id="data-preparation">Data Preparation</h4>
+<p>TODO:</p>
+<ul>
+<li>To be refined, here is some collection of my initial findings.</li>
+<li>
+<p>To test on coco128 when developing next time.</p>
+</li>
+<li>
+<p>There are no bounding box annotations, therefore we need to label/annotate the images:</p>
+<ul>
+<li>Created a branch <code>node-convert-to-coco</code> to convert the node's output data to coco format.<ul>
+<li>This branch will make inference on the images and give us the bounding box annotations.</li>
+<li>This reduces overhead for my quick prototyping, but is not the best if one cares about 
+  the quality of data. This is because although inferencing on human is easy, it is not
+  trivial when the human wears a <strong>helmet</strong>, the bounding box is not tight above. </li>
+<li>The output using <code>csv_writer</code> will be converted to COCO.</li>
+<li>See my tmp.py for more details.</li>
+</ul>
+</li>
+<li>Once converted, tested it on google colab to see if it works. It did since macOS cannot run cuda
+  and this repo only allows cuda for training, we can loosen this restriction.<br />
+  See my google drive.</li>
+</ul>
+</li>
+<li>
+<p>See YOLOXX to see how to annotate using COCO format, this was developed on macOS initially.</p>
+</li>
+</ul>
+<div class="admonition danger">
+<p class="admonition-title">TODO</p>
+<p>Some considerations:</p>
+<ul>
+<li>Do we need a node to convert our inference results to COCO/VOC format? We can have a generic node 
+  for this purpose; like we enforce a certain format in the form of csv/df, then convert them to either.  </li>
+</ul>
+</div>
+<h5 id="coco-dataset">COCO Dataset</h5>
+<ul>
+<li><a href="https://cocodataset.org/#detection-eval">COCO Detection Eval</a></li>
+</ul>
+<h5 id="pascal-voc-dataset">Pascal VOC Dataset</h5>
+<p>TODOS:</p>
+<ul>
+<li>Currently convert coco to voc online, need write a script maybe since I wrote one for coco temporarily.</li>
+</ul>
+<p>For YOLOX, Pascal VOC is not well maintained, so for now the folder structure is rigidly defined below:</p>
+<div class="highlight"><pre><span></span><code>📁<span class="w"> </span>YOLOX/
+📄<span class="w"> </span>├──<span class="w"> </span>datasets/
+📄<span class="w"> </span>│<span class="w">   </span>├──<span class="w"> </span>VOCdevkit/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>VOC2012/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>sp_ppe_voc_helmet_mask_vest/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>Annotations/
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>ImageSets/
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>Main/
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>train.txt
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>val.txt
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>test.txt
+📄<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="p">|</span><span class="w">   </span>├──<span class="w"> </span>trainval.txt
+📄<span class="w"> </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>JPEGImages/
+</code></pre></div>
+<p>Without changing source code, the <code>VOCdevkit</code> and <code>VOC{year}</code> folder names are fixed and not negotiable.
+I attempted to do away with the <code>VOC{year}</code> folder, but it really requires changing a few places, and
+I am aware that even PyTorch's own <code>voc.py</code> dataset uses this same format. So I keep it as such for now
+but it is possible to loosen this restriction.</p>
+<ul>
+<li><strong>Annotations</strong> folder contains all the xml files, which is each image's annotations info in Pascal VOC format.</li>
+<li><strong>JPEGImages</strong> folder contains all the images.</li>
+<li><strong>ImageSets</strong> folder contains the train/val/test split, which is a txt file with each line being the image name
+  without the extension. For example, if the image is <code>000001.jpg</code>, then the line in the txt file is <code>000001</code>.<ul>
+<li>Note we do not need to use <code>trainval.txt</code> since we can just use <code>train.txt</code> and <code>val.txt</code> to train and validate.</li>
+<li>Note we should find a way to use KFolds here, might be cumbersome to train every fold manually?</li>
+</ul>
+</li>
+</ul>
+<h3 id="model-training">Model Training</h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=be_D3V9Pxlg&amp;t=2371s">Training your own YoloX Object Detection Model on Colab - YoloX Object Detection Model Deployment</a><ul>
+<li>This quite useful as a starter.</li>
+</ul>
+</li>
+<li>Coding your own dataset or dataloader class<ul>
+<li><a href="https://github.com/open-mmlab/mmdetection/tree/master/mmdet/datasets">MMDetection Dataset Class</a></li>
+<li>https://github.com/pytorch/vision/blob/main/torchvision/datasets/voc.py</li>
+</ul>
+</li>
+</ul>
+<h4 id="config-exp-file">Config (Exp) File</h4>
+<p>The main config file of YOLOX resides in the <code>exps/</code> folder.</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">YOLOX/exps/default/yolox_s.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Exp</span><span class="p">(</span><span class="n">MyExp</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">NUM_CLASSES</span>  <span class="c1"># 20</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;num_classes&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="mf">0.33</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warmup_epochs</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># ---------- transform config ------------ #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mosaic_prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixup_prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hsv_prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flip_prob</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degrees</span> <span class="o">=</span> <span class="mf">10.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mosaic_scale</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shear</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perspective</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_mixup</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="steps">Steps</h2>
+<ol>
+<li>Make the data into pascal voc format and place it under <code>YOLOX/datasets/VOCdevkit</code> folder. Note you need to create <code>VOCdevkit</code> folder first.</li>
+<li>Follow exactly the format I have inside my folder.</li>
+<li>When making the data, I hardcoded a bit, make sure eventually is same format as the one here for now https://www.youtube.com/watch?v=be_D3V9Pxlg&amp;t=2371s with some tweaks.</li>
+<li>Download weights to weights folder <code>YOLOX/weights</code></li>
+</ol>
+<p><div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>weights
+wget.exe<span class="w"> </span>-P<span class="w"> </span>.<span class="se">\w</span>eights<span class="se">\ </span>https://github.com/Megvii-BaseDetection/storage/releases/download/0.0.1/yolox_s.pth
+</code></pre></div>
+4. Create <code>exp</code> file, meaning the configuration file for the experiment.</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>exp/custom/sp_ppe
+<span class="nb">cd</span><span class="w"> </span>exp/custom/sp_ppe
+touch<span class="w"> </span>sp_ppe_voc.py
+<span class="nb">cd</span><span class="w"> </span>../../../
+</code></pre></div>
+<p>see code inside, this file is very important as it overwrites the base class.</p>
+<p>4.1. Note it is very important to change coco class and voc class file.</p>
+<ol>
+<li>Run the training</li>
+</ol>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>tools/train.py<span class="w"> </span>-f<span class="w"> </span>.<span class="se">\e</span>xps<span class="se">\c</span>ustom<span class="se">\s</span>p_ppe<span class="se">\s</span>p_ppe_voc_human_only.py<span class="w"> </span>-d<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span><span class="m">4</span><span class="w"> </span>--fp16<span class="w"> </span>-o<span class="w"> </span>-c<span class="w"> </span>.<span class="se">\w</span>eights<span class="se">\y</span>olox_s.pth
+</code></pre></div>
+<p>if there is Weights &amp; Biases:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>tools/train.py<span class="w"> </span>-f<span class="w"> </span>.<span class="se">\e</span>xps<span class="se">\c</span>ustom<span class="se">\s</span>p_ppe<span class="se">\s</span>p_ppe_voc_human_only.py<span class="w"> </span>-d<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span><span class="m">4</span><span class="w"> </span>--fp16<span class="w"> </span>-o<span class="w"> </span>-c<span class="w"> </span>.<span class="se">\w</span>eights<span class="se">\y</span>olox_s.pth<span class="w"> </span><span class="se">\</span>
+--logger<span class="w"> </span>wandb<span class="w"> </span><span class="se">\</span>
+wandb-project<span class="w"> </span>yolox<span class="w"> </span><span class="se">\</span>
+wandb-log_checkpoints<span class="w"> </span>True<span class="w"> </span><span class="se">\</span>
+wandb-num_eval_images<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+</code></pre></div>
+<p>where <code>num_eval_images</code> means at every evaluation step, the dashboard also shows 3 images from the validation set along with the predicted bounding box.</p>
+<ol>
+<li>Run test</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nv">MODEL_PATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C:\Users\reighns\reighns_ml\ml_projects\YOLOX\YOLOX_outputs\sp_ppe_voc_helmet_mask_vest\latest_ckpt.pth&#39;</span>
+TEST_IMAGE_PATH
+
+python<span class="w"> </span>tools/demo.py<span class="w"> </span>image<span class="w"> </span>-f<span class="w"> </span>.<span class="se">\e</span>xps<span class="se">\c</span>ustom<span class="se">\s</span>p_ppe<span class="se">\s</span>p_ppe_voc_helmet_mask_vest.py<span class="w"> </span>-c<span class="w"> </span>.<span class="se">\Y</span>OLOX_outputs<span class="se">\s</span>p_ppe_voc_helmet_mask_vest<span class="se">\l</span>ast_epoch_ckpt.pth<span class="w"> </span>--path<span class="w"> </span>.<span class="se">\d</span>atasets<span class="se">\V</span>OCdevkit<span class="se">\V</span>OC2012<span class="se">\s</span>p_ppe_voc_helmet_mask_vest<span class="se">\t</span>est<span class="se">\h</span>elmet--147-_jpg.rf.ed1d0dab4fc4b4f0c4213e6569a7ef02.jpg<span class="w"> </span>--conf<span class="w"> </span><span class="m">0</span>.25<span class="w"> </span>--nms<span class="w"> </span><span class="m">0</span>.45<span class="w"> </span>--tsize<span class="w"> </span><span class="m">640</span><span class="w"> </span>--save_result<span class="w"> </span>--device<span class="w"> </span>gpu
+</code></pre></div>
+<h2 id="weights-biases">Weights &amp; Biases</h2>
+<p>See https://docs.wandb.ai/quickstart for more details. But basically use</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>wandb
+wandb<span class="w"> </span>login
+</code></pre></div>
+<p>however for now comment out a chunk of code in logger since it has <code>self.cats</code> which only works for coco.</p>
+<h2 id="model-capability">Model Capability</h2>
+<p>We first check if model can memorize, then generalize, the former is important to check for bugs, and to ensure our model has basic capability to learn, but no way does it 
+guarantee that it can generalize. Regardless, we still want to ensure this as if it cannot even memorize in-sample data points, it for sure cannot generalize.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>https://docs.wandb.ai/guides/track/log/media to log bounding boxes</li>
+<li>https://www.youtube.com/watch?v=be_D3V9Pxlg&amp;t=2371s</li>
+<li>https://github.com/awsaf49/bbox/blob/main/bbox/utils.py</li>
+<li>https://www.kaggle.com/code/ayuraj/train-yolov5-cross-validation-ensemble-w-b/notebook</li>
+<li>https://github.com/roboflow-ai/YOLOX</li>
+<li>https://www.kaggle.com/code/awsaf49/great-barrier-reef-yolov5-train/notebook#%F0%9F%93%81-Create-Folds</li>
+<li>Transfer learning for YOLOX: https://github.com/Megvii-BaseDetection/YOLOX/issues/1105 + https://github.com/Megvii-BaseDetection/YOLOX/pull/1156</li>
+<li>Converting darknet or yolov5 datasets to COCO format for YOLOX: YOLO2COCO <a href="https://github.com/RapidAI/YOLO2COCO">from Daniel</a></li>
+<li>https://stackoverflow.com/questions/67733876/create-pascol-voc-xml-from-csv
+https://pyimagesearch.com/2022/05/02/mean-average-precision-map-using-the-coco-evaluator/
+https://wandb.ai/manan-goel/yolox-nano/reports/Tracking-your-YOLOX-Runs-with-Weights-Biases---VmlldzoxNzc0NjA0
+https://docs.wandb.ai/guides/integrations/other/yolox
+https://www.kaggle.com/code/remekkinas/yolox-training-pipeline-cots-dataset-lb-0-507/notebook#6.-RUN-INFERENCE
+https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch
+https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch
+https://blog.roboflow.com/how-to-train-yolox-on-a-custom-dataset/
+https://www.kaggle.com/code/litaldavar/hard-head-detection-with-yolov5/notebook
+https://www.kaggle.com/code/billiemage/object-detection</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../about/" class="md-footer__link md-footer__link--prev" aria-label="Previous: About" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              About
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-footer__link md-footer__link--next" aria-label="Next: Unit Vector" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Unit Vector
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate"], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

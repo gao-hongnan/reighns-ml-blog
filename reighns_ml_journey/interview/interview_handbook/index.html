@@ -1,0 +1,3208 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/interview/interview_handbook/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Interview handbook - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#why-is-softmax-layer-monotonic" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Interview handbook
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-softmax-layer-monotonic" class="md-nav__link">
+    Why is Softmax Layer Monotonic?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-imbalance" class="md-nav__link">
+    Data Imbalance
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Imbalance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#robinhood-question-1" class="md-nav__link">
+    Robinhood Question 1
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bias-variance-tradeoff" class="md-nav__link">
+    Bias-Variance Tradeoff
+  </a>
+  
+    <nav class="md-nav" aria-label="Bias-Variance Tradeoff">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#association-with-overfit-underfit" class="md-nav__link">
+    Association with Overfit-Underfit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-tackle-bias-variance-tradeoff" class="md-nav__link">
+    How to tackle Bias-Variance Tradeoff
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overfitting-and-underfitting" class="md-nav__link">
+    Overfitting and Underfitting
+  </a>
+  
+    <nav class="md-nav" aria-label="Overfitting and Underfitting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-overfitting" class="md-nav__link">
+    What is overfitting?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-tackle-overfitting" class="md-nav__link">
+    How to tackle Overfitting?
+  </a>
+  
+    <nav class="md-nav" aria-label="How to tackle Overfitting?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regularization" class="md-nav__link">
+    Regularization
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regularization_1" class="md-nav__link">
+    Regularization
+  </a>
+  
+    <nav class="md-nav" aria-label="Regularization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#briefly-desribe-regularization-in-logistic-regression" class="md-nav__link">
+    Briefly desribe Regularization in Logistic Regression
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-is-the-l1-constraint-a-diamond-and-l2-constraint-a-circle" class="md-nav__link">
+    Why is the L1 constraint a diamond and L2 constraint a circle?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preprocessing-techniques" class="md-nav__link">
+    Preprocessing Techniques
+  </a>
+  
+    <nav class="md-nav" aria-label="Preprocessing Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#feature-scaling" class="md-nav__link">
+    Feature Scaling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding" class="md-nav__link">
+    Encoding
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-selection-evaluation" class="md-nav__link">
+    Model Selection, Evaluation
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Selection, Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-model-selection" class="md-nav__link">
+    What is Model Selection?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gradient-descent" class="md-nav__link">
+    Gradient Descent
+  </a>
+  
+    <nav class="md-nav" aria-label="Gradient Descent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batch-gradient-descent" class="md-nav__link">
+    Batch Gradient Descent
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stochastic-gradient-descent" class="md-nav__link">
+    Stochastic Gradient Descent
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exploding-and-vanishing-gradients" class="md-nav__link">
+    Exploding and Vanishing Gradients
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    Metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-models-produce-well-calibrated-probabilities" class="md-nav__link">
+    What models produce well calibrated probabilities?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-do-we-sometimes-use-multi-head-to-evaluate-multi-label-classification" class="md-nav__link">
+    Why do we sometimes use "multi-head" to evaluate multi-label classification?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-should-one-use-sigmoid-or-softmax-in-a-neural-network" class="md-nav__link">
+    When should one use Sigmoid or Softmax in a Neural Network?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#probability-and-statistics" class="md-nav__link">
+    Probability and Statistics
+  </a>
+  
+    <nav class="md-nav" aria-label="Probability and Statistics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-do-you-multiply-probabilities" class="md-nav__link">
+    Why do you multiply probabilities?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-priori-posterior-and-conditional" class="md-nav__link">
+    What is Priori, Posterior and Conditional
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generic-questions" class="md-nav__link">
+    Generic Questions
+  </a>
+  
+    <nav class="md-nav" aria-label="Generic Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-are-common-pitfalls-that-lead-to-data-leakage-in-a-pipeline" class="md-nav__link">
+    What are common pitfalls that lead to Data Leakage in a pipeline?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-meaning-of-traintest-distribution-in-the-context-of-machine-learning" class="md-nav__link">
+    What is the meaning of "Train/Test" Distribution in the context of Machine Learning?
+  </a>
+  
+    <nav class="md-nav" aria-label="What is the meaning of "Train/Test" Distribution in the context of Machine Learning?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#train-and-test-distribution" class="md-nav__link">
+    Train and Test Distribution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution-from-your-model" class="md-nav__link">
+    Distribution from your model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametric-and-non-parametric-models" class="md-nav__link">
+    Parametric and Non-Parametric Models.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supervised-and-unsupervised-learning" class="md-nav__link">
+    Supervised and Unsupervised Learning.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tradeoff-between-flexibility-and-interpretability-of-machine-learning-models" class="md-nav__link">
+    Tradeoff between Flexibility and Interpretability of Machine Learning Models.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reducible-and-irreducible-errors" class="md-nav__link">
+    Reducible and Irreducible Errors.
+  </a>
+  
+    <nav class="md-nav" aria-label="Reducible and Irreducible Errors.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    Definition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-intuition" class="md-nav__link">
+    Example (Intuition)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#describe-ensembling-in-laymen-terms" class="md-nav__link">
+    Describe Ensembling in laymen terms.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensembling-theory" class="md-nav__link">
+    Ensembling Theory
+  </a>
+  
+    <nav class="md-nav" aria-label="Ensembling Theory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bagging" class="md-nav__link">
+    Bagging
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-validation" class="md-nav__link">
+    Cross-Validation
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross-Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-does-cross-validation-reduce-variance" class="md-nav__link">
+    Why does Cross-Validation reduce Variance?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-evaluation" class="md-nav__link">
+    Model Evaluation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linear-regression" class="md-nav__link">
+    Linear Regression
+  </a>
+  
+    <nav class="md-nav" aria-label="Linear Regression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#polynomial-regression" class="md-nav__link">
+    Polynomial Regression
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logistic-regression" class="md-nav__link">
+    Logistic Regression
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-tree" class="md-nav__link">
+    Decision Tree
+  </a>
+  
+    <nav class="md-nav" aria-label="Decision Tree">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#describe-dt-briefly" class="md-nav__link">
+    Describe DT briefly
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolutional-neural-networks" class="md-nav__link">
+    Convolutional Neural Networks
+  </a>
+  
+    <nav class="md-nav" aria-label="Convolutional Neural Networks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padding" class="md-nav__link">
+    Padding
+  </a>
+  
+    <nav class="md-nav" aria-label="Padding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-role-of-zero-padding" class="md-nav__link">
+    What is the role of zero padding?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pooling" class="md-nav__link">
+    Pooling
+  </a>
+  
+    <nav class="md-nav" aria-label="Pooling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-average-pooling" class="md-nav__link">
+    Global Average Pooling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-normalization-in-transfer-learning" class="md-nav__link">
+    Image Normalization in Transfer Learning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1x1-convolution" class="md-nav__link">
+    1x1 Convolution
+  </a>
+  
+    <nav class="md-nav" aria-label="1x1 Convolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intuition" class="md-nav__link">
+    Intuition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#downsample-feature-maps-with-1x1-convolution" class="md-nav__link">
+    Downsample Feature Maps with 1x1 Convolution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upsample-feature-maps-with-1x1-convolution" class="md-nav__link">
+    Upsample Feature Maps with 1x1 Convolution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1x1-convolution-is-equivalent-to-a-fc-layer" class="md-nav__link">
+    1x1 Convolution is Equivalent to a FC-layer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#downsampling" class="md-nav__link">
+    Downsampling
+  </a>
+  
+    <nav class="md-nav" aria-label="Downsampling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#convolutional-stride-downsampling" class="md-nav__link">
+    Convolutional Stride (Downsampling)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pooling-downsampling" class="md-nav__link">
+    Pooling (Downsampling)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convolutional-stride-vs-pooling-for-downsampling" class="md-nav__link">
+    Convolutional Stride vs Pooling for Downsampling
+  </a>
+  
+    <nav class="md-nav" aria-label="Convolutional Stride vs Pooling for Downsampling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-when-the-convolution-with-strides-is-better-than-pooling" class="md-nav__link">
+    Example when the convolution with strides is better than pooling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-where-pooling-is-better-than-convolution" class="md-nav__link">
+    Example where pooling is better than convolution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-maps" class="md-nav__link">
+    Feature Maps
+  </a>
+  
+    <nav class="md-nav" aria-label="Feature Maps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-are-the-last-few-feature-maps-more-useful-in-feature-extraction" class="md-nav__link">
+    Why are the last few Feature Maps more Useful in Feature extraction?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#object-detection-yolo" class="md-nav__link">
+    Object Detection (YOLO)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#object-detection-bounding-boxes" class="md-nav__link">
+    Object Detection (Bounding Boxes)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/interview/interview_handbook.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Interview handbook</h1>
+
+<div class="arithmatex">\[
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\a}{\mathbf{a}}
+\newcommand{\b}{\mathbf{b}}
+\newcommand{\betaa}{\mathbf{\beta}}
+\newcommand{\c}{\mathbf{c}}
+\newcommand{\u}{\mathbf{u}}
+\newcommand{\v}{\mathbf{v}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\C}{\mathbf{C}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\rank}{\textbf{rank}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\U}{\mathrm{U}}
+\newcommand{\V}{\mathrm{V}}
+\newcommand{\W}{\mathrm{W}}
+\newcommand{\L}{\mathcal{L}}
+\newcommand{\P}{\mathbb{P}}
+\]</div>
+<h2 id="why-is-softmax-layer-monotonic">Why is Softmax Layer Monotonic?</h2>
+<ul>
+<li>https://stackoverflow.com/questions/56096598/is-softmax-used-when-only-the-most-probable-class-will-be-used#:~:text=But%20softmax%20is%20a%20monotonic,layer%2C%20leaving%20the%20softmax%20out.</li>
+</ul>
+<h2 id="data-imbalance">Data Imbalance</h2>
+<ul>
+<li>https://machinelearningmastery.com/random-oversampling-and-undersampling-for-imbalanced-classification/</li>
+</ul>
+<h3 id="robinhood-question-1">Robinhood Question <sup id="fnref:Kevin Huo &amp; Nick Singh: Ace The Data Science Interview, 2021. (pp. 118)"><a class="footnote-ref" href="#fn:Kevin Huo &amp; Nick Singh: Ace The Data Science Interview, 2021. (pp. 118)">1</a></sup></h3>
+<ul>
+<li>First, check if we can collect more data for the minority class, this may not always be feasible, but worth a try to ask first.</li>
+<li>Make sure the metrics defined for such problem is sensible, for example, using accuracy is not good and one should explain why this is the case by using the <code>ZeroR</code> example. One should also mention that AUROC, precision-recall metrics that are not so misleading.</li>
+<li>Over/Under sampling: delete majority class randomly till convergence to desired distribution, or resample with replacement minority class,</li>
+<li>Smote</li>
+</ul>
+<h2 id="bias-variance-tradeoff">Bias-Variance Tradeoff</h2>
+<ul>
+<li>Definition</li>
+<li>Intuition and Examples</li>
+<li>My code on understanding the math and stats behind.</li>
+</ul>
+<h3 id="association-with-overfit-underfit">Association with Overfit-Underfit</h3>
+<h3 id="how-to-tackle-bias-variance-tradeoff">How to tackle Bias-Variance Tradeoff</h3>
+<p>In the Ace the data science interview book, author mentioned how to approach case specific question.</p>
+<p>Example</p>
+<ul>
+<li>high bias -&gt; increase model complexity</li>
+<li>high var -&gt; increase data etc</li>
+</ul>
+<h2 id="overfitting-and-underfitting">Overfitting and Underfitting</h2>
+<h3 id="what-is-overfitting">What is overfitting?</h3>
+<ul>
+<li>https://sebastianraschka.com/faq/docs/overfitting.html</li>
+</ul>
+<h3 id="how-to-tackle-overfitting">How to tackle Overfitting?</h3>
+<h4 id="regularization">Regularization</h4>
+<p>...</p>
+<h2 id="regularization_1">Regularization</h2>
+<h3 id="briefly-desribe-regularization-in-logistic-regression">Briefly desribe Regularization in Logistic Regression</h3>
+<ul>
+<li>https://sebastianraschka.com/faq/docs/regularized-logistic-regression-performance.html</li>
+</ul>
+<p>The visualization in the example is insane coupled with clear and intuitive explanation! Initially, you see the global minimum of the convex function is in the center of the graph, which is unregularized, we want to make the model a bit less "accurate" so we can have it generalize, so you see the small circle there is the "L2-term", now you can still find minimum, but with constraint to be in the small L2 circle.</p>
+<h3 id="why-is-the-l1-constraint-a-diamond-and-l2-constraint-a-circle">Why is the L1 constraint a diamond and L2 constraint a circle?</h3>
+<p>Consider a naive vector <span class="arithmatex">\(\v = \begin{bmatrix} x \\ y \end{bmatrix} \in \R^2\)</span>. Assume all vectors start from the origin.</p>
+<p>Define L2 norm as <span class="arithmatex">\(\Vert \v \Vert_2 = \sqrt{x^2 + y^2}\)</span> and then the <strong>set of vectors (coordinates)</strong> that satisfies this definition of L2 norm can be rewritten as:</p>
+<div class="arithmatex">\[
+\left\{(x, y) ~|~ x^2+y^2 = r^2 \right\}
+\]</div>
+<p>where this definition means that if <span class="arithmatex">\(\Vert \v \Vert_2 = 1\)</span>, then all vectors <span class="arithmatex">\(\v\)</span> having this norm must lie on the unit circle.</p>
+<p>See the image from ISLR, consider a simple linear equation with two independent variables <span class="arithmatex">\(\y = \beta_1 \x_1 + \beta_2 \x_2\)</span>, then the beta vector <span class="arithmatex">\(\betaa = \begin{bmatrix} \beta_1 \\ \beta_2 \end{bmatrix}\)</span> not has to fulfil a constraint such that say for example L2 norm (ridge) of <span class="arithmatex">\(\betaa\)</span> must be less than or equals to <span class="arithmatex">\(r = 1\)</span>. Geomtrically, you can see the circle that the <span class="arithmatex">\(\betaa\)</span> must fall within and note that it may or may not contain the "true optimal <span class="arithmatex">\(\betaa\)</span>".</p>
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/interview/misc_and_untidied/reg.PNG" style="margin-left:auto; margin-right:auto"/></p>
+<p style="text-align: center">
+    <b>ISLR</b>
+</p>
+
+<p><strong>See pp.242-244 from ISLR for more intuition</strong>.</p>
+<ul>
+<li>https://medium.com/uwaterloo-voice/a-deep-dive-into-regularization-eec8ab648bce</li>
+<li>https://www.mathworks.com/matlabcentral/answers/347583-how-to-plot-the-l2-norm-circle</li>
+<li>https://medium.com/@kiprono_65591/regularization-a-technique-used-to-prevent-over-fitting-886d5b361700</li>
+<li>https://www.analyticsvidhya.com/blog/2017/06/a-comprehensive-guide-for-linear-ridge-and-lasso-regression/</li>
+</ul>
+<h2 id="preprocessing-techniques">Preprocessing Techniques</h2>
+<ul>
+<li>should also check cs3244.</li>
+</ul>
+<h3 id="feature-scaling">Feature Scaling</h3>
+<ul>
+<li>An article on which models may need scale: https://www.thekerneltrip.com/statistics/when-scale-my-data/</li>
+<li>Sebastian god: https://sebastianraschka.com/Articles/2014_about_feature_scaling.html</li>
+<li>More math: https://stats.stackexchange.com/questions/29781/when-conducting-multiple-regression-when-should-you-center-your-predictor-varia</li>
+<li>https://stats.stackexchange.com/questions/48360/is-standardization-needed-before-fitting-logistic-regression says If you use logistic regression with LASSO or ridge regression (as Weka Logistic class does) you should. As Hastie,Tibshirani and Friedman points out (page 82 of the pdf or at page 63 of the book): The ridge solutions are not equivariant under scaling of the inputs, and so one normally standardizes the inputs before solving.</li>
+</ul>
+<h3 id="encoding">Encoding</h3>
+<ul>
+<li>https://stats.stackexchange.com/questions/288095/what-algorithms-require-one-hot-encoding</li>
+</ul>
+<h2 id="model-selection-evaluation">Model Selection, Evaluation</h2>
+<ul>
+<li>Must read: Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning by Seb</li>
+</ul>
+<p>Some summary from the paper.</p>
+<ul>
+<li>
+<p>1.1 Performance Estimation: Generalization Performance vs. Model Selection</p>
+<ul>
+<li>Why evaluate the predictive performance of a model?</li>
+<li>Relative performance is accurate if we assume bias affects all the models we trained.</li>
+<li>For example, if we trained 3 models, <span class="arithmatex">\(M_1, M_2, M_3\)</span>, and their validation accuracy is ranked as <span class="arithmatex">\(M_2: 75\% &gt; M_1: 70\% &gt; M_3: 65\%\)</span>, then if we add pessismistic bias of <span class="arithmatex">\(10\%\)</span>, the three models still ranked in the same order relatively: <span class="arithmatex">\(M_2: 65\% &gt; M_1: 60\% &gt; M_3: 55\%\)</span>. </li>
+<li>But do not think a <span class="arithmatex">\(65\%\)</span> validation accuracy translates to <span class="arithmatex">\(65\%\)</span> accuracy on the unseen test set.</li>
+</ul>
+</li>
+<li>
+<p>1.2 Assumptions and Terminology</p>
+</li>
+<li>1.5 Holdout validation: v impt idea</li>
+<li>3.9: Talks about whether feature selection in cv loop or out, data leak or ok.</li>
+<li>section 4: Hypothesis testing and algorithm comparison!</li>
+</ul>
+<h3 id="what-is-model-selection">What is Model Selection?</h3>
+<p>The process of finding the best-performing model from a set of models that were produced by different hyperparameter settings is called model selection.</p>
+<h2 id="gradient-descent">Gradient Descent</h2>
+<ul>
+<li>https://realpython.com/gradient-descent-algorithm-python/</li>
+</ul>
+<h3 id="batch-gradient-descent">Batch Gradient Descent</h3>
+<h3 id="stochastic-gradient-descent">Stochastic Gradient Descent</h3>
+<h3 id="exploding-and-vanishing-gradients">Exploding and Vanishing Gradients</h3>
+<ul>
+<li>https://www.analyticsvidhya.com/blog/2021/06/the-challenge-of-vanishing-exploding-gradients-in-deep-neural-networks/</li>
+</ul>
+<h2 id="metrics">Metrics</h2>
+<h3 id="what-models-produce-well-calibrated-probabilities">What models produce well calibrated probabilities?</h3>
+<ul>
+<li>https://stats.stackexchange.com/questions/208867/why-does-logistic-regression-produce-well-calibrated-models</li>
+</ul>
+<h3 id="why-do-we-sometimes-use-multi-head-to-evaluate-multi-label-classification">Why do we sometimes use "multi-head" to evaluate multi-label classification?</h3>
+<ul>
+<li>https://debuggercafe.com/multi-head-deep-learning-models-for-multi-label-classification/</li>
+</ul>
+<h3 id="when-should-one-use-sigmoid-or-softmax-in-a-neural-network">When should one use Sigmoid or Softmax in a Neural Network?</h3>
+<blockquote>
+<p><a href="https://stats.stackexchange.com/questions/233658/softmax-vs-sigmoid-function-in-logistic-classifier">Sigmoid vs Softmax</a> I've noticed people often get directed to this question when searching whether to use sigmoid vs softmax in neural networks. If you are one of those people building a neural network classifier, here is how to decide whether to apply sigmoid or softmax to the raw output values from your network:</p>
+</blockquote>
+<ul>
+<li>If you have a multi-label classification problem = there is more than one "right answer" = the outputs are NOT mutually exclusive, then use a sigmoid function on each raw output independently. The sigmoid will allow you to have high probability for all of your classes, some of them, or none of them. Example: classifying diseases in a chest x-ray image. The image might contain pneumonia, emphysema, and/or cancer, or none of those findings.</li>
+</ul>
+<hr />
+<ul>
+<li>If you have a multi-class classification problem = there is only one "right answer" = the outputs are mutually exclusive, then use a softmax function. The softmax will enforce that the sum of the probabilities of your output classes are equal to one, so in order to increase the probability of a particular class, your model must correspondingly decrease the probability of at least one of the other classes. Example: classifying images from the MNIST data set of handwritten digits. A single picture of a digit has only one true identity - the picture cannot be a 7 and an 8 at the same time.</li>
+</ul>
+<hr />
+<div class="highlight"><pre><span></span><code><span class="c1"># micro-averaged AUC</span>
+<span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_true</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+<span class="c1"># macro-averaged AUC</span>
+<span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">y_pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">)])</span>
+</code></pre></div>
+<ul>
+<li>https://scikit-learn.org/stable/modules/multiclass.html#multilabel-classification</li>
+<li>https://glassboxmedicine.com/2019/05/26/classification-sigmoid-vs-softmax/</li>
+<li>https://scikit-learn.org/stable/modules/multiclass.html#multilabel-classification</li>
+</ul>
+<h2 id="probability-and-statistics">Probability and Statistics</h2>
+<h3 id="why-do-you-multiply-probabilities">Why do you multiply probabilities?</h3>
+<p>Also appear in Chapter 2 summary.</p>
+<p>Consider rolling a dice twice, what is the probability that you roll a 5 and 6 respectively.</p>
+<p>We all know the answer is <span class="arithmatex">\(\dfrac{1}{6} \times \dfrac{1}{6} = \dfrac{1}{36}\)</span>. But why?</p>
+<p>This can be first understood that our denominator is the total outcomes in our sample space <span class="arithmatex">\(\S\)</span>. This is <span class="arithmatex">\(36\)</span>, why? By our counting principle on multiplication, we know that if we have <span class="arithmatex">\(6\)</span> choices in roll <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(6\)</span> choices in roll 2, then the cross-product is <span class="arithmatex">\(6 \times 6 = 36\)</span> total choices. One can enumerate <span class="arithmatex">\(\{(1,1), (1,2), \ldots, (6,6)\}\)</span> to see why.</p>
+<p>Now the numerator is also related to the counting principle of multiplication as well! In roll 1, rolling a 5 is 1 choice, rolling a 6 next is 1 choice, so total there is a only one combination choice <span class="arithmatex">\(1 \times 1\)</span>!</p>
+<p>Now if we reframe the problem to what is the probability that you roll a 1, 2 or 3 in the first roll and 2 or 3 in the second roll. Then of course our denominator don't change as <span class="arithmatex">\(36\)</span>, but our numerator changes, since in roll 1 we have 3 choices, and roll 2 have 2 choices, by the multiplicative principle we have a total of <span class="arithmatex">\(3 \times 2 = 6\)</span> choices, and so our probability is <span class="arithmatex">\(\dfrac{6}{36}\)</span> now. You can verify that there are indeed <span class="arithmatex">\(6\)</span> choices manually.</p>
+<blockquote>
+<p><strong>Now the most important part is we can use this if both events are independent! If not we need to be careful!</strong>.</p>
+</blockquote>
+<h3 id="what-is-priori-posterior-and-conditional">What is Priori, Posterior and Conditional</h3>
+<p>Common terms in ML world.</p>
+<p>Suppose there are three types of players in a tennis tournament: A, B, and C. Fifty percent of the contestants in the tournament are A players, 25% are B players, and 25% are C players. Your chance of beating the contestants depends on the class of the player, as follows:</p>
+<ul>
+<li>0.3 against an A player</li>
+<li>0.4 against a B player</li>
+<li>0.5 against a C player</li>
+</ul>
+<p>If you play a match in this tournament, what is the probability of your winning the
+match? Supposing that you have won a match, what is the probability that you played
+against an A player?</p>
+<p>Let <span class="arithmatex">\(W\)</span> be the event that you win and <span class="arithmatex">\(A\)</span> be the event that you played vs player <span class="arithmatex">\(A\)</span>, then</p>
+<ul>
+<li>Conditional: <span class="arithmatex">\(\P(W~|~A)\)</span> = given you played player <span class="arithmatex">\(A\)</span>, what is your probability of winning?</li>
+<li>Priori: <span class="arithmatex">\(\P(A)\)</span> = <strong>without entering the game</strong>, what is your probability of facing player <span class="arithmatex">\(A\)</span>?</li>
+<li>Posterior: <span class="arithmatex">\(\P(A~|~W)\)</span> = <strong>after entering the game and winning the match</strong>, what is your probability that you have actually played with <span class="arithmatex">\(A\)</span>?</li>
+<li>Machine Learning: In many practical engineering problems, the question of interest is often the last one. That
+is, supposing that you have observed something, what is the most likely cause of that event?
+For example, supposing we have observed this particular dataset, what is the best Gaussian
+model that would fit the dataset? Questions like these require some analysis of conditional
+probability, prior probability, and posterior probability.</li>
+</ul>
+<h2 id="generic-questions">Generic Questions</h2>
+<p>Usually generic and fundamental questions. These questions are "less code oriented", and usually requires a short and sweet answer, alongside with an example to illustrate.</p>
+<h3 id="what-are-common-pitfalls-that-lead-to-data-leakage-in-a-pipeline">What are common pitfalls that lead to <strong>Data Leakage</strong> in a pipeline?</h3>
+<ul>
+<li>https://scikit-learn.org/stable/common_pitfalls.html</li>
+<li>See also numerous question I asked on cross-validated.</li>
+</ul>
+<h3 id="what-is-the-meaning-of-traintest-distribution-in-the-context-of-machine-learning">What is the meaning of "Train/Test" Distribution in the context of Machine Learning?</h3>
+<ul>
+<li>https://towardsdatascience.com/understanding-entropy-the-golden-measurement-of-machine-learning-4ea97c663dc3#:~:text=By%20using%20entropy%20in%20machine,be%20desired%20in%20model%2Dbuilding.</li>
+<li>https://www.kdnuggets.com/2019/01/when-your-training-testing-data-different-distributions.html</li>
+</ul>
+<p>Let us talk this in a less formal way without invoking formal definitions of "probability distributions".</p>
+<h4 id="train-and-test-distribution">Train and Test Distribution</h4>
+<p>Let us say we are imposed a Machine Learning problem to predict cats vs dogs. We are handed a training set, and there is also a hidden test set that we do not know of. Let us pretend we browse through each image in the training set <span class="arithmatex">\(\mathcal{D}\)</span>, and plot out the pixel distribution of each image, we observe that each image pixel distribution follows a gaussian curve with mean 0 and std 1 (i.e. each image in <span class="arithmatex">\(\mathcal{D}\)</span> is generated from <span class="arithmatex">\(\mathcal{N}(0,1)\)</span>). Then we trained a good model using training set, but performed badly on the test set <span class="arithmatex">\(\mathcal{D}_{test}\)</span>, and after we also plot the pixel density of the test set, we discovered that this set follows a very different distributions, say follow <span class="arithmatex">\(\mathcal{N}(255, 255)\)</span>, and each image has 10 times the resolution of the training set. We can therefore conclude, that, both train and test set have different "probability distributions".</p>
+<hr />
+<h4 id="distribution-from-your-model">Distribution from your model</h4>
+<p>Let us also continue our example from the cat vs dog, this time we assume both train, test and every other images for dogs and cats are generated from <span class="arithmatex">\(\mathcal{N}(0, 1)\)</span>. That is to say, we <strong>know</strong> our population distribution, and if we do know, then why do we need a Machine Learning model at all? We can just approximate all images with the known population distribution with the parameters. Even simpler, if we have a dataset that is beknownst to us with a perfect linear relationship that can be predicted perfectly by a simple linear regression model, (i.e. the population parameter is known), then why do we even need linear regression?</p>
+<p>However, this world is far from perfect, and we do not know the population parameters of the underlying distribution of the dataset given to us, hence we use models to predict it.</p>
+<p>Thus, we can analogously say that if a training set <span class="arithmatex">\(\mathcal{D}\)</span> follows a distribution <span class="arithmatex">\(p\)</span>, then our model follows a distribution <span class="arithmatex">\(q\)</span>, where in the simplest case in linear regression, we know our <span class="arithmatex">\(q\)</span> follows a distribution with 2 parameters, <span class="arithmatex">\(m\)</span> the slope, <span class="arithmatex">\(c\)</span> the bias.</p>
+<p>With that in mind, our machine learning models can be phrased as using <span class="arithmatex">\(q\)</span> to approximate <span class="arithmatex">\(q\)</span>. And this is often used in Cross-Entropy loss.</p>
+<h3 id="parametric-and-non-parametric-models">Parametric and Non-Parametric Models.</h3>
+<ul>
+<li>ISLR (p21-24)</li>
+<li>https://stats.stackexchange.com/questions/268638/what-exactly-is-the-difference-between-a-parametric-and-non-parametric-model</li>
+<li>https://sebastianraschka.com/faq/docs/parametric_vs_nonparametric.html</li>
+</ul>
+<blockquote>
+<p>https://sebastianraschka.com/faq/docs/parametric_vs_nonparametric.html:
+The term “non-parametric” might sound a bit confusing at first: non-parametric does not mean that they have NO parameters! On the contrary, non-parametric models (can) become more and more complex with an increasing amount of data.</p>
+<p>So, in a parametric model, we have a finite number of parameters, and in nonparametric models, the number of parameters is (potentially) infinite. Or in other words, in nonparametric models, the complexity of the model grows with the number of training data; in parametric models, we have a fixed number of parameters (or a fixed structure if you will).</p>
+<p>Linear models such as linear regression, logistic regression, and linear Support Vector Machines are typical examples of a parametric “learners;” here, we have a fixed size of parameters (the weight coefficient.) In contrast, K-nearest neighbor, decision trees, or RBF kernel SVMs are considered as non-parametric learning algorithms since the number of parameters grows with the size of the training set. – K-nearest neighbor and decision trees, that makes sense, but why is an RBF kernel SVM non-parametric whereas a linear SVM is parametric? In the RBF kernel SVM, we construct the kernel matrix by computing the pair-wise distances between the training points, which makes it non-parametric.</p>
+<p>In the field of statistics, the term parametric is also associated with a specified probability distribution that you “assume” your data follows, and this distribution comes with the finite number of parameters (for example, the mean and standard deviation of a normal distribution); you don’t make/have these assumptions in non-parametric models. So, in intuitive terms, we can think of a non-parametric model as a “distribution” or (quasi) assumption-free model.</p>
+<p>However, keep in mind that the definitions of “parametric” and “non-parametric” are “a bit ambiguous” at best; according to the “The Handbook of Nonparametric Statistics 1 (1962) on p. 2: “A precise and universally acceptable definition of the term ‘nonparametric’ is not presently available. The viewpoint adopted in this handbook is that a statistical procedure is of a nonparametric type if it has properties which are satisfied to a reasonable approximation when some assumptions that are at least of a moderately general nature hold."</p>
+</blockquote>
+<hr />
+<h3 id="supervised-and-unsupervised-learning">Supervised and Unsupervised Learning.</h3>
+<ul>
+<li>ISLR (p26-28)</li>
+</ul>
+<h3 id="tradeoff-between-flexibility-and-interpretability-of-machine-learning-models">Tradeoff between Flexibility and Interpretability of Machine Learning Models.</h3>
+<ul>
+<li>ISLR (p24-26)</li>
+</ul>
+<h3 id="reducible-and-irreducible-errors">Reducible and Irreducible Errors.</h3>
+<ul>
+<li>ISLR (p18-19)</li>
+</ul>
+<h4 id="definition">Definition</h4>
+<p>Formal Definition</p>
+<h4 id="example-intuition">Example (Intuition)</h4>
+<ul>
+<li>We can use features <span class="arithmatex">\(\X\)</span> to predict <span class="arithmatex">\(\y\)</span>, for example, use <strong>age of house, number of bedrooms, etc</strong> to predict the <strong>price of the house</strong>.</li>
+<li>The <strong>irreducible errors</strong> can be random events such as Elon Musk tweeting something good about a particular house, which our model cannot account for.</li>
+</ul>
+<h3 id="describe-ensembling-in-laymen-terms">Describe Ensembling in laymen terms.</h3>
+<p><strong>François Chollet</strong>(Creator of Keras) explained it as : Ensembling relies on the assumption that different good models trained independently are likely to be good for different reasons: each model looks at slightly different aspects of the data to make its predictions, getting part of the “truth” but not all of it. You may be familiar with the ancient parable of the blind men and the elephant: a group of blind men come across an elephant for the first time and try to understand what the elephant is by touching it. Each man touches a different part of the elephant’s body—just one part, such as the trunk or a leg. Then the men describe toeach other what an elephant is: “It’s like a snake,” “Like a pillar or a tree,” and so on.The blind men are essentially machine-learning models trying to understand the manifold of the training data, each from its own perspective, using its own assumptions(provided by the unique architecture of the model and the unique random weight initialization). Each of them gets part of the truth of the data, but not the whole truth. By pooling their perspectives together, you can get a far more accurate description of the data. The elephant is a combination of parts: not any single blind man gets it quiteright, but, interviewed together, they can tell a fairly accurate story.</p>
+<p>Let’s use classification as an example. The easiest way to pool the predictions of a setof classifiers (to ensemble the classifiers) is to average their predictions at inference time:Use four different models to compute initial predictions.</p>
+<div class="highlight"><pre><span></span><code>preds_a = model_a.predict(x_val)
+preds_b = model_b.predict(x_val)
+preds_c = model_c.predict(x_val)
+preds_d = model_d.predict(x_val)
+</code></pre></div>
+<p>This new prediction array should be more accurate than any of the initial ones.</p>
+<p><code>final_preds = 0.25 * (preds_a + preds_b + preds_c + preds_d)</code></p>
+<p>This will work only if the classifiers are more or less equally good. If one of them is significantly worse than the others, the final predictions may not be as good as the best classifier of the group.A smarter way to ensemble classifiers is to do a weighted average, where the weights are learned on the validation data typically, the better classifiers are given a higher weight, and the worse classifiers are given a lower weight. To search for a good set of ensembling weights, you can use random search or a simple optimization algorithm such as Nelder-Mead:</p>
+<div class="highlight"><pre><span></span><code>preds_a = model_a.predict(x_val)
+preds_b = model_b.predict(x_val)
+preds_c = model_c.predict(x_val)
+preds_d = model_d.predict(x_val)
+</code></pre></div>
+<p>These weights (0.5, 0.25,0.1, 0.15) are assumed to be learned empirically.<code>final_preds = 0.5 * preds_a + 0.25 * preds_b + 0.1 * preds_c + 0.15 * preds_d</code></p>
+<h2 id="ensembling-theory">Ensembling Theory</h2>
+<h3 id="bagging">Bagging</h3>
+<h2 id="cross-validation">Cross-Validation</h2>
+<h3 id="why-does-cross-validation-reduce-variance">Why does Cross-Validation reduce Variance?</h3>
+<h2 id="model-evaluation">Model Evaluation</h2>
+<ul>
+<li>https://www.ritchieng.com/applying-machine-learning/</li>
+</ul>
+<h2 id="linear-regression">Linear Regression</h2>
+<h3 id="polynomial-regression">Polynomial Regression</h3>
+<ul>
+<li>https://zerowithdot.com/polynomial-regression-in-python/</li>
+</ul>
+<h2 id="logistic-regression">Logistic Regression</h2>
+<h2 id="decision-tree">Decision Tree</h2>
+<h3 id="describe-dt-briefly">Describe DT briefly</h3>
+<ul>
+<li>Suprvised Learning: will need corresponding label</li>
+<li>Non-parametric</li>
+<li></li>
+</ul>
+<h2 id="convolutional-neural-networks">Convolutional Neural Networks</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># !pip install torchinfo</span>
+<span class="kn">import</span> <span class="nn">timm</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">from</span> <span class="nn">torchinfo</span> <span class="kn">import</span> <span class="n">summary</span>
+
+<span class="k">def</span> <span class="nf">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1992</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed all random number generators.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using Seed Number </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONHASHSEED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># set PYTHONHASHSEED env var at fixed value</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># pytorch (both CPU and CUDA)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># for numpy pseudo-random generator</span>
+    <span class="c1"># set fixed value for python built-in pseudo-random generator</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">seed_worker</span><span class="p">(</span><span class="n">_worker_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed a worker with the given ID.&quot;&quot;&quot;</span>
+    <span class="n">worker_seed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">initial_seed</span><span class="p">()</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">worker_seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">worker_seed</span><span class="p">)</span>
+
+
+<span class="n">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">1992</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Using Seed Number 1992
+</code></pre></div>
+<h3 id="padding">Padding</h3>
+<h4 id="what-is-the-role-of-zero-padding">What is the role of zero padding?</h4>
+<h3 id="pooling">Pooling</h3>
+<h4 id="global-average-pooling">Global Average Pooling</h4>
+<ul>
+<li>https://rwightman.github.io/pytorch-image-models/feature_extraction/#penultimate-layer-features-pre-classifier-features</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">timm</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">timm</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">image_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+<span class="n">input_image_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">image_shape</span><span class="p">))</span>
+
+
+<span class="c1"># print(summary(model, (2, 3, 224, 224)))</span>
+</code></pre></div>
+<ul>
+<li><code>model.reset_classifier(num_classes=0, global_pool="")</code> means we <strong>do not want global average pooling</strong> and thus the shape at the last conv layer (penultimate layer) is <span class="arithmatex">\((2, 512, 7, 7)\)</span></li>
+<li><code>model.reset_classifier(num_classes=0, global_pool="avg")</code> means we <strong>do want global average pooling</strong> and thus the shape at the last conv layer (penultimate layer) is <span class="arithmatex">\((2, 512)\)</span>
+   whereby for each and every of the 512 feature maps <span class="arithmatex">\(f_i\)</span>, we average <span class="arithmatex">\(f_i\)</span> across all pixels (i.e. if <span class="arithmatex">\(f_i\)</span> is 3 by 3 then average means add all <span class="arithmatex">\(3 \times 3 = 9\)</span> pixels and average) and concat to become one <span class="arithmatex">\(512\)</span> vector. </li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">timm</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">reset_classifier</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">global_pool</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unpooled shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Original shape: torch.Size([2, 1000])
+Unpooled shape: torch.Size([2, 512, 7, 7])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">timm</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">reset_classifier</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">global_pool</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Pooled shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Original shape: torch.Size([2, 1000])
+Pooled shape: torch.Size([2, 512])
+</code></pre></div>
+<h3 id="image-normalization-in-transfer-learning">Image Normalization in Transfer Learning</h3>
+<p><a href="https://reighns92.github.io/reighns-ml-blog/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/">Image Normalization</a></p>
+<h3 id="1x1-convolution">1x1 Convolution</h3>
+<ul>
+<li><a href="https://machinelearningmastery.com/introduction-to-1x1-convolutions-to-reduce-the-complexity-of-convolutional-neural-networks/">A Gentle Introduction to 1×1 Convolutions to Manage Model Complexity</a></li>
+</ul>
+<h4 id="intuition">Intuition</h4>
+<p>Pooling layers are designed to downscale <strong>feature maps</strong> and systematically halve the <strong>width and height</strong> of feature maps in the network. Nevertheless, pooling layers do not change the number of filters in the model which is the <strong>depth or number of channels</strong>. The intuition of 1x1 convolution is that we can think of it as a <strong>downsample</strong> operation on the <strong>feature maps</strong> but this time shrinking the <strong>depth/channels</strong> instead of the <strong>width/height</strong>.</p>
+<h4 id="downsample-feature-maps-with-1x1-convolution">Downsample Feature Maps with 1x1 Convolution</h4>
+<p>In Andrew Ng's example, let us define:</p>
+<ul>
+<li>Batch size of 1;</li>
+<li>A conv layer of with kernel size of 5, same padding of 2 and stride of 1, and an output depth of 32;</li>
+<li>The input shape is a stack of feature maps of 192 depth/channels, each of 28 by 28;</li>
+<li>It follows that the learnable params of the this conv layer is <span class="arithmatex">\(32 \times 5 \times 5 \times 192 + 32 = 153, 632\)</span>.  </li>
+<li>It follows that the output shape is of <span class="arithmatex">\((32, 28, 28)\)</span>, which is a stack of feature maps of 32 depth, each of 28 by 28 size.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">192</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">),</span>
+
+<span class="p">)</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">input_image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">192</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+Sequential                               --                        --
+├─Conv2d: 1-1                            [1, 32, 28, 28]           153,632
+==========================================================================================
+Total params: 153,632
+Trainable params: 153,632
+Non-trainable params: 0
+Total mult-adds (M): 120.45
+==========================================================================================
+Input size (MB): 0.60
+Forward/backward pass size (MB): 0.20
+Params size (MB): 0.61
+Estimated Total Size (MB): 1.42
+==========================================================================================
+</code></pre></div>
+<p>Now if we design a <strong>intermediate</strong> layer that holds 1x1 convolution that first decreases the depth from 192 to 16 instead of 32, then connect back with another conv layer of kernel size 5 and depth 32, we can recover the same output shape but at a much leseer computational cost. As we can see below, the params reduced almost 10 folds.</p>
+<p>Commonly, we call this <strong>intermediate</strong> layer a <strong>bottleneck layer</strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">192</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">input_image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">192</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+Sequential                               --                        --
+├─Conv2d: 1-1                            [1, 16, 28, 28]           3,088
+├─Conv2d: 1-2                            [1, 32, 28, 28]           12,832
+==========================================================================================
+Total params: 15,920
+Trainable params: 15,920
+Non-trainable params: 0
+Total mult-adds (M): 12.48
+==========================================================================================
+Input size (MB): 0.60
+Forward/backward pass size (MB): 0.30
+Params size (MB): 0.06
+Estimated Total Size (MB): 0.97
+==========================================================================================
+</code></pre></div>
+<h4 id="upsample-feature-maps-with-1x1-convolution">Upsample Feature Maps with 1x1 Convolution</h4>
+<p>Similarly, we can increase the <strong>depth/channel</strong> of the <strong>feature maps</strong> while maintaining the <strong>width and height</strong>.</p>
+<h4 id="1x1-convolution-is-equivalent-to-a-fc-layer">1x1 Convolution is Equivalent to a FC-layer</h4>
+<h3 id="downsampling">Downsampling</h3>
+<h4 id="convolutional-stride-downsampling">Convolutional Stride (Downsampling)</h4>
+<div class="highlight"><pre><span></span><code><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">input_image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+Sequential                               --                        --
+├─Conv2d: 1-1                            [1, 64, 224, 224]         9,408
+==========================================================================================
+Total params: 9,408
+Trainable params: 9,408
+Non-trainable params: 0
+Total mult-adds (M): 472.06
+==========================================================================================
+Input size (MB): 0.60
+Forward/backward pass size (MB): 25.69
+Params size (MB): 0.04
+Estimated Total Size (MB): 26.33
+==========================================================================================
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+Sequential                               --                        --
+├─Conv2d: 1-1                            [1, 64, 112, 112]         9,408
+==========================================================================================
+Total params: 9,408
+Trainable params: 9,408
+Non-trainable params: 0
+Total mult-adds (M): 118.01
+==========================================================================================
+Input size (MB): 0.60
+Forward/backward pass size (MB): 6.42
+Params size (MB): 0.04
+Estimated Total Size (MB): 7.06
+==========================================================================================
+</code></pre></div>
+<p>This is considered a <strong>downsampling</strong> operation due to our stride changed from 2 to 1. The output shape of the feature maps is from (64, 224, 224) to (64, 112, 112), effectively halving the width and height of the feature maps.</p>
+<h4 id="pooling-downsampling">Pooling (Downsampling)</h4>
+<ul>
+<li>https://www.quora.com/What-is-a-downsampling-layer-in-Convolutional-Neural-Network-CNN</li>
+</ul>
+<div class="container" style="display: inline-block;">  
+  <figure>
+  <div style="float: left; padding: 10px;">
+    <img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/data/misc/Illustration-of-Max-Pooling-and-Average-Pooling-Figure-2-above-shows-an-example-of-max.png' width="350" height="350" align="center"/>
+    <figcaption align="center"><b>Pooling as a form of Downsampling. <a href="https://www.researchgate.net/figure/Illustration-of-Max-Pooling-and-Average-Pooling-Figure-2-above-shows-an-example-of-max_fig2_333593451">Source</a></b></figcaption>
+  </div>
+  </figure>
+</div>
+
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+Sequential                               --                        --
+├─Conv2d: 1-1                            [1, 64, 224, 224]         9,408
+==========================================================================================
+Total params: 9,408
+Trainable params: 9,408
+Non-trainable params: 0
+Total mult-adds (M): 472.06
+==========================================================================================
+Input size (MB): 0.60
+Forward/backward pass size (MB): 25.69
+Params size (MB): 0.04
+Estimated Total Size (MB): 26.33
+==========================================================================================
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>==========================================================================================
+Layer (type:depth-idx)                   Output Shape              Param #
+==========================================================================================
+Sequential                               --                        --
+├─Conv2d: 1-1                            [1, 64, 224, 224]         9,408
+├─MaxPool2d: 1-2                         [1, 64, 112, 112]         --
+==========================================================================================
+Total params: 9,408
+Trainable params: 9,408
+Non-trainable params: 0
+Total mult-adds (M): 472.06
+==========================================================================================
+Input size (MB): 0.60
+Forward/backward pass size (MB): 25.69
+Params size (MB): 0.04
+Estimated Total Size (MB): 26.33
+==========================================================================================
+</code></pre></div>
+<p>Spatial pooling layers such as <code>MaxPool2d</code> with a size of 2 and stride 2 also reduces the feature map by a factor of 2 by 2. </p>
+<p>Notice that both downsampling methods have the same number of <strong>trainable parameters</strong> and also the exact <strong>same output shape</strong>, so what's the difference?</p>
+<blockquote>
+<p>Maybe the additional <code>MaxPool2d</code> is an additional operation that is not needed? Let's see two examples.</p>
+</blockquote>
+<h4 id="convolutional-stride-vs-pooling-for-downsampling">Convolutional Stride vs Pooling for Downsampling</h4>
+<p>The advantage of the convolution layer is that it can learn certain properties that you might not think of while you add pooling layer. Pooling is a fixed operation and convolution can be learned. On the other hand, pooling is a cheaper operation than convolution, both in terms of the amount of computation that you need to do and number of parameters that you need to store (no parameters for pooling layer).</p>
+<p>There are examples when one of them is better choice than the other.</p>
+<h5 id="example-when-the-convolution-with-strides-is-better-than-pooling">Example when the convolution with strides is better than pooling</h5>
+<p>The first layer in the ResNet uses convolution with strides. This is a great example of when striding gives you an advantage. This layer by itself significantly reduces the amount of computation that has to be done by the network in the subsequent layers. It compresses multiple 3x3 convolution (3 to be exact) in to one 7x7 convolution, to make sure that it has exactly the same receptive field as 3 convolution layers (even though it is less powerful in terms of what it can learn). At the same time this layer applies stride=2 that downsamples the image. Because this first layer in ResNet does convolution and downsampling at the same time, the operation becomes significantly cheaper computationally. If you use stride=1 and pooling for downsampling, then you will end up with convolution that does 4 times more computation + extra computation for the next pooling layer. The same trick was used in SqueezeNet and some other neural network architectures.</p>
+<h5 id="example-where-pooling-is-better-than-convolution">Example where pooling is better than convolution</h5>
+<p>In the NIPS 2018, there was a new architecture presented called <a href="https://papers.nips.cc/paper/7356-fishnet-a-versatile-backbone-for-image-region-and-pixel-level-prediction.pdf">FishNet</a>. One thing that they try is to fix the problems with the residual connections used in the ResNet. In the ResNet, in few places, they put 1x1 convolution in the skip connection when downsampling was applied to the image. This convolution layer makes gradient propagation harder. One of the major changes in their paper is that they get rid of the convolutions in the residual connections and replaced them with pooling and simple upscales/identities/concatenations. This solution fixes problem with gradient propagation in very deep networks. </p>
+<p>From the FishNet paper (Section 3.2)</p>
+<blockquote>
+<p>The layers in the head are composed of concatenation, convolution with
+identity mapping, and max-pooling. Therefore, the gradient propagation
+problem from the previous backbone network in the tail are solved with
+the FishNet by 1) excluding I-conv at the head; and 2) using
+concatenation at the body and the head.</p>
+</blockquote>
+<ul>
+<li><a href="https://stats.stackexchange.com/questions/387482/pooling-vs-stride-for-downsampling">Pooling vs. stride for downsampling</a></li>
+</ul>
+<h3 id="feature-maps">Feature Maps</h3>
+<h4 id="why-are-the-last-few-feature-maps-more-useful-in-feature-extraction">Why are the last few Feature Maps more Useful in Feature extraction?</h4>
+<ul>
+<li>The backbone network ("convolution and pooling") is responsible for extracting a feature map from the image that contains higher level summarized information. Each head uses this feature map as input to predict its desired outcome. </li>
+<li>The main intuition why feature maps of the last few layers (last layer usually) are important is one needs to recognize the earlier conv layer's feature maps find simple features like shapes, sizes, edges from an image, while the deep conv layers will be of more abstract features in an image. As a result, we really just want the abstract feature maps as they are <strong>more class specific to the image</strong> instead of the earlier layers which gives <strong>generic shapes</strong>.</li>
+</ul>
+<h2 id="object-detection-yolo">Object Detection (YOLO)</h2>
+<h2 id="object-detection-bounding-boxes">Object Detection (Bounding Boxes)</h2>
+<ul>
+<li>Different conversions<ul>
+<li>https://albumentations.ai/docs/getting_started/bounding_boxes_augmentation/</li>
+<li>https://github.com/awsaf49/bbox/blob/main/bbox/utils.py</li>
+</ul>
+</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:Kevin Huo &amp; Nick Singh: Ace The Data Science Interview, 2021. (pp. 118)">
+<p><strong>Kevin Huo &amp; Nick Singh: Ace The Data Science Interview, 2021. (pp. 118)</strong>&#160;<a class="footnote-backref" href="#fnref:Kevin Huo &amp; Nick Singh: Ace The Data Science Interview, 2021. (pp. 118)" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate"], "search": "../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

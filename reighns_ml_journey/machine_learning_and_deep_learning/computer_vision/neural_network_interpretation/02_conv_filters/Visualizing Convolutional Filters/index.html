@@ -1,0 +1,2543 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/02_conv_filters/Visualizing%20Convolutional%20Filters/">
+      
+      <link rel="icon" href="../../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>EDA Visualizations for Image Recognition (Conv Filter Edition) - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#eda-visualizations-for-image-recognition-conv-filter-edition" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              EDA Visualizations for Image Recognition (Conv Filter Edition)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-and-imports" class="md-nav__link">
+    Dependencies and Imports
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-and-logging" class="md-nav__link">
+    Config and Logging
+  </a>
+  
+    <nav class="md-nav" aria-label="Config and Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#utils" class="md-nav__link">
+    Utils
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seeding" class="md-nav__link">
+    Seeding
+  </a>
+  
+    <nav class="md-nav" aria-label="Seeding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transforms-params" class="md-nav__link">
+    Transforms Params
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualizations" class="md-nav__link">
+    Visualizations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convolution-layers" class="md-nav__link">
+    Convolution Layers 
+  </a>
+  
+    <nav class="md-nav" aria-label="Convolution Layers ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#feature-extractor-using-pytorchs-native-feature-extraction-module" class="md-nav__link">
+    Feature Extractor using PyTorch's native Feature Extraction Module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-vgg16-and-resnet18" class="md-nav__link">
+    Visualizing VGG16 and ResNet18
+  </a>
+  
+    <nav class="md-nav" aria-label="Visualizing VGG16 and ResNet18">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-initialize-the-models" class="md-nav__link">
+    Step 1: Initialize the models.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-transform-the-tensors" class="md-nav__link">
+    Step 2: Transform the Tensors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-plotting-the-feature-maps" class="md-nav__link">
+    Step 3: Plotting the Feature Maps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparison-with-randomly-initialized-weights" class="md-nav__link">
+    Comparison with Randomly Initialized Weights
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/02_conv_filters/Visualizing Convolutional Filters.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="eda-visualizations-for-image-recognition-conv-filter-edition">EDA Visualizations for Image Recognition (Conv Filter Edition)</h1>
+<h2 id="dependencies-and-imports">Dependencies and Imports</h2>
+<div class="highlight"><pre><span></span><code><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">timm</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># linear algebra</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>  <span class="c1"># data processing, CSV file I/O (e.g. pd.read_csv)</span>
+<span class="kn">import</span> <span class="nn">timm</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">from</span> <span class="nn">torchvision.models.feature_extraction</span> <span class="kn">import</span> <span class="p">(</span><span class="n">create_feature_extractor</span><span class="p">,</span>
+                                                   <span class="n">get_graph_node_names</span><span class="p">)</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">PIL</span>
+<span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
+
+<span class="n">InteractiveShell</span><span class="o">.</span><span class="n">ast_node_interactivity</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># importing modules</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+</code></pre></div>
+<h2 id="config-and-logging">Config and Logging</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">INFO</span><span class="p">,</span> <span class="n">FileHandler</span><span class="p">,</span> <span class="n">Formatter</span><span class="p">,</span> <span class="n">StreamHandler</span><span class="p">,</span> <span class="n">getLogger</span>
+
+<span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info.log&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize logger and save to file.</span>
+
+<span class="sd">    Consider having more log_file paths to save, eg: debug.log, error.log, etc.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        log_file (str, optional): [description]. Defaults to Path(LOGS_DIR, &quot;info.log&quot;).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        logging.Logger: [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">stream_handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">()</span>
+    <span class="n">stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span>
+        <span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">FileHandler</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span>
+        <span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="utils">Utils</h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_multiple_img</span><span class="p">(</span><span class="n">img_matrix_list</span><span class="p">,</span> <span class="n">title_list</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">main_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">myaxes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">img_matrix_list</span><span class="p">)</span> <span class="o">/</span> <span class="n">ncols</span><span class="p">),</span>
+        <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span>
+        <span class="n">squeeze</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">main_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">img_matrix_list</span><span class="p">,</span> <span class="n">title_list</span><span class="p">)):</span>
+        <span class="n">myaxes</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="n">ncols</span><span class="p">][</span><span class="n">i</span> <span class="o">%</span> <span class="n">ncols</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">myaxes</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="n">ncols</span><span class="p">][</span><span class="n">i</span> <span class="o">%</span> <span class="n">ncols</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="seeding">Seeding</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1992</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed all random number generators.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using Seed Number </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONHASHSEED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># set PYTHONHASHSEED env var at fixed value</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># pytorch (both CPU and CUDA)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># for numpy pseudo-random generator</span>
+    <span class="c1"># set fixed value for python built-in pseudo-random generator</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">seed_worker</span><span class="p">(</span><span class="n">_worker_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed a worker with the given ID.&quot;&quot;&quot;</span>
+    <span class="n">worker_seed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">initial_seed</span><span class="p">()</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">worker_seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">worker_seed</span><span class="p">)</span>
+
+
+<span class="n">seed_all</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Using Seed Number 1992
+</code></pre></div>
+<h3 id="transforms-params">Transforms Params</h3>
+<div class="highlight"><pre><span></span><code><span class="n">mean</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">]</span>
+<span class="n">std</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]</span>
+<span class="n">image_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">224</span>
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="n">image_size</span><span class="p">,</span> <span class="n">image_size</span><span class="p">)),</span>
+        <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+        <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">std</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">pre_normalize_transform</span> <span class="o">=</span>  <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="n">image_size</span><span class="p">,</span> <span class="n">image_size</span><span class="p">)),</span>
+        <span class="n">torchvision</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="visualizations">Visualizations</h2>
+<div class="highlight"><pre><span></span><code><span class="n">cat_p</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/data/misc/cat.jpg&quot;</span>
+<span class="n">dog_p</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/data/misc/dog.jpg&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+
+<span class="c1"># plot cat and dog with title using PIL</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">cat</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="n">cat_p</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cat</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Cat&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">dog</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="n">dog_p</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dog</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Dog&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+</code></pre></div>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_14_0.png" /></p>
+<h2 id="convolution-layers">Convolution Layers <a id="2.3"></a></h2>
+<p>The image and content are referenced with courtesy from [Tarun's notebook](https://www.kaggle.com/tarunpaparaju/plant-pathology-2020-eda-models](https://www.kaggle.com/tarunpaparaju/plant-pathology-2020-eda-models).</p>
+<hr />
+<p>Convolution is a rather simple algorithm which involves a kernel (a 2D matrix) which moves over the entire image, calculating dot products with each window along the way. The GIF below demonstrates convolution in action.</p>
+<p><center><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/visualizing_convolutional_filters/conv_filter_1.gif" width="450px"></center></p>
+<p>The above process can be summarized with an equation, where <em>f</em> is the image and <em>h</em> is the kernel. The dimensions of <em>f</em> are <em>(m, n)</em> and the kernel is a square matrix with dimensions smaller than <em>f</em>:
+<span class="arithmatex">\(<span class="arithmatex">\(\text{conv}(f, h) = \sum_{j}\sum_{k}h_{jk} \cdot f_{(m-j)(n-k)}\)</span>\)</span></p>
+<p>In the above equation, the kernel <em>h</em> is moving across the length and breadth of the image. The dot product of <em>h</em> with a sub-matrix or window of matrix <em>f</em> is taken at each step, hence the double summation (rows and columns). </p>
+<p>I have always remembered from the revered Andrew Ng about how he taught us about what convolutional layers do.</p>
+<blockquote>
+<p>In the beginning, the conv layers are of low level abstraction, detailing a image's features such as shapes and sizes. In particular, he described to us the horizontal and vertical conv filters. As the conv layers go later, it will pick up on many abstract features, which is not really easily distinguished by human eyes.</p>
+</blockquote>
+<p>Below, we see an example of horizontal and vertical filters.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">conv_horizontal</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot the horizontal convolution of the image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image (torch.Tensor): [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">kernel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">kernel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">filter2D</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original Image&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">conv</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Convolved Image with horizontal edges&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">conv_vertical</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot the vertical convolution of the image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image (torch.Tensor): [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">kernel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">kernel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">kernel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">filter2D</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original Image&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">conv</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Convolved Image with vertical edges&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p>Well, I can easily make out the horizontal and vertical edges from the dog image! Actually, not so obvious if you don't look closely! </p>
+<div class="highlight"><pre><span></span><code><span class="n">conv_horizontal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dog</span><span class="p">))</span>
+<span class="n">conv_vertical</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dog</span><span class="p">))</span>
+</code></pre></div>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_19_0.png" /></p>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_19_1.png" /></p>
+<p>The issue is, I want to visualize what our models' conv layers are seeing, like for example, the first conv layer usually has 64 filters, that is a whooping 64 different combinations of filters, each doing a slightly different thing. A mental model that I have for the first conv layer looks something like the following.</p>
+<div class="highlight"><pre><span></span><code><span class="n">conv_1_filters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;vertical edge detector&quot;</span><span class="p">,</span> <span class="s2">&quot;horizontal edge detector&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;slanted 45 degrees detector&quot;</span><span class="p">,</span> <span class="s2">&quot;slanted 180 degrees detector&quot;</span><span class="p">,</span>
+                  <span class="o">...</span><span class="p">]</span>
+</code></pre></div>
+<h3 id="feature-extractor-using-pytorchs-native-feature-extraction-module">Feature Extractor using PyTorch's native Feature Extraction Module</h3>
+<p>In order to visualize properly, I made use of <strong>PyTorch's</strong> newest <code>feature_extraction</code> module to do so. Note that the new feature is still in development, but it does make my life easier and reduces overhead. I no longer need use <code>hooks</code> or what not to plot layer information!</p>
+<p>We just need to import
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torchvision.models.feature_extraction</span> <span class="kn">import</span> <span class="p">(</span><span class="n">create_feature_extractor</span><span class="p">,</span>
+                                                   <span class="n">get_graph_node_names</span><span class="p">)</span>
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_conv_layers</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">models</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a function that give me the conv layers of PyTorch model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Union[torchvision.models, timm.models]): A PyTorch model.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        conv_layers (Dict[str, str]): {&quot;layer1.0.conv1&quot;: layer1.0.conv1, ...}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conv_layers</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_modules</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">):</span>
+            <span class="n">conv_layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">return</span> <span class="n">conv_layers</span>
+
+
+<span class="k">def</span> <span class="nf">get_feature_maps</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+    <span class="n">pretrained</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to plot feature maps from PyTorch models.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_name (str): Name of the model to use.</span>
+<span class="sd">        image (torch.Tensor): image should be a tensor of shape (1, 3, H, W)</span>
+<span class="sd">        reduction (str, optional): Defaults to &quot;mean&quot;. One of [&quot;mean&quot;, &quot;max&quot;, &quot;sum&quot;]</span>
+<span class="sd">        pretrained (bool): whether the model is pretrained or not</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Must use Torchvision models.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        model_feature_maps (Dict[str, torch.Tensor]): {&quot;conv_1&quot;: conv_1_feature_map, ...}</span>
+<span class="sd">        processed_feature_maps (List[torch.Tensor]): [conv_1_feature_map, ...] processed using a reduction method.</span>
+<span class="sd">        feature_map_names (List[str]): [conv_1, ...]</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from torchvision.models.vgg import vgg16</span>
+<span class="sd">        &gt;&gt;&gt; model = vgg16(pretrained=True)</span>
+<span class="sd">        &gt;&gt;&gt; image = torch.rand(1, 3, 224, 224)</span>
+<span class="sd">        &gt;&gt;&gt; feature_maps = get_feature_maps(model, image, reduction=&quot;mean&quot;)</span>
+
+<span class="sd">    Reduction:</span>
+<span class="sd">        If a feature map has 4 filters, in the shape of (4, H, W) = (4, 32, 32), then the reduction can be done as follows:</span>
+<span class="sd">        &gt;&gt;&gt; reduction = &quot;mean&quot;: There are 4 filters in this feature map, you can imagine it as 4 32x32 images.</span>
+<span class="sd">                                We sum up all 4 filters element-wise and get a single 32x32 image.</span>
+<span class="sd">                                Then we take the mean of all 32x32 images by dividing by num of kernels to get a single 32x32 image, which is reduction=&quot;mean&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torchvision</span><span class="o">.</span><span class="n">models</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)(</span><span class="n">pretrained</span><span class="o">=</span><span class="n">pretrained</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+
+    <span class="n">train_nodes</span><span class="p">,</span> <span class="n">eval_nodes</span> <span class="o">=</span> <span class="n">get_graph_node_names</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The train nodes of the model graph is:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">train_nodes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">return_conv_nodes</span> <span class="o">=</span> <span class="n">get_conv_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">feature_extractor</span> <span class="o">=</span> <span class="n">create_feature_extractor</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">return_nodes</span><span class="o">=</span><span class="n">return_conv_nodes</span><span class="p">)</span>
+
+    <span class="c1"># `model_feature_maps` will be a dict of Tensors, each representing a feature map</span>
+    <span class="n">model_feature_maps</span> <span class="o">=</span> <span class="n">feature_extractor</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="n">processed_feature_maps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">feature_map_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">conv_name</span><span class="p">,</span> <span class="n">conv_feature_map</span> <span class="ow">in</span> <span class="n">model_feature_maps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="n">conv_feature_map</span> <span class="o">=</span> <span class="n">conv_feature_map</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">num_filters</span> <span class="o">=</span> <span class="n">conv_feature_map</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+            <span class="n">gray_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">conv_feature_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_filters</span>
+        <span class="k">elif</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+            <span class="n">gray_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">conv_feature_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;sum&quot;</span><span class="p">:</span>
+            <span class="n">gray_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">conv_feature_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">processed_feature_maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gray_scale</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+        <span class="n">feature_map_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv_name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model_feature_maps</span><span class="p">,</span> <span class="n">processed_feature_maps</span><span class="p">,</span> <span class="n">feature_map_names</span>
+</code></pre></div>
+<h3 id="visualizing-vgg16-and-resnet18">Visualizing VGG16 and ResNet18</h3>
+<h4 id="step-1-initialize-the-models">Step 1: Initialize the models.</h4>
+<p>As of now, I recommend using <code>torchvision</code>'s models. Ideally, I will want to use <code>timm</code> library for a more detailed list, but there are some bugs that is not easily integrated with the module.</p>
+<div class="highlight"><pre><span></span><code><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">torchvision.models</span> <span class="k">as</span> <span class="nn">models</span>
+
+<span class="n">vgg16_pretrained_true</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">vgg16</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">vgg16_pretrained_true</span> <span class="o">=</span> <span class="n">vgg16_pretrained_true</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">resnet18_pretrained_true</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet18</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">resnet18_pretrained_true</span> <span class="o">=</span> <span class="n">resnet18_pretrained_true</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Get node names</span>
+<span class="n">train_nodes</span><span class="p">,</span> <span class="n">eval_nodes</span> <span class="o">=</span> <span class="n">get_graph_node_names</span><span class="p">(</span><span class="n">vgg16_pretrained_true</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train nodes of VGG16:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">train_nodes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">train_nodes</span><span class="p">,</span> <span class="n">eval_nodes</span> <span class="o">=</span> <span class="n">get_graph_node_names</span><span class="p">(</span><span class="n">resnet18_pretrained_true</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Train nodes of ResNet18:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">train_nodes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2021-12-29 19:06:08: Train nodes of VGG16:
+
+[&#39;x&#39;, &#39;features.0&#39;, &#39;features.1&#39;, &#39;features.2&#39;, &#39;features.3&#39;, &#39;features.4&#39;, &#39;features.5&#39;, &#39;features.6&#39;, &#39;features.7&#39;, &#39;features.8&#39;, &#39;features.9&#39;, &#39;features.10&#39;, &#39;features.11&#39;, &#39;features.12&#39;, &#39;features.13&#39;, &#39;features.14&#39;, &#39;features.15&#39;, &#39;features.16&#39;, &#39;features.17&#39;, &#39;features.18&#39;, &#39;features.19&#39;, &#39;features.20&#39;, &#39;features.21&#39;, &#39;features.22&#39;, &#39;features.23&#39;, &#39;features.24&#39;, &#39;features.25&#39;, &#39;features.26&#39;, &#39;features.27&#39;, &#39;features.28&#39;, &#39;features.29&#39;, &#39;features.30&#39;, &#39;avgpool&#39;, &#39;flatten&#39;, &#39;classifier.0&#39;, &#39;classifier.1&#39;, &#39;classifier.2&#39;, &#39;classifier.3&#39;, &#39;classifier.4&#39;, &#39;classifier.5&#39;, &#39;classifier.6&#39;]
+2021-12-29 19:06:08: Train nodes of ResNet18:
+
+[&#39;x&#39;, &#39;conv1&#39;, &#39;bn1&#39;, &#39;relu&#39;, &#39;maxpool&#39;, &#39;layer1.0.conv1&#39;, &#39;layer1.0.bn1&#39;, &#39;layer1.0.relu&#39;, &#39;layer1.0.conv2&#39;, &#39;layer1.0.bn2&#39;, &#39;layer1.0.add&#39;, &#39;layer1.0.relu_1&#39;, &#39;layer1.1.conv1&#39;, &#39;layer1.1.bn1&#39;, &#39;layer1.1.relu&#39;, &#39;layer1.1.conv2&#39;, &#39;layer1.1.bn2&#39;, &#39;layer1.1.add&#39;, &#39;layer1.1.relu_1&#39;, &#39;layer2.0.conv1&#39;, &#39;layer2.0.bn1&#39;, &#39;layer2.0.relu&#39;, &#39;layer2.0.conv2&#39;, &#39;layer2.0.bn2&#39;, &#39;layer2.0.downsample.0&#39;, &#39;layer2.0.downsample.1&#39;, &#39;layer2.0.add&#39;, &#39;layer2.0.relu_1&#39;, &#39;layer2.1.conv1&#39;, &#39;layer2.1.bn1&#39;, &#39;layer2.1.relu&#39;, &#39;layer2.1.conv2&#39;, &#39;layer2.1.bn2&#39;, &#39;layer2.1.add&#39;, &#39;layer2.1.relu_1&#39;, &#39;layer3.0.conv1&#39;, &#39;layer3.0.bn1&#39;, &#39;layer3.0.relu&#39;, &#39;layer3.0.conv2&#39;, &#39;layer3.0.bn2&#39;, &#39;layer3.0.downsample.0&#39;, &#39;layer3.0.downsample.1&#39;, &#39;layer3.0.add&#39;, &#39;layer3.0.relu_1&#39;, &#39;layer3.1.conv1&#39;, &#39;layer3.1.bn1&#39;, &#39;layer3.1.relu&#39;, &#39;layer3.1.conv2&#39;, &#39;layer3.1.bn2&#39;, &#39;layer3.1.add&#39;, &#39;layer3.1.relu_1&#39;, &#39;layer4.0.conv1&#39;, &#39;layer4.0.bn1&#39;, &#39;layer4.0.relu&#39;, &#39;layer4.0.conv2&#39;, &#39;layer4.0.bn2&#39;, &#39;layer4.0.downsample.0&#39;, &#39;layer4.0.downsample.1&#39;, &#39;layer4.0.add&#39;, &#39;layer4.0.relu_1&#39;, &#39;layer4.1.conv1&#39;, &#39;layer4.1.bn1&#39;, &#39;layer4.1.relu&#39;, &#39;layer4.1.conv2&#39;, &#39;layer4.1.bn2&#39;, &#39;layer4.1.add&#39;, &#39;layer4.1.relu_1&#39;, &#39;avgpool&#39;, &#39;flatten&#39;, &#39;fc&#39;]
+</code></pre></div>
+<p><strong>Good God!</strong> When I saw the layer names from <code>vgg16</code>, I nearly fainted, I see no easy way to know which layer belongs to a Conv layer. I understand that <code>get_graph_node_names</code> will get all the nodes on the model's graph, but it is difficult to map the node names to a layer if it is named as such, seeing <code>resnet18</code>'s node names is much easier for one to identify which is conv layer or not.</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_nodes</span><span class="p">,</span> <span class="n">eval_nodes</span> <span class="o">=</span> <span class="n">get_graph_node_names</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The train nodes of the model graph is:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">train_nodes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Thus I wrote a small function <code>get_conv_layers</code> to get the conv layer names. It is not perfect, as downsample layers (1x1 conv layers) are tagged under <code>Conv2d</code> but we may not really need to use them to visualize our feature maps. One can tweak a bit if need be, but for now, I will get all layers that use the <code>Conv2d</code> blocks.</p>
+<p>If the feature names in vgg16 are named with conv, then we can simply use a small loop below to find the conv layer names.</p>
+<div class="highlight"><pre><span></span><code><span class="n">conv_layers</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;conv&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+        <span class="n">conv_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</code></pre></div>
+<p>I actually thought ResNet18 has 18 conv layers, but even minusing to 3 downsample layers, it's 17 conv layers, wonder why?</p>
+<h4 id="step-2-transform-the-tensors">Step 2: Transform the Tensors</h4>
+<p>The PyTorch <code>feature_extraction</code> expects the image input to be of shape <code>[B,C,H,W]</code>. </p>
+<div class="highlight"><pre><span></span><code><span class="c1"># We use torchvision&#39;s transform to transform the cat image to channels first.</span>
+<span class="n">cat_tensor</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
+
+<span class="c1"># Now feature_extractor expects batch_size x C x H x W, so we expand one dimension in the 0th dim</span>
+<span class="n">cat_tensor</span> <span class="o">=</span> <span class="n">cat_tensor</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># We use torchvision&#39;s transform to transform the cat image with resize and normalization.</span>
+<span class="c1"># Conveniently, also making it channel first!</span>
+<span class="n">cat_tensor</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">cat</span><span class="p">)</span>
+<span class="n">dog_tensor</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">dog</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">cat_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dog_tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;PyTorch expects Channel First!&quot;</span>
+
+<span class="c1"># Now feature_extractor expects batch_size x C x H x W, so we expand one dimension in the 0th dim</span>
+<span class="n">cat_tensor</span> <span class="o">=</span> <span class="n">cat_tensor</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">dog_tensor</span> <span class="o">=</span> <span class="n">dog_tensor</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">cat_tensor&#39;s shape:</span><span class="se">\n</span><span class="si">{</span><span class="n">cat_tensor</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">dog_tensor&#39;s shape:</span><span class="se">\n</span><span class="si">{</span><span class="n">dog_tensor</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2021-12-29 19:06:10:
+
+cat_tensor&#39;s shape:
+torch.Size([1, 3, 224, 224])
+
+dog_tensor&#39;s shape:
+torch.Size([1, 3, 224, 224])
+</code></pre></div>
+<h4 id="step-3-plotting-the-feature-maps">Step 3: Plotting the Feature Maps</h4>
+<p>We first walk through <code>get_feature_maps</code> and see what my function is doing.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Get node names</span>
+<span class="n">train_nodes</span><span class="p">,</span> <span class="n">eval_nodes</span> <span class="o">=</span> <span class="n">get_graph_node_names</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># Since get node names do not indicate properly which is a conv layer or not,</span>
+<span class="c1"># we use get_conv_layer instead to do the job, which returns a dict {&quot;conv_layer_name&quot;: &quot;conv_layer_name&quot;}</span>
+<span class="n">return_conv_nodes</span> <span class="o">=</span> <span class="n">get_conv_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># call create_feature_extractor on the model and its corresponding conv layer names.</span>
+<span class="n">feature_extractor</span> <span class="o">=</span> <span class="n">create_feature_extractor</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">return_nodes</span><span class="o">=</span><span class="n">return_conv_nodes</span><span class="p">)</span>
+
+<span class="c1"># `model_feature_maps` will be a dict of Tensors, each representing a feature map</span>
+<span class="c1"># {&quot;conv_layer_1&quot;: output filter map,...}</span>
+<span class="n">model_feature_maps</span> <span class="o">=</span> <span class="n">feature_extractor</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+<span class="c1"># we need to further process the feature maps</span>
+<span class="n">processed_feature_maps</span><span class="p">,</span> <span class="n">feature_map_names</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+
+<span class="k">for</span> <span class="n">conv_name</span><span class="p">,</span> <span class="n">conv_feature_map</span> <span class="ow">in</span> <span class="n">model_feature_maps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="c1"># Squeeze the dimension from [1, 64, 32, 32] to [64, 32, 32]</span>
+    <span class="c1"># This means we have 64 filters of 32x32 &quot;images&quot; or kernels</span>
+    <span class="n">conv_feature_map</span> <span class="o">=</span> <span class="n">conv_feature_map</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># get number of feature/kernels in this layer</span>
+    <span class="n">num_filters</span> <span class="o">=</span> <span class="n">conv_feature_map</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+    <span class="c1"># If a feature map has 4 filters, in the shape of (4, H, W) = (4, 32, 32), then the reduction mean can be done as follows: There are 4 filters in this feature map, you can imagine it as 4 32x32 images.</span>
+    <span class="c1"># Step 1: We sum up all 4 filters element-wise and get a single 32x32 image.</span>
+    <span class="c1"># Step 2: Then we take the mean of all 32x32 images to get a single 32x32 image, which is reduction=&quot;mean&quot;.</span>
+    <span class="k">if</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+        <span class="n">gray_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">conv_feature_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_filters</span>
+    <span class="k">elif</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+        <span class="n">gray_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">conv_feature_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s2">&quot;sum&quot;</span><span class="p">:</span>
+        <span class="n">gray_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">conv_feature_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">processed_feature_maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gray_scale</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+    <span class="n">feature_map_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv_name</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">_</span><span class="p">,</span> <span class="n">vgg16_processed_feature_maps</span><span class="p">,</span> <span class="n">vgg16_feature_map_names</span> <span class="o">=</span> <span class="n">get_feature_maps</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;vgg16&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">cat_tensor</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">resnet18_processed_feature_maps</span><span class="p">,</span> <span class="n">resnet18_feature_map_names</span> <span class="o">=</span> <span class="n">get_feature_maps</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;resnet18&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">cat_tensor</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2021-12-29 19:06:12: The train nodes of the model graph is:
+
+[&#39;x&#39;, &#39;features.0&#39;, &#39;features.1&#39;, &#39;features.2&#39;, &#39;features.3&#39;, &#39;features.4&#39;, &#39;features.5&#39;, &#39;features.6&#39;, &#39;features.7&#39;, &#39;features.8&#39;, &#39;features.9&#39;, &#39;features.10&#39;, &#39;features.11&#39;, &#39;features.12&#39;, &#39;features.13&#39;, &#39;features.14&#39;, &#39;features.15&#39;, &#39;features.16&#39;, &#39;features.17&#39;, &#39;features.18&#39;, &#39;features.19&#39;, &#39;features.20&#39;, &#39;features.21&#39;, &#39;features.22&#39;, &#39;features.23&#39;, &#39;features.24&#39;, &#39;features.25&#39;, &#39;features.26&#39;, &#39;features.27&#39;, &#39;features.28&#39;, &#39;features.29&#39;, &#39;features.30&#39;, &#39;avgpool&#39;, &#39;flatten&#39;, &#39;classifier.0&#39;, &#39;classifier.1&#39;, &#39;classifier.2&#39;, &#39;classifier.3&#39;, &#39;classifier.4&#39;, &#39;classifier.5&#39;, &#39;classifier.6&#39;]
+2021-12-29 19:06:12: The train nodes of the model graph is:
+
+[&#39;x&#39;, &#39;conv1&#39;, &#39;bn1&#39;, &#39;relu&#39;, &#39;maxpool&#39;, &#39;layer1.0.conv1&#39;, &#39;layer1.0.bn1&#39;, &#39;layer1.0.relu&#39;, &#39;layer1.0.conv2&#39;, &#39;layer1.0.bn2&#39;, &#39;layer1.0.add&#39;, &#39;layer1.0.relu_1&#39;, &#39;layer1.1.conv1&#39;, &#39;layer1.1.bn1&#39;, &#39;layer1.1.relu&#39;, &#39;layer1.1.conv2&#39;, &#39;layer1.1.bn2&#39;, &#39;layer1.1.add&#39;, &#39;layer1.1.relu_1&#39;, &#39;layer2.0.conv1&#39;, &#39;layer2.0.bn1&#39;, &#39;layer2.0.relu&#39;, &#39;layer2.0.conv2&#39;, &#39;layer2.0.bn2&#39;, &#39;layer2.0.downsample.0&#39;, &#39;layer2.0.downsample.1&#39;, &#39;layer2.0.add&#39;, &#39;layer2.0.relu_1&#39;, &#39;layer2.1.conv1&#39;, &#39;layer2.1.bn1&#39;, &#39;layer2.1.relu&#39;, &#39;layer2.1.conv2&#39;, &#39;layer2.1.bn2&#39;, &#39;layer2.1.add&#39;, &#39;layer2.1.relu_1&#39;, &#39;layer3.0.conv1&#39;, &#39;layer3.0.bn1&#39;, &#39;layer3.0.relu&#39;, &#39;layer3.0.conv2&#39;, &#39;layer3.0.bn2&#39;, &#39;layer3.0.downsample.0&#39;, &#39;layer3.0.downsample.1&#39;, &#39;layer3.0.add&#39;, &#39;layer3.0.relu_1&#39;, &#39;layer3.1.conv1&#39;, &#39;layer3.1.bn1&#39;, &#39;layer3.1.relu&#39;, &#39;layer3.1.conv2&#39;, &#39;layer3.1.bn2&#39;, &#39;layer3.1.add&#39;, &#39;layer3.1.relu_1&#39;, &#39;layer4.0.conv1&#39;, &#39;layer4.0.bn1&#39;, &#39;layer4.0.relu&#39;, &#39;layer4.0.conv2&#39;, &#39;layer4.0.bn2&#39;, &#39;layer4.0.downsample.0&#39;, &#39;layer4.0.downsample.1&#39;, &#39;layer4.0.add&#39;, &#39;layer4.0.relu_1&#39;, &#39;layer4.1.conv1&#39;, &#39;layer4.1.bn1&#39;, &#39;layer4.1.relu&#39;, &#39;layer4.1.conv2&#39;, &#39;layer4.1.bn2&#39;, &#39;layer4.1.add&#39;, &#39;layer4.1.relu_1&#39;, &#39;avgpool&#39;, &#39;flatten&#39;, &#39;fc&#39;]
+</code></pre></div>
+<p>Then we create a simple <code>plot_feature_maps</code> that take in the <code>processed_feature_maps</code> and <code>feature_map_names</code> to plot them.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_feature_maps</span><span class="p">(</span>
+    <span class="n">processed_feature_maps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">feature_map_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">nrows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot the feature maps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        processed_feature_maps (List[torch.Tensor]): [description]</span>
+<span class="sd">        feature_map_names (List[str]): [description]</span>
+<span class="sd">        nrows (int): [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+    <span class="n">ncols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_feature_maps</span><span class="p">)</span> <span class="o">//</span> <span class="n">nrows</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">processed_feature_maps</span><span class="p">)):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">imgplot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">processed_feature_maps</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">feature_map_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_feature_maps</span><span class="p">(</span>
+    <span class="n">vgg16_processed_feature_maps</span><span class="p">,</span>
+    <span class="n">vgg16_feature_map_names</span><span class="p">,</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;VGG16 Pretrained Feature Maps&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plot_feature_maps</span><span class="p">(</span>
+    <span class="n">resnet18_processed_feature_maps</span><span class="p">,</span>
+    <span class="n">resnet18_feature_map_names</span><span class="p">,</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ResNet18 Pretrained Feature Maps&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_36_0.png" /></p>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_36_1.png" /></p>
+<h2 id="comparison-with-randomly-initialized-weights">Comparison with Randomly Initialized Weights</h2>
+<p>We know that if the model is not pretrained, it will initialize with random weights using weight initialization methods such as Kaimin or Xavier. I expect the edges to be not so "smooth" as the ones that are pretrained! This is logical, as the filters in the conv layers are mostly random, and we have not trained any epochs yet, so let's see what it gives us.</p>
+<div class="highlight"><pre><span></span><code><span class="n">_</span><span class="p">,</span> <span class="n">vgg16_processed_feature_maps</span><span class="p">,</span> <span class="n">vgg16_feature_map_names</span> <span class="o">=</span> <span class="n">get_feature_maps</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;vgg16&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">cat_tensor</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">resnet18_processed_feature_maps</span><span class="p">,</span> <span class="n">resnet18_feature_map_names</span> <span class="o">=</span> <span class="n">get_feature_maps</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;resnet18&quot;</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">cat_tensor</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2021-12-29 19:06:21: The train nodes of the model graph is:
+
+[&#39;x&#39;, &#39;features.0&#39;, &#39;features.1&#39;, &#39;features.2&#39;, &#39;features.3&#39;, &#39;features.4&#39;, &#39;features.5&#39;, &#39;features.6&#39;, &#39;features.7&#39;, &#39;features.8&#39;, &#39;features.9&#39;, &#39;features.10&#39;, &#39;features.11&#39;, &#39;features.12&#39;, &#39;features.13&#39;, &#39;features.14&#39;, &#39;features.15&#39;, &#39;features.16&#39;, &#39;features.17&#39;, &#39;features.18&#39;, &#39;features.19&#39;, &#39;features.20&#39;, &#39;features.21&#39;, &#39;features.22&#39;, &#39;features.23&#39;, &#39;features.24&#39;, &#39;features.25&#39;, &#39;features.26&#39;, &#39;features.27&#39;, &#39;features.28&#39;, &#39;features.29&#39;, &#39;features.30&#39;, &#39;avgpool&#39;, &#39;flatten&#39;, &#39;classifier.0&#39;, &#39;classifier.1&#39;, &#39;classifier.2&#39;, &#39;classifier.3&#39;, &#39;classifier.4&#39;, &#39;classifier.5&#39;, &#39;classifier.6&#39;]
+2021-12-29 19:06:21: The train nodes of the model graph is:
+
+[&#39;x&#39;, &#39;conv1&#39;, &#39;bn1&#39;, &#39;relu&#39;, &#39;maxpool&#39;, &#39;layer1.0.conv1&#39;, &#39;layer1.0.bn1&#39;, &#39;layer1.0.relu&#39;, &#39;layer1.0.conv2&#39;, &#39;layer1.0.bn2&#39;, &#39;layer1.0.add&#39;, &#39;layer1.0.relu_1&#39;, &#39;layer1.1.conv1&#39;, &#39;layer1.1.bn1&#39;, &#39;layer1.1.relu&#39;, &#39;layer1.1.conv2&#39;, &#39;layer1.1.bn2&#39;, &#39;layer1.1.add&#39;, &#39;layer1.1.relu_1&#39;, &#39;layer2.0.conv1&#39;, &#39;layer2.0.bn1&#39;, &#39;layer2.0.relu&#39;, &#39;layer2.0.conv2&#39;, &#39;layer2.0.bn2&#39;, &#39;layer2.0.downsample.0&#39;, &#39;layer2.0.downsample.1&#39;, &#39;layer2.0.add&#39;, &#39;layer2.0.relu_1&#39;, &#39;layer2.1.conv1&#39;, &#39;layer2.1.bn1&#39;, &#39;layer2.1.relu&#39;, &#39;layer2.1.conv2&#39;, &#39;layer2.1.bn2&#39;, &#39;layer2.1.add&#39;, &#39;layer2.1.relu_1&#39;, &#39;layer3.0.conv1&#39;, &#39;layer3.0.bn1&#39;, &#39;layer3.0.relu&#39;, &#39;layer3.0.conv2&#39;, &#39;layer3.0.bn2&#39;, &#39;layer3.0.downsample.0&#39;, &#39;layer3.0.downsample.1&#39;, &#39;layer3.0.add&#39;, &#39;layer3.0.relu_1&#39;, &#39;layer3.1.conv1&#39;, &#39;layer3.1.bn1&#39;, &#39;layer3.1.relu&#39;, &#39;layer3.1.conv2&#39;, &#39;layer3.1.bn2&#39;, &#39;layer3.1.add&#39;, &#39;layer3.1.relu_1&#39;, &#39;layer4.0.conv1&#39;, &#39;layer4.0.bn1&#39;, &#39;layer4.0.relu&#39;, &#39;layer4.0.conv2&#39;, &#39;layer4.0.bn2&#39;, &#39;layer4.0.downsample.0&#39;, &#39;layer4.0.downsample.1&#39;, &#39;layer4.0.add&#39;, &#39;layer4.0.relu_1&#39;, &#39;layer4.1.conv1&#39;, &#39;layer4.1.bn1&#39;, &#39;layer4.1.relu&#39;, &#39;layer4.1.conv2&#39;, &#39;layer4.1.bn2&#39;, &#39;layer4.1.add&#39;, &#39;layer4.1.relu_1&#39;, &#39;avgpool&#39;, &#39;flatten&#39;, &#39;fc&#39;]
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_feature_maps</span><span class="p">(</span>
+    <span class="n">vgg16_processed_feature_maps</span><span class="p">,</span>
+    <span class="n">vgg16_feature_map_names</span><span class="p">,</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;VGG16 NOT Pretrained Feature Maps&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plot_feature_maps</span><span class="p">(</span>
+    <span class="n">resnet18_processed_feature_maps</span><span class="p">,</span>
+    <span class="n">resnet18_feature_map_names</span><span class="p">,</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ResNet18 NOT Pretrained Feature Maps&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_39_0.png" /></p>
+<p><img alt="png" src="../Visualizing%20Convolutional%20Filters_files/Visualizing%20Convolutional%20Filters_39_1.png" /></p>
+<p>References:</p>
+<ul>
+<li><a href="https://pytorch.org/vision/stable/feature_extraction.html">https://pytorch.org/vision/stable/feature_extraction.html</a></li>
+<li><a href="https://ravivaishnav20.medium.com/visualizing-feature-maps-using-pytorch-12a48cd1e573">https://ravivaishnav20.medium.com/visualizing-feature-maps-using-pytorch</a></li>
+<li><a href="https://pytorch.org/blog/FX-feature-extraction-torchvision/">https://pytorch.org/blog/FX-feature-extraction-torchvision/</a></li>
+<li><a href="https://www.kaggle.com/tarunpaparaju/plant-pathology-2020-eda-models">https://www.kaggle.com/tarunpaparaju/plant-pathology-2020-eda-models</a></li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../../..", "features": ["content.code.annotate"], "search": "../../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

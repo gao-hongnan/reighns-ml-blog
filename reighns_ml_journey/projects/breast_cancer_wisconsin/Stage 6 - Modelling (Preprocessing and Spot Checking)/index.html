@@ -1,0 +1,3317 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/">
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Modelling (Preprocessing and Spot Checking) - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dependencies-and-configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Modelling (Preprocessing and Spot Checking)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Modelling (Preprocessing and Spot Checking)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-and-configuration" class="md-nav__link">
+    Dependencies and Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spot-checking-algorithms" class="md-nav__link">
+    Spot Checking Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#say-no-to-data-leakage" class="md-nav__link">
+    Say No to Data Leakage!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pseudo-code-of-cross-validation-and-pipeline" class="md-nav__link">
+    Pseudo-Code of Cross-Validation and Pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-pipeline" class="md-nav__link">
+    Training Pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Training Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#make-pipeline" class="md-nav__link">
+    Make Pipeline
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#results-class" class="md-nav__link">
+    Results Class
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utilities" class="md-nav__link">
+    Utilities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-of-cross-validated-models-cv-oof" class="md-nav__link">
+    Comparison of Cross-Validated Models (CV + OOF)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out-of-fold-confusion-matrix" class="md-nav__link">
+    Out-of-Fold Confusion Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hypothesis-testing-across-models" class="md-nav__link">
+    Hypothesis Testing Across Models
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-and-configuration" class="md-nav__link">
+    Dependencies and Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spot-checking-algorithms" class="md-nav__link">
+    Spot Checking Algorithms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#say-no-to-data-leakage" class="md-nav__link">
+    Say No to Data Leakage!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pseudo-code-of-cross-validation-and-pipeline" class="md-nav__link">
+    Pseudo-Code of Cross-Validation and Pipeline
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-pipeline" class="md-nav__link">
+    Training Pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Training Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#make-pipeline" class="md-nav__link">
+    Make Pipeline
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#results-class" class="md-nav__link">
+    Results Class
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utilities" class="md-nav__link">
+    Utilities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-of-cross-validated-models-cv-oof" class="md-nav__link">
+    Comparison of Cross-Validated Models (CV + OOF)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out-of-fold-confusion-matrix" class="md-nav__link">
+    Out-of-Fold Confusion Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hypothesis-testing-across-models" class="md-nav__link">
+    Hypothesis Testing Across Models
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/projects/breast_cancer_wisconsin/Stage 6 - Modelling (Preprocessing and Spot Checking).md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<div align="center">
+<h1>Stage 6: Spot Checking Algorithms</a></h1>
+by Hongnan Gao
+<br>
+</div>
+
+<h2 id="dependencies-and-configuration">Dependencies and Configuration</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># !pip install gcloud == 0.18.3</span>
+<span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">mlxtend</span><span class="o">==</span><span class="mf">0.19.0</span>
+<span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">statsmodels</span><span class="o">==</span><span class="mf">0.13.1</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mlxtend</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">mlxtend.evaluate</span> <span class="kn">import</span> <span class="n">bias_variance_decomp</span><span class="p">,</span> <span class="n">paired_ttest_5x2cv</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">decomposition</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">ensemble</span><span class="p">,</span> <span class="n">feature_selection</span><span class="p">,</span>
+                     <span class="n">linear_model</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">model_selection</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span>
+                     <span class="n">pipeline</span><span class="p">,</span> <span class="n">preprocessing</span><span class="p">,</span> <span class="n">svm</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">statsmodels.regression.linear_model</span> <span class="kn">import</span> <span class="n">OLS</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[K     |████████████████████████████████| 1.3 MB 5.2 MB/s 
+[K     |████████████████████████████████| 9.8 MB 1.3 MB/s 
+[?25h
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">config</span><span class="p">:</span>
+    <span class="n">raw_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/breast-cancer-wisconsin/data/raw/data.csv&quot;</span>
+    <span class="n">processed_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/breast-cancer-wisconsin/data/processed/processed.csv&quot;</span>
+    <span class="n">df_folds</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/breast-cancer-wisconsin/data/processed/df_folds.csv&quot;</span>
+    <span class="n">train_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1992</span>
+    <span class="n">num_folds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">cv_schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;StratifiedKFold&quot;</span>
+    <span class="n">classification_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;binary&quot;</span>
+
+    <span class="n">target_col</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;diagnosis&quot;</span><span class="p">])</span>
+    <span class="n">unwanted_cols</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span>  <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;Unnamed: 32&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Plotting</span>
+    <span class="n">colors</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span><span class="n">field</span><span class="p">(</span><span class="n">default_factory</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;#fe4a49&quot;</span><span class="p">,</span> <span class="s2">&quot;#2ab7ca&quot;</span><span class="p">,</span> <span class="s2">&quot;#fed766&quot;</span><span class="p">,</span> <span class="s2">&quot;#59981A&quot;</span><span class="p">])</span>
+    <span class="n">cmap_reversed</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;mako_r&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the config object to a dictionary.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The config object as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;raw_data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="p">,</span>
+            <span class="s2">&quot;processed_data&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">processed_data</span><span class="p">,</span>
+            <span class="s2">&quot;train_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_size</span><span class="p">,</span>
+            <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
+            <span class="s2">&quot;num_folds&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_folds</span><span class="p">,</span>
+            <span class="s2">&quot;cv_schema&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_schema</span><span class="p">,</span>
+            <span class="s2">&quot;classification_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_type</span><span class="p">,</span>
+            <span class="s2">&quot;target_col&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_col</span><span class="p">,</span>
+            <span class="s2">&quot;unwanted_cols&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">unwanted_cols</span><span class="p">,</span>
+            <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">,</span>
+            <span class="s2">&quot;cmap_reversed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmap_reversed</span>
+        <span class="p">}</span>
+
+
+
+<span class="c1">#     spot_checking_boxplot = &quot;../data/images/spot_checking_boxplot.png&quot;</span>
+<span class="c1">#     oof_confusion_matrix = &quot;../data/images/oof_confusion_matrix.png&quot;</span>
+<span class="c1">#     final_train_confusion_matrix = &quot;../data/images/final_train_confusion_matrix.png&quot;</span>
+<span class="c1">#     precision_recall_threshold_plot = &quot;../data/images/precision_recall_threshold_plot.png&quot;</span>
+<span class="c1">#     roc_plot = &quot;../data/images/roc_plot.png&quot;</span>
+<span class="c1">#     feature_importance = &quot;../data/images/feature_importance.png&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_seeds</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set seeds for reproducibility.&quot;&quot;&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info.log&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize logger.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">stream_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+    <span class="n">stream_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">,%H:%M:%S&quot;</span><span class="p">))</span>
+    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="n">datefmt</span><span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">,%H:%M:%S&quot;</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">stream_handler</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Utils functions that we need</span>
+
+<span class="k">def</span> <span class="nf">variance_inflation_factor</span><span class="p">(</span><span class="n">exog</span><span class="p">,</span> <span class="n">idx_kept</span><span class="p">,</span> <span class="n">vif_idx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute VIF for one feature.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        exog (np.ndarray): Observations</span>
+<span class="sd">        idx_kept (List[int]): Indices of features to consider</span>
+<span class="sd">        vif_idx (int): Index of feature for which to compute VIF</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: VIF for the selected feature</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">exog</span><span class="p">)</span>
+
+    <span class="n">x_i</span> <span class="o">=</span> <span class="n">exog</span><span class="p">[:,</span> <span class="n">vif_idx</span><span class="p">]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">idx_kept</span> <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="n">vif_idx</span><span class="p">]</span>
+    <span class="n">x_noti</span> <span class="o">=</span> <span class="n">exog</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">]</span>
+
+    <span class="n">r_squared_i</span> <span class="o">=</span> <span class="n">OLS</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">x_noti</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">rsquared</span>
+    <span class="n">vif</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">r_squared_i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vif</span>
+
+<span class="k">class</span> <span class="nc">ReduceVIF</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The base of the class structure is implemented in https://www.kaggle.com/ffisegydd/sklearn-multicollinearity-class;</span>
+<span class="sd">    I heavily modified the class such that it can take in numpy arrays and correctly implemented the fit and transform method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_drop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thresh</span> <span class="o">=</span> <span class="n">thresh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_drop</span> <span class="o">=</span> <span class="n">max_drop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_indices_kept_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names_kept_</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the state of predictor columns after each fold.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_indices_kept_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_names_kept_</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fits the Recursive VIF on the training folds and save the selected feature names in self.feature_names</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X ([type]): [description]</span>
+<span class="sd">            y ([type], optional): [description]. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_indices_kept_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_names_kept_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_vif</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>     
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms the Validation Set according to the selected feature names.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X ([type]): [description]</span>
+<span class="sd">            y ([type], optional): [description]. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">X</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_indices_kept_</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">calculate_vif</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implements a VIF function that recursively eliminates features.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (Union[np.ndarray, pd.DataFrame]): [description]</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">feature_names</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">column_indices_kept</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">feature_names</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span>
+
+        <span class="n">dropped</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="n">dropped</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_drop</span><span class="p">:</span>
+            <span class="n">dropped</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="n">max_vif</span><span class="p">,</span> <span class="n">max_vif_col</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">column_indices_kept</span><span class="p">:</span>
+
+                <span class="n">vif</span> <span class="o">=</span> <span class="n">variance_inflation_factor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">column_indices_kept</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">max_vif</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">vif</span> <span class="o">&gt;</span> <span class="n">max_vif</span><span class="p">:</span>
+                    <span class="n">max_vif</span> <span class="o">=</span> <span class="n">vif</span>
+                    <span class="n">max_vif_col</span> <span class="o">=</span> <span class="n">col</span>
+
+            <span class="k">if</span> <span class="n">max_vif</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">thresh</span><span class="p">:</span>
+                <span class="c1"># print(f&quot;Dropping {max_vif_col} with vif={max_vif}&quot;)</span>
+                <span class="n">column_indices_kept</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">max_vif_col</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">feature_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">feature_names</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">max_vif_col</span><span class="p">)</span>
+
+                <span class="n">dropped</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">column_indices_kept</span><span class="p">,</span> <span class="n">feature_names</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># set seeding for reproducibility</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">set_seeds</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="c1"># read data</span>
+<span class="n">df_folds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">df_folds</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Assign predictors and target accordingly</span>
+<span class="n">predictor_cols</span> <span class="o">=</span> <span class="n">df_folds</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">target_col</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">target_col</span>
+</code></pre></div>
+<h2 id="spot-checking-algorithms">Spot Checking Algorithms</h2>
+<div class="alert alert-success" role="alert">
+    <b>Terminology Alert!</b> This method is advocated by <a href="https://machinelearningmastery.com/">Jason Brownlee PhD</a> and this serves as the first stage of my modelling process. We will rapidly test (spot check) different classifier algorithms, from <code>DummyClassifier</code>, to <code>LinearModel</code> to more sophisticated ensemble trees like <code>RandomForest</code>. 
+</div>
+
+<hr />
+<p>I also note to the readers that we need to think of a few things when choosing the "optimal" machine learning algorithm:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/No_free_lunch_theorem">No Lunch Free Theorem</a> intuitively says that no single optimization algorithm can work best in all situations. Therefore, spot checking can help us form a basis of which algorithm might work better in this particular scenario.</li>
+<li><a href="https://en.wikipedia.org/wiki/Occam%27s_razor">Occam's Razor</a> often appears in many Machine Learning textbook, and the narrative is that a simpler model more often times generalizes better than a complex model. This is not unfamiliar when we think of the bias-variance tradeoff, and that is why there is always a tradeoff that we must make.</li>
+</ul>
+<h2 id="say-no-to-data-leakage">Say No to Data Leakage!</h2>
+<div class="alert alert-block alert-danger">
+<b>Say No to Data Leakage:</b> This has been emphasized throughout and we must be careful as we should never touch the test set when fitting the model. In fact, we should try our best to not <b>contaminate</b> our validation set as well.
+    <li> This means that preprocessing steps such as <code>StandardScaling()</code> should only be fitted on the training data, and then apply the same transformation (mean and std) on the test data. In other words, do not apply scaling on the whole dataset before splitting. 
+    <li> However, it is also equally important to take note <b>not to contaminate</b> our validation set, which is often overlooked, resulting in over optimistic results from model selection phase, but perform badly on unseen test set. As a result, when we use a 5 fold cross validation, we should be careful during fitting that the preprocessing steps are only applied on the training folds, and not on all 5 folds.
+    <li> The same idea is also applied to our <code>ReduceVIF()</code> preprocessing step. We should also include this in our pipeline and not select the features outside the cross-validation loop.</li>
+</div>
+
+<hr />
+<p>Quoting from <strong><a href="https://scikit-learn.org/stable/common_pitfalls.html">scikit-learn</a></strong>:</p>
+<blockquote>
+<p>Data leakage occurs when information that would not be available at prediction time is used when building the model. This results in overly optimistic performance estimates, for example from <a href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation">cross-validation</a>, and thus poorer performance when the model is used on actually novel data, for example during production.</p>
+<p>A common cause is not keeping the test and train data subsets separate. Test data should never be used to make choices about the model. <strong>The general rule is to never call fit on the test data.</strong> While this may sound obvious, this is easy to miss in some cases, for example when applying certain pre-processing steps.</p>
+<p>Although both train and test data subsets should receive the same preprocessing transformation (as described in the previous section), it is important that these transformations are only learnt from the training data. For example, if you have a normalization step where you divide by the average value, the average should be the average of the train subset, not the average of all the data. If the test subset is included in the average calculation, information from the test subset is influencing the model.</p>
+</blockquote>
+<hr />
+<div class="alert alert-success" role="alert">
+    <b>How to avoid Data Leakage?</b> We know the pitfalls of fitting on validation/test data, the natural question is how can we avoid it completely? You can code it up yourself, but as a starter, we can use scikit-learn's <code>Pipeline</code> object. My tips are as follows:
+<li> Any preprocessing step must be done after splitting the whole dataset into train and test. If you are also using cross-validation, then we should only apply the preprocessing steps on the train set, and then use the metrics obtained from the train set to transform the validation set. You can see my pseudo-code below for a rough outline.
+    <li> The <code>Pipeline</code> object of Scikit-Learn can help prevent data leakage.
+</div>
+
+<h2 id="pseudo-code-of-cross-validation-and-pipeline">Pseudo-Code of Cross-Validation and Pipeline</h2>
+<p>The below outlines a pseudo code of the cross-validation scheme using <code>Pipeline</code> object. Note that I included the most outer loop, which is searching for hyperparameters.</p>
+<ul>
+<li>Define <span class="arithmatex">\(G\)</span> as the set of combination of hyperparamters. Define number of splits to be <span class="arithmatex">\(K\)</span>.</li>
+<li>For each set of hyperparameter <span class="arithmatex">\(z \in Z\)</span>:<ul>
+<li>for fold <span class="arithmatex">\(j\)</span> in K:<ul>
+<li>Set <span class="arithmatex">\(F_{\text{train}}=\bigcup\limits_{i\neq k}^{K} F_{i}\)</span></li>
+<li>Set <span class="arithmatex">\(F_{\text{val}} = F_{j}\)</span> as the validation set</li>
+<li>Perform Standard Scaling on <span class="arithmatex">\(F_{\text{train}}\)</span> and find the mean and std</li>
+<li>Perform VIF recursively on <span class="arithmatex">\(F_{\text{train}}\)</span> and find the selected features</li>
+<li>Transform <span class="arithmatex">\(F_{\text{val}}\)</span> using the mean and std found using <span class="arithmatex">\(F_{\text{train}}\)</span></li>
+<li>Transform <span class="arithmatex">\(F_{\text{val}}\)</span> to have only the selected features from <span class="arithmatex">\(F_{\text{train}}\)</span></li>
+<li>Train and fit on <span class="arithmatex">\(F_{\text{train}}\)</span> </li>
+</ul>
+</li>
+<li>Evaluate the fitted parameters on <span class="arithmatex">\(F_{\text{val}}\)</span> to obtain <span class="arithmatex">\(\mathcal{M}\)</span></li>
+</ul>
+</li>
+</ul>
+<h2 id="training-pipeline">Training Pipeline</h2>
+<h3 id="make-pipeline">Make Pipeline</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># @ TODO: https://www.kaggle.com/kabure/predicting-house-prices-xgb-rf-bagging-reg-pipe</span>
+<span class="c1"># Different models can potentially have different pre-processing steps, consider putting steps as a </span>
+<span class="c1"># passable list.</span>
+
+<span class="k">def</span> <span class="nf">make_pipeline</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a feature preparation pipeline for a model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (Callable): The model to be used.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _pipeline (Callable): pipeline object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create a list of steps, note that some models may not need certain steps, and hence</span>
+    <span class="c1"># may need an if-else here</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="c1"># standardization</span>
+    <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;standardize&quot;</span><span class="p">,</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()))</span>
+    <span class="c1"># reduce VIF</span>
+    <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;remove_multicollinearity&quot;</span><span class="p">,</span> <span class="n">ReduceVIF</span><span class="p">(</span><span class="n">thresh</span><span class="o">=</span><span class="mi">10</span><span class="p">)))</span>
+
+    <span class="c1"># the model to be appended at the last step</span>
+    <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">))</span>
+    <span class="c1"># create pipeline</span>
+    <span class="n">_pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_pipeline</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># baseline model</span>
+    <span class="n">dummy</span><span class="o">.</span><span class="n">DummyClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;stratified&quot;</span><span class="p">),</span>
+    <span class="c1"># linear model</span>
+    <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;liblinear&quot;</span><span class="p">),</span>
+    <span class="c1"># nearest neighbours</span>
+    <span class="n">neighbors</span><span class="o">.</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
+    <span class="c1"># SVM</span>
+    <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">),</span>
+    <span class="c1"># tree</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">),</span>
+    <span class="c1"># ensemble</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span><span class="n">make_pipeline</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">classifiers</span><span class="p">]</span>
+</code></pre></div>
+<h3 id="results-class">Results Class</h3>
+<p>The <code>Results</code> class will help us store model's results.</p>
+<div class="admonition danger">
+<p class="admonition-title">Careful when using ROC function!</p>
+</div>
+<p>We also note that when passing arguments to scikit-learn's <code>roc_auc_score</code> function, we should be careful not to pass <code>y_score=model.predict(X)</code> inside as we have to understand that we are passing in <b>non-thresholded</b> probabilities into <code>y_score</code>. If you pass the predicted values (full of 0 and 1s), then you are thresholding on 0 and 1 only, which is incorrect by definition. 
+</div></p>
+<div class="highlight"><pre><span></span><code><span class="n">default_result_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;y_true&quot;</span><span class="p">,</span> <span class="s2">&quot;y_pred&quot;</span><span class="p">,</span> <span class="s2">&quot;y_prob&quot;</span><span class="p">]</span>
+
+<span class="n">default_logit_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;y_true&quot;</span><span class="p">,</span> <span class="s2">&quot;y_pred&quot;</span><span class="p">,</span> <span class="s2">&quot;y_prob&quot;</span><span class="p">]</span>
+
+<span class="n">default_score_names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;accuracy_score&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;precision_recall_fscore_support&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;confusion_matrix&quot;</span><span class="p">,</span>
+    <span class="c1"># &quot;average_precision_score&quot;,</span>
+    <span class="s2">&quot;multiclass_roc_auc_score&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;brier_score_loss&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">custom_score_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;multiclass_roc_auc_score&quot;</span><span class="p">,</span> <span class="s2">&quot;brier_score_loss&quot;</span><span class="p">]</span>
+
+<span class="n">use_preds</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;accuracy_score&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;precision_recall_fscore_support&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;confusion_matrix&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">use_probs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;average_precision_score&quot;</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Results</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores results for model training in columnwise format.&quot;&quot;&quot;</span>
+
+    <span class="n">_result_dict</span><span class="p">:</span> <span class="n">Dict</span>
+
+    <span class="n">logit_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">score_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">logit_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_logit_names</span><span class="p">,</span>
+        <span class="n">score_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_score_names</span><span class="p">,</span>
+        <span class="n">existing_dict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a new results store.&quot;&quot;&quot;</span>       
+        <span class="bp">self</span><span class="o">.</span><span class="n">logit_names</span> <span class="o">=</span> <span class="n">logit_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_names</span> <span class="o">=</span> <span class="n">score_names</span>
+
+        <span class="k">if</span> <span class="n">existing_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">existing_dict</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">dict_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;identifier&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logit_names</span><span class="p">,</span> <span class="o">*</span><span class="n">score_names</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dict_keys</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a new results row.&quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">in_place</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Results</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logit_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span><span class="p">[</span><span class="s2">&quot;identifier&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">result_name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="o">*</span><span class="n">results</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">logit_names</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">score_names</span><span class="p">]):</span>
+
+            <span class="n">result_value</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">result_name</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span><span class="p">[</span><span class="n">result_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a map of identifiers to result values for a result.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">identifier</span><span class="p">:</span> <span class="n">result_value</span> <span class="k">for</span>
+            <span class="n">identifier</span><span class="p">,</span> <span class="n">result_value</span> <span class="ow">in</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span><span class="p">[</span><span class="s2">&quot;identifier&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span><span class="p">[</span><span class="n">result_name</span><span class="p">])</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_result_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a list of values for a result.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span><span class="p">[</span><span class="n">result_name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">to_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a Data Frame containing the results.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a dictionary containing the results.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             Dict[str, List[Any]]: Dictionary of result columns </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_dict</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">multiclass_label_binarize</span><span class="p">(</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">class_labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">pos_label</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">neg_label</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Binarize labels in one-vs-all fashion.</span>
+<span class="sd">    # TODO: to replace with the above vstack method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        y (np.ndarray) Sequence of integer labels to encode</span>
+<span class="sd">        class_labels (array-like) Labels for each class</span>
+<span class="sd">        pos_label (int) Value for positive labels</span>
+<span class="sd">        neg_label (int) Value for negative labels</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray of shape (n_samples, n_classes) Encoded dataset</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">label</span><span class="p">,</span> <span class="n">pos_label</span><span class="p">,</span> <span class="n">neg_label</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">class_labels</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">multiclass_roc_auc_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute ROC-AUC score for each class in a multiclass dataset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        y_true (np.ndarray of shape (n_samples, n_classes)) True labels</span>
+<span class="sd">        y_score (np.ndarray of shape (n_samples, n_classes)) Target scores</span>
+<span class="sd">        classes (array-like of shape (n_classes,)) List of dataset classes. If `None`,</span>
+<span class="sd">            the lexicographical order of the labels in `y_true` is used.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        array-like: ROC-AUC score for each class, in the same order as `classes`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="k">if</span> <span class="n">classes</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">classes</span>
+    <span class="p">)</span>
+
+    <span class="n">y_true_multiclass</span> <span class="o">=</span> <span class="n">multiclass_label_binarize</span><span class="p">(</span>
+        <span class="n">y_true</span><span class="p">,</span>
+        <span class="n">class_labels</span><span class="o">=</span><span class="n">classes</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">oneclass_roc_auc_score</span><span class="p">(</span><span class="n">class_id</span><span class="p">):</span>
+        <span class="n">y_true_class</span> <span class="o">=</span> <span class="n">y_true_multiclass</span><span class="p">[:,</span> <span class="n">class_id</span><span class="p">]</span>
+        <span class="n">y_score_class</span> <span class="o">=</span> <span class="n">y_score</span><span class="p">[:,</span> <span class="n">class_id</span><span class="p">]</span>
+
+        <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span>
+            <span class="n">y_true</span><span class="o">=</span><span class="n">y_true_class</span><span class="p">,</span>
+            <span class="n">y_score</span><span class="o">=</span><span class="n">y_score_class</span><span class="p">,</span>
+            <span class="n">pos_label</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">metrics</span><span class="o">.</span><span class="n">auc</span><span class="p">(</span>
+            <span class="n">fpr</span><span class="p">,</span>
+            <span class="n">tpr</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">oneclass_roc_auc_score</span><span class="p">(</span><span class="n">class_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">class_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">))</span>
+    <span class="p">]</span>
+</code></pre></div>
+<h3 id="utilities">Utilities</h3>
+<p>Some utility functions to prepare data and post-process data.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_y</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare the target variable for the model.</span>
+
+<span class="sd">    If Binary Classification, we need to ravel the array to 1d.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        y (np.ndarray): Target variable.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: Transformed Target variable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">classification_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span> <span class="k">else</span> <span class="n">y</span>
+
+<span class="k">def</span> <span class="nf">mean_score</span><span class="p">(</span><span class="n">score_values</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the mean score.&quot;&quot;&quot;</span>
+
+    <span class="n">score_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">score_values</span><span class="p">)</span>
+
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">score_values</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">score_values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">score_values</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">mean_cv_results</span><span class="p">(</span><span class="n">model_results</span><span class="p">:</span> <span class="n">Results</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add mean cross-validation results.</span>
+
+<span class="sd">    This method computes the mean value for all</span>
+<span class="sd">    score types in the model_results, including</span>
+<span class="sd">    for scores (e.g., confusion matrix) where</span>
+<span class="sd">    the mean value may contain decimal places.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cv_logits</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">y_result</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">model_results</span><span class="o">.</span><span class="n">get_result_values</span><span class="p">(</span><span class="n">y_result</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">y_result</span> <span class="ow">in</span>
+        <span class="n">model_results</span><span class="o">.</span><span class="n">logit_names</span>
+    <span class="p">}</span>
+
+    <span class="n">cv_scores</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">score</span><span class="p">:</span> <span class="n">mean_score</span><span class="p">(</span>
+            <span class="n">model_results</span><span class="o">.</span><span class="n">get_result_values</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">model_results</span><span class="o">.</span><span class="n">score_names</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="o">**</span><span class="n">cv_logits</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">cv_scores</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">oof_cv_results</span><span class="p">(</span><span class="n">model_results</span><span class="p">:</span> <span class="n">Results</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add OOF cross-validation results.&quot;&quot;&quot;</span>
+
+    <span class="n">cv_logits</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">y_result</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="n">model_results</span><span class="o">.</span><span class="n">get_result_values</span><span class="p">(</span><span class="n">y_result</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">y_result</span> <span class="ow">in</span>
+        <span class="n">model_results</span><span class="o">.</span><span class="n">logit_names</span>
+    <span class="p">}</span>
+
+    <span class="n">cv_scores</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">cv_logits</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="o">**</span><span class="n">cv_logits</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">cv_scores</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">add_cv_results</span><span class="p">(</span><span class="n">model_results</span><span class="p">:</span> <span class="n">Results</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add cross-validation results.</span>
+
+<span class="sd">    This method returns a copy of the given model results</span>
+<span class="sd">    with summary columns for mean and CV cross-validation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mean_cv</span> <span class="o">=</span> <span class="n">mean_cv_results</span><span class="p">(</span><span class="n">model_results</span><span class="p">)</span>
+    <span class="n">oof_cv</span> <span class="o">=</span> <span class="n">oof_cv_results</span><span class="p">(</span><span class="n">model_results</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">model_results</span>
+        <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;mean_cv&quot;</span><span class="p">,</span> <span class="n">mean_cv</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;oof_cv&quot;</span><span class="p">,</span> <span class="n">oof_cv</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_metrics</span><span class="p">(</span><span class="n">logits</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute metrics from logits.</span>
+<span class="sd">    use_probs: all metrics that use probabilities.</span>
+<span class="sd">    use_preds: all metrics that use thresholded predictions.</span>
+
+<span class="sd">    # TODO add this</span>
+<span class="sd">    precision, recall, fbeta_score, _ = metrics.precision_recall_fscore_support(</span>
+<span class="sd">        y_true=y_val,</span>
+<span class="sd">        y_pred = y_val_pred,</span>
+<span class="sd">        labels=np.unique(y_val),</span>
+<span class="sd">        average=None</span>
+<span class="sd">    )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_prob</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">logits</span><span class="p">[</span><span class="s2">&quot;y_true&quot;</span><span class="p">],</span>
+        <span class="n">logits</span><span class="p">[</span><span class="s2">&quot;y_pred&quot;</span><span class="p">],</span>
+        <span class="n">logits</span><span class="p">[</span><span class="s2">&quot;y_prob&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+
+    <span class="n">use_preds</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;accuracy_score&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;precision_recall_fscore_support&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;confusion_matrix&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">use_probs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;average_precision_score&quot;</span><span class="p">]</span>
+
+    <span class="n">default_metrics_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">custom_metrics_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">default_score_names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">metric_name</span><span class="p">):</span>
+            <span class="c1"># TODO: get metric score with default parameters, consider adding kwargs if you want to configure parameters</span>
+            <span class="k">if</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">use_preds</span><span class="p">:</span>
+                <span class="n">metric_score</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">metric_name</span><span class="p">)(</span>
+                    <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">use_probs</span><span class="p">:</span>
+                <span class="c1"># logger.info(&quot;TODO: write custom scores for precision-recall as here is hardcoded&quot;)</span>
+                <span class="k">pass</span>
+<span class="c1">#                 metric_score = getattr(metrics, metric_name)(</span>
+<span class="c1">#                     y_true, y_prob</span>
+<span class="c1">#                 )</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># add custom metrics here</span>
+            <span class="n">multiclass_roc_auc</span> <span class="o">=</span> <span class="n">multiclass_roc_auc_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_prob</span><span class="p">)</span>
+            <span class="n">brier_score_loss</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">metrics</span><span class="o">.</span><span class="n">brier_score_loss</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_prob</span><span class="o">=</span><span class="n">y_prob</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">classification_type</span> <span class="o">==</span> <span class="s2">&quot;binary&quot;</span>
+                <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="p">)</span>
+            <span class="n">custom_metrics_dict</span><span class="p">[</span><span class="s2">&quot;multiclass_roc_auc_score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">multiclass_roc_auc</span>
+            <span class="n">custom_metrics_dict</span><span class="p">[</span><span class="s2">&quot;brier_score_loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brier_score_loss</span>
+
+        <span class="k">if</span> <span class="n">metric_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">default_metrics_dict</span><span class="p">:</span>
+            <span class="n">default_metrics_dict</span><span class="p">[</span><span class="n">metric_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_score</span>
+
+        <span class="n">metrics_dict</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">default_metrics_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">custom_metrics_dict</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">metrics_dict</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">train_on_fold</span><span class="p">(</span>
+    <span class="n">df_folds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">models</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="n">num_folds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">predictor_col</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">target_col</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Take in a dataframe with fold number as column,</span>
+<span class="sd">    and a models which holds a list of callable models,</span>
+<span class="sd">    we will loop through and return a dictionary of cv results.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df_folds (pd.DataFrame): Dataframe with fold number as column.</span>
+<span class="sd">        model (Callable): A callable model.</span>
+<span class="sd">        num_folds (int): Number of folds.</span>
+<span class="sd">        predictor_col (List[str]): List of predictor columns.</span>
+<span class="sd">        target_col (List[str]): List of target columns.</span>
+
+
+<span class="sd">    Returns:</span>
+<span class="sd">        model_dict (Dict[str, Results]: Dictionary of model results with model name as key.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">y_true</span> <span class="o">=</span> <span class="n">df_folds</span><span class="p">[</span><span class="n">target_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="c1"># test_pred_arr: np.ndarray = np.zeros(len(X_test))</span>
+
+    <span class="n">model_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+        <span class="n">model_results</span> <span class="o">=</span> <span class="n">Results</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">):</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="c1"># out-of-fold validation predictions</span>
+        <span class="n">oof_pred_arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_folds</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">fold</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_folds</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">train_df</span> <span class="o">=</span> <span class="n">df_folds</span><span class="p">[</span><span class="n">df_folds</span><span class="p">[</span><span class="s2">&quot;fold&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">fold</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">val_df</span> <span class="o">=</span> <span class="n">df_folds</span><span class="p">[</span><span class="n">df_folds</span><span class="p">[</span><span class="s2">&quot;fold&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">fold</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">val_idx</span> <span class="o">=</span> <span class="n">df_folds</span><span class="p">[</span><span class="n">df_folds</span><span class="p">[</span><span class="s2">&quot;fold&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">fold</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">predictor_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">prepare_y</span><span class="p">(</span>
+                <span class="n">train_df</span><span class="p">[</span><span class="n">target_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="p">)</span>
+            <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span> <span class="o">=</span> <span class="n">val_df</span><span class="p">[</span><span class="n">predictor_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">prepare_y</span><span class="p">(</span>
+                <span class="n">val_df</span><span class="p">[</span><span class="n">target_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="p">)</span>
+
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+            <span class="n">y_val_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>
+            <span class="n">y_val_prob</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>
+
+            <span class="n">logits</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;y_true&quot;</span><span class="p">:</span> <span class="n">y_val</span><span class="p">,</span>
+                <span class="s2">&quot;y_pred&quot;</span><span class="p">:</span> <span class="n">y_val_pred</span><span class="p">,</span>
+                <span class="s2">&quot;y_prob&quot;</span><span class="p">:</span> <span class="n">y_val_prob</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="n">metrics</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+
+            <span class="n">model_results</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fold </span><span class="si">{</span><span class="n">fold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">logits</span><span class="p">,</span> <span class="o">**</span><span class="n">metrics</span><span class="p">},</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_dict</span><span class="p">:</span>
+            <span class="n">model_dict</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_results</span>
+
+    <span class="k">return</span> <span class="n">model_dict</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Returns a dict in the format of</span>
+<span class="c1"># {&#39;LogisticRegression&#39;: &lt;__main__.Results at 0x7f3bca575e90&gt;}</span>
+<span class="n">model_dict</span> <span class="o">=</span> <span class="n">train_on_fold</span><span class="p">(</span>
+    <span class="n">df_folds</span><span class="p">,</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="n">classifiers</span><span class="p">,</span>
+    <span class="n">num_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">predictor_col</span><span class="o">=</span><span class="n">predictor_cols</span><span class="p">,</span>
+    <span class="n">target_col</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">target_col</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Takes in a model_dict and add cv results to the dict</span>
+<span class="n">model_dict_with_summary</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">add_cv_results</span><span class="p">(</span><span class="n">model_results</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_results</span> <span class="ow">in</span> <span class="n">model_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Transforms model_dict_with_summary to a Dict of dataframes</span>
+<span class="c1"># model_results_df[&#39;LogisticRegression&#39;] -&gt; df</span>
+<span class="n">model_results_df</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">results</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">model_dict_with_summary</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">model_results_df</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">results_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fold 1&#39;</span><span class="p">,</span> <span class="s1">&#39;fold 2&#39;</span><span class="p">,</span> <span class="s1">&#39;fold 3&#39;</span><span class="p">,</span> <span class="s1">&#39;fold 4&#39;</span><span class="p">,</span> <span class="s1">&#39;fold 5&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_cv&#39;</span><span class="p">,</span> <span class="s1">&#39;oof_cv&#39;</span><span class="p">]</span>
+<span class="n">results_df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>fold 1</th>
+      <th>fold 2</th>
+      <th>fold 3</th>
+      <th>fold 4</th>
+      <th>fold 5</th>
+      <th>mean_cv</th>
+      <th>oof_cv</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">RandomForestClassifier</th>
+      <th>accuracy_score</th>
+      <td>0.932039</td>
+      <td>0.961165</td>
+      <td>0.95098</td>
+      <td>0.960784</td>
+      <td>0.95098</td>
+      <td>0.95119</td>
+      <td>0.951172</td>
+    </tr>
+    <tr>
+      <th>precision_recall_fscore_support</th>
+      <td>([0.9672131147540983, 0.8809523809523809], [0....</td>
+      <td>([0.9552238805970149, 0.9722222222222222], [0....</td>
+      <td>([0.927536231884058, 1.0], [1.0, 0.86842105263...</td>
+      <td>([0.9545454545454546, 0.9722222222222222], [0....</td>
+      <td>([0.9402985074626866, 0.9714285714285714], [0....</td>
+      <td>[[0.9489634378486625, 0.9593650793650793], [0....</td>
+      <td>([0.9484848484848485, 0.9560439560439561], [0....</td>
+    </tr>
+    <tr>
+      <th>confusion_matrix</th>
+      <td>[[59, 5], [2, 37]]</td>
+      <td>[[64, 1], [3, 35]]</td>
+      <td>[[64, 0], [5, 33]]</td>
+      <td>[[63, 1], [3, 35]]</td>
+      <td>[[63, 1], [4, 34]]</td>
+      <td>[[62.6, 1.6], [3.4, 34.8]]</td>
+      <td>[[313, 8], [17, 174]]</td>
+    </tr>
+    <tr>
+      <th>multiclass_roc_auc_score</th>
+      <td>[0.9709535256410255, 0.9709535256410255]</td>
+      <td>[0.9896761133603239, 0.9896761133603239]</td>
+      <td>[0.9967105263157895, 0.9967105263157895]</td>
+      <td>[0.9930098684210527, 0.9930098684210527]</td>
+      <td>[0.9802631578947368, 0.980263157894737]</td>
+      <td>[0.9861226383265856, 0.9861226383265856]</td>
+      <td>[0.9849374500497463, 0.9849374500497464]</td>
+    </tr>
+    <tr>
+      <th>brier_score_loss</th>
+      <td>0.0594175</td>
+      <td>0.0415534</td>
+      <td>0.0376471</td>
+      <td>0.0347059</td>
+      <td>0.0413725</td>
+      <td>0.0429393</td>
+      <td>0.0429688</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="comparison-of-cross-validated-models-cv-oof">Comparison of Cross-Validated Models (CV + OOF)</h3>
+<p>The point of the following comparison is to check how different models are performing across folds. More specifically, if we have 5 folds, we will have a metric score for each fold, subsequently, we can find the standard error of model's performance. We need to be aware of models that have high variance across folds in terms of the metrics performance. This can indicate that the model is highly unstable, and may be a sign of overfitting.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">summarize_metrics</span><span class="p">(</span>
+    <span class="n">model_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Results</span><span class="p">],</span> <span class="n">metric_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;roc&quot;</span><span class="p">,</span> <span class="n">pos_label</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Summarize metrics of each fold with its standard error.</span>
+<span class="sd">    We also plot a boxplot to show the results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">model_results</span> <span class="ow">in</span> <span class="n">model_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">result_dict</span> <span class="o">=</span> <span class="n">model_results</span><span class="o">.</span><span class="n">get_result</span><span class="p">(</span><span class="n">result_name</span><span class="o">=</span><span class="n">metric_name</span><span class="p">)</span>
+
+        <span class="n">tmp_score</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">result_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">pos_class_score</span> <span class="o">=</span> <span class="n">metric</span><span class="p">[</span><span class="n">pos_label</span><span class="p">]</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">model_name</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">pos_class_score</span><span class="p">))</span>
+            <span class="n">tmp_score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos_class_score</span><span class="p">)</span>
+
+        <span class="c1"># append the Standard Error of K folds</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s2">&quot;SE&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp_score</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp_score</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;fold&quot;</span><span class="p">,</span> <span class="n">metric_name</span><span class="p">])</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">metric_name</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">summary_df</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;DummyClassifier&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s2">&quot;fold&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;SE&quot;</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># fig.savefig(config.spot_checking_boxplot, format=&#39;png&#39;, dpi=300)</span>
+
+    <span class="k">return</span> <span class="n">summary_df</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">summary_df</span> <span class="o">=</span> <span class="n">summarize_metrics</span><span class="p">(</span>
+    <span class="n">model_dict</span><span class="o">=</span><span class="n">model_dict</span><span class="p">,</span> <span class="n">metric_name</span><span class="o">=</span><span class="s2">&quot;multiclass_roc_auc_score&quot;</span>
+<span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">summary_df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>model</th>
+      <th>fold</th>
+      <th>multiclass_roc_auc_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>24</th>
+      <td>DecisionTreeClassifier</td>
+      <td>fold 1</td>
+      <td>0.865585</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>DecisionTreeClassifier</td>
+      <td>fold 2</td>
+      <td>0.924291</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>DecisionTreeClassifier</td>
+      <td>fold 3</td>
+      <td>0.923931</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>DecisionTreeClassifier</td>
+      <td>fold 4</td>
+      <td>0.923931</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>DecisionTreeClassifier</td>
+      <td>fold 5</td>
+      <td>0.895148</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>DecisionTreeClassifier</td>
+      <td>SE</td>
+      <td>0.011677</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>RandomForestClassifier</td>
+      <td>fold 1</td>
+      <td>0.970954</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>RandomForestClassifier</td>
+      <td>fold 2</td>
+      <td>0.989676</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>RandomForestClassifier</td>
+      <td>fold 3</td>
+      <td>0.996711</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>RandomForestClassifier</td>
+      <td>fold 4</td>
+      <td>0.993010</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>RandomForestClassifier</td>
+      <td>fold 5</td>
+      <td>0.980263</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>RandomForestClassifier</td>
+      <td>SE</td>
+      <td>0.004672</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><img alt="png" src="../Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29_files/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29_31_1.png" /></p>
+<h3 id="out-of-fold-confusion-matrix">Out-of-Fold Confusion Matrix</h3>
+<p>We do have information on the performance of each folds, we now look at the performance of all 5 folds together. Typicall there are two ways to do it, one is to simply take the average of the score of five folds, the other is to take a look at out of folds predictions.</p>
+<hr />
+<p>From the confusion matrix of the out of fold performance, Logistic Regression does seem to be a model we can explore on, although slightly lower in terms of overall AUROC score than SVC, it seems to have the quite low False Negatives amongst all. With further hyperparameter tuning and threshold optimization, we can make it better.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">model_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_binary_confusion_matrix</span><span class="p">(</span>
+    <span class="n">results_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">model_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">n_models</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_names</span><span class="p">)</span>
+    <span class="c1"># if 7 models, then 3 rows, 2 columns, and 7 subplots</span>
+    <span class="c1"># always fix column to be 3</span>
+    <span class="n">n_cols</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">n_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n_models</span> <span class="o">/</span> <span class="n">n_cols</span><span class="p">))</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">axes</span><span class="p">,</span> <span class="n">algo</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">model_names</span><span class="p">):</span>
+        <span class="c1"># Unravel into tn, fp, fn and tp</span>
+        <span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">oof_cv</span><span class="p">[</span><span class="n">algo</span><span class="p">]</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="c1"># reshape into tp, fp, fn, tn - this is personal preference</span>
+        <span class="n">reshaped_cm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">tp</span><span class="p">,</span> <span class="n">fp</span><span class="p">],</span> <span class="p">[</span><span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">]])</span>
+
+        <span class="c1"># Get positive ROC score - hardcoded here.</span>
+        <span class="n">positive_class_auroc</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">oof_cv</span><span class="p">[</span><span class="n">algo</span><span class="p">]</span><span class="o">.</span><span class="n">multiclass_roc_auc_score</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># annotations</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;True Pos&quot;</span><span class="p">,</span> <span class="s2">&quot;False Pos&quot;</span><span class="p">,</span> <span class="s2">&quot;False Neg&quot;</span><span class="p">,</span> <span class="s2">&quot;True Neg&quot;</span><span class="p">]</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{0:0.0f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">reshaped_cm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span>
+        <span class="n">percentages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;</span><span class="si">{0:.2%}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">reshaped_cm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">reshaped_cm</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># final annotations</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v1</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">v2</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">v3</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">percentages</span><span class="p">)]</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># heatmap</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">reshaped_cm</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="mi">330</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#fe4a49&quot;</span><span class="p">,</span> <span class="s2">&quot;#2ab7ca&quot;</span><span class="p">,</span> <span class="s2">&quot;#fed766&quot;</span><span class="p">,</span> <span class="s2">&quot;#59981A&quot;</span><span class="p">],</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">linecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+            <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+            <span class="n">annot</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">annot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">},</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">axes</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">algo</span><span class="p">),</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3500</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="mf">0.72</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="s2">&quot;AUC: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">positive_class_auroc</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+            <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="c1">## ticks and labels</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1">## titles and text</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="s2">&quot;Out Of Fold Confusion Matrix&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">},</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This Visualization show the results of various classifiers and there respective</span>
+<span class="sd">    results.&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">},</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+    <span class="c1"># fig.savefig(config.oof_confusion_matrix, format=&#39;png&#39;, dpi=300)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plot_binary_confusion_matrix</span><span class="p">(</span><span class="n">results_df</span><span class="p">,</span> <span class="n">model_names</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="png" src="../Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29_files/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29_35_0.png" /></p>
+<h3 id="hypothesis-testing-across-models">Hypothesis Testing Across Models</h3>
+<p>I am slightly shocked at the performance of plain LogisticRegression, I decide to use an idea from <a href="http://rasbt.github.io/mlxtend/user_guide/evaluate/paired_ttest_kfold_cv/">Hypothesis Testing Across Models</a> to check if the difference is really by chance or not. Note that I will be modifying his code as his code does not split using StratifiedKFold.</p>
+<hr />
+<p>The basic idea is to test if two model's difference in scores (in this case roc), is statistically significant or not. However, we note that this method may violate an assumption of Student's t test.</p>
+<hr />
+<ul>
+<li>Null Hypothesis <span class="arithmatex">\(H_0\)</span>: The difference in the performance score of two classifiers is Statistically Significant.</li>
+<li>Alternate Hypothesis <span class="arithmatex">\(H_1\)</span>: The difference in the performance score of two classifiers is <strong>not</strong> Statistically Significant.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">paired_ttest_skfold_cv</span><span class="p">(</span>
+    <span class="n">estimator1</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">estimator2</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">cv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modified from https://github.com/rasbt/mlxtend/blob/master/mlxtend/evaluate/ttest.py to accomodate StratifiedKFold.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        estimator1 (Callable): [description]</span>
+<span class="sd">        estimator2 (Callable): [description]</span>
+<span class="sd">        X (np.ndarray): [description]</span>
+<span class="sd">        y (np.ndarray): [description]</span>
+<span class="sd">        cv (int, optional): [description]. Defaults to 10.</span>
+<span class="sd">        scoring (str, optional): [description]. Defaults to None.</span>
+<span class="sd">        shuffle (bool, optional): [description]. Defaults to False.</span>
+<span class="sd">        random_seed (int, optional): [description]. Defaults to None.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AttributeError: [description]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">shuffle</span><span class="p">:</span>
+        <span class="n">skf</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">skf</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">StratifiedKFold</span><span class="p">(</span>
+            <span class="n">n_splits</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">scoring</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">estimator1</span><span class="o">.</span><span class="n">_estimator_type</span> <span class="o">==</span> <span class="s2">&quot;classifier&quot;</span><span class="p">:</span>
+            <span class="n">scoring</span> <span class="o">=</span> <span class="s2">&quot;accuracy&quot;</span>
+        <span class="k">elif</span> <span class="n">estimator1</span><span class="o">.</span><span class="n">_estimator_type</span> <span class="o">==</span> <span class="s2">&quot;regressor&quot;</span><span class="p">:</span>
+            <span class="n">scoring</span> <span class="o">=</span> <span class="s2">&quot;r2&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Estimator must &quot;</span> <span class="s2">&quot;be a Classifier or Regressor.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">scorer</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get_scorer</span><span class="p">(</span><span class="n">scoring</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">scorer</span> <span class="o">=</span> <span class="n">scoring</span>
+
+    <span class="n">score_diff</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">skf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">):</span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+        <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+
+        <span class="n">estimator1</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">estimator2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="n">est1_score</span> <span class="o">=</span> <span class="n">scorer</span><span class="p">(</span><span class="n">estimator1</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+        <span class="n">est2_score</span> <span class="o">=</span> <span class="n">scorer</span><span class="p">(</span><span class="n">estimator2</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+        <span class="n">score_diff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">est1_score</span> <span class="o">-</span> <span class="n">est2_score</span><span class="p">)</span>
+
+    <span class="n">avg_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">score_diff</span><span class="p">)</span>
+
+    <span class="n">numerator</span> <span class="o">=</span> <span class="n">avg_diff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="nb">sum</span><span class="p">([(</span><span class="n">diff</span> <span class="o">-</span> <span class="n">avg_diff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">score_diff</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">cv</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">t_stat</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+
+    <span class="n">pvalue</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t_stat</span><span class="p">),</span> <span class="n">cv</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">t_stat</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">pvalue</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># check if difference between algorithms is real</span>
+<span class="n">X_tmp</span> <span class="o">=</span> <span class="n">df_folds</span><span class="p">[</span><span class="n">predictor_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y_tmp</span> <span class="o">=</span> <span class="n">df_folds</span><span class="p">[</span><span class="s1">&#39;diagnosis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">t</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">paired_ttest_skfold_cv</span><span class="p">(</span><span class="n">estimator1</span><span class="o">=</span><span class="n">classifiers</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">estimator2</span><span class="o">=</span><span class="n">classifiers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_tmp</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_tmp</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;P-value: </span><span class="si">%.3f</span><span class="s1">, t-Statistic: </span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2021-11-13,14:04:35 - P-value: 0.171, t-Statistic: 1.667
+2021-11-13,14:04:35 - P-value: 0.171, t-Statistic: 1.667
+</code></pre></div>
+<p>Since <span class="arithmatex">\(p\)</span>-value is quite high, and more the basic threshold of 0.05 or 0.1, we fail to reject the null hypothesis, and say that there is no significant difference between these two models.</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Modelling (Cross-Validation Schema)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Modelling (Cross-Validation Schema)
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-footer__link md-footer__link--next" aria-label="Next: Modelling (Model Selection)" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Modelling (Model Selection)
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

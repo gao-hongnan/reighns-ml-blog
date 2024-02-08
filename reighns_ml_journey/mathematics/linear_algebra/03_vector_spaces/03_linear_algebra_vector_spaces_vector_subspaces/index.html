@@ -1,0 +1,2791 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/">
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Vector Space and Subspaces - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#vector-spaces" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Vector Space and Subspaces
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Vector Space and Subspaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Vector Space and Subspaces
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vector-spaces" class="md-nav__link">
+    Vector Spaces
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector Spaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notations" class="md-nav__link">
+    Notations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimensions" class="md-nav__link">
+    Dimensions
+  </a>
+  
+    <nav class="md-nav" aria-label="Dimensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-dimension" class="md-nav__link">
+    Algebraic Definition (Dimension)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometric-definition-dimension" class="md-nav__link">
+    Geometric Definition (Dimension)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-space" class="md-nav__link">
+    Vector Space
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector Space">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-vector-space" class="md-nav__link">
+    Definition (Vector Space)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-space-over-a-field" class="md-nav__link">
+    Vector Space over a Field
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-of-vector-spaces-over-a-field" class="md-nav__link">
+    Example of Vector Spaces over a Field
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subspaces" class="md-nav__link">
+    Subspaces
+  </a>
+  
+    <nav class="md-nav" aria-label="Subspaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geometric-definition-subspaces" class="md-nav__link">
+    Geometric Definition (Subspaces)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-subspaces" class="md-nav__link">
+    Algebraic Definition (Subspaces)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-and-intuition-of-subspaces" class="md-nav__link">
+    Example and Intuition of Subspaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-the-subspace-criterion" class="md-nav__link">
+    Theorem (The Subspace Criterion)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (The Subspace Criterion)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-combination-definition-revisited" class="md-nav__link">
+    Linear Combination (Definition revisited)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-closure-linear-combination-implies-subspace" class="md-nav__link">
+    Theorem (Closure Linear Combination implies Subspace)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-subspaces-of-mathbbr2" class="md-nav__link">
+    Vector subspaces of \(\mathbb{R}^2\)
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector subspaces of \(\mathbb{R}^2\)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-non-subspace" class="md-nav__link">
+    Examples of Non-Subspace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualization-of-subspaces-in-mathbbr2" class="md-nav__link">
+    Visualization of Subspaces in \(\mathbb{R}^2\)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-subspaces-of-mathbbr3" class="md-nav__link">
+    Vector subspaces of \(\mathbb{R}^3\)
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector subspaces of \(\mathbb{R}^3\)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visualization-of-subspaces-in-mathbbr3" class="md-nav__link">
+    Visualization of Subspaces in \(\mathbb{R}^3\)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-intersection-of-subspaces-is-a-subspace" class="md-nav__link">
+    Theorem (Intersection of Subspaces is a Subspace)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Intersection of Subspaces is a Subspace)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof_1" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#union-of-two-subspaces-may-not-be-a-subspace" class="md-nav__link">
+    Union of Two Subspaces may not be a Subspace
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ambient-space" class="md-nav__link">
+    Ambient Space
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vector-spaces" class="md-nav__link">
+    Vector Spaces
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector Spaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notations" class="md-nav__link">
+    Notations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimensions" class="md-nav__link">
+    Dimensions
+  </a>
+  
+    <nav class="md-nav" aria-label="Dimensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-dimension" class="md-nav__link">
+    Algebraic Definition (Dimension)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometric-definition-dimension" class="md-nav__link">
+    Geometric Definition (Dimension)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-space" class="md-nav__link">
+    Vector Space
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector Space">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition-vector-space" class="md-nav__link">
+    Definition (Vector Space)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-space-over-a-field" class="md-nav__link">
+    Vector Space over a Field
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-of-vector-spaces-over-a-field" class="md-nav__link">
+    Example of Vector Spaces over a Field
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subspaces" class="md-nav__link">
+    Subspaces
+  </a>
+  
+    <nav class="md-nav" aria-label="Subspaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geometric-definition-subspaces" class="md-nav__link">
+    Geometric Definition (Subspaces)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-subspaces" class="md-nav__link">
+    Algebraic Definition (Subspaces)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-and-intuition-of-subspaces" class="md-nav__link">
+    Example and Intuition of Subspaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-the-subspace-criterion" class="md-nav__link">
+    Theorem (The Subspace Criterion)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (The Subspace Criterion)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-combination-definition-revisited" class="md-nav__link">
+    Linear Combination (Definition revisited)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-closure-linear-combination-implies-subspace" class="md-nav__link">
+    Theorem (Closure Linear Combination implies Subspace)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-subspaces-of-mathbbr2" class="md-nav__link">
+    Vector subspaces of \(\mathbb{R}^2\)
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector subspaces of \(\mathbb{R}^2\)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-non-subspace" class="md-nav__link">
+    Examples of Non-Subspace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualization-of-subspaces-in-mathbbr2" class="md-nav__link">
+    Visualization of Subspaces in \(\mathbb{R}^2\)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-subspaces-of-mathbbr3" class="md-nav__link">
+    Vector subspaces of \(\mathbb{R}^3\)
+  </a>
+  
+    <nav class="md-nav" aria-label="Vector subspaces of \(\mathbb{R}^3\)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visualization-of-subspaces-in-mathbbr3" class="md-nav__link">
+    Visualization of Subspaces in \(\mathbb{R}^3\)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-intersection-of-subspaces-is-a-subspace" class="md-nav__link">
+    Theorem (Intersection of Subspaces is a Subspace)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Intersection of Subspaces is a Subspace)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof_1" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#union-of-two-subspaces-may-not-be-a-subspace" class="md-nav__link">
+    Union of Two Subspaces may not be a Subspace
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ambient-space" class="md-nav__link">
+    Ambient Space
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Vector Space and Subspaces</h1>
+
+<div class="arithmatex">\[\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\v}{\mathbf{v}}
+\newcommand{\a}{\mathbf{a}}
+\newcommand{\b}{\mathbf{b}}
+\newcommand{\c}{\mathbf{c}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\u}{\mathbf{u}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\C}{\mathbf{C}}\]</div>
+<ul>
+<li><a href="#vector-spaces">Vector Spaces</a></li>
+<li><a href="#notations">Notations</a></li>
+<li><a href="#dimensions">Dimensions</a><ul>
+<li><a href="#algebraic-definition-dimension">Algebraic Definition (Dimension)</a></li>
+<li><a href="#geometric-definition-dimension">Geometric Definition (Dimension)</a></li>
+</ul>
+</li>
+<li><a href="#vector-space">Vector Space</a><ul>
+<li><a href="#definition-vector-space">Definition (Vector Space)</a></li>
+<li><a href="#vector-space-over-a-field">Vector Space over a Field</a></li>
+<li><a href="#example-of-vector-spaces-over-a-field">Example of Vector Spaces over a Field</a></li>
+</ul>
+</li>
+<li><a href="#subspaces">Subspaces</a><ul>
+<li><a href="#geometric-definition-subspaces">Geometric Definition (Subspaces)</a></li>
+<li><a href="#algebraic-definition-subspaces">Algebraic Definition (Subspaces)</a></li>
+<li><a href="#example-and-intuition-of-subspaces">Example and Intuition of Subspaces</a></li>
+<li><a href="#theorem-the-subspace-criterion">Theorem (The Subspace Criterion)</a></li>
+<li><a href="#proof">Proof</a></li>
+<li><a href="#linear-combination-definition-revisited">Linear Combination (Definition revisited)</a></li>
+<li><a href="#theorem-closure-linear-combination-implies-subspace">Theorem (Closure Linear Combination implies Subspace)</a></li>
+<li><a href="#vector-subspaces-of-mathbbr2">Vector subspaces of <span class="arithmatex">\(\mathbb{R}^2\)</span></a></li>
+<li><a href="#examples-of-non-subspace">Examples of Non-Subspace</a></li>
+<li><a href="#visualization-of-subspaces-in-mathbbr2">Visualization of Subspaces in <span class="arithmatex">\(\mathbb{R}^2\)</span></a></li>
+<li><a href="#vector-subspaces-of-mathbbr3">Vector subspaces of <span class="arithmatex">\(\mathbb{R}^3\)</span></a></li>
+<li><a href="#visualization-of-subspaces-in-mathbbr3">Visualization of Subspaces in <span class="arithmatex">\(\mathbb{R}^3\)</span></a></li>
+<li><a href="#theorem-intersection-of-subspaces-is-a-subspace">Theorem (Intersection of Subspaces is a Subspace)</a></li>
+<li><a href="#proof-1">Proof</a></li>
+<li><a href="#union-of-two-subspaces-may-not-be-a-subspace">Union of Two Subspaces may not be a Subspace</a></li>
+</ul>
+</li>
+<li><a href="#ambient-space">Ambient Space</a></li>
+</ul>
+<h2 id="vector-spaces">Vector Spaces</h2>
+<h3 id="notations">Notations</h3>
+<p>For this section, we will treat our field <span class="arithmatex">\(\F\)</span> to be the real space <span class="arithmatex">\(\R\)</span>; and when we later mention <strong>vector space</strong> or <strong>vector subspace</strong> <span class="arithmatex">\(V\)</span>, we actually mean the <strong>vector space/subspace over the field <span class="arithmatex">\(\R\)</span></strong>.</p>
+<h3 id="dimensions">Dimensions</h3>
+<p>Normally, dimensions are formally defined after the introduction of basis. We will give an informal treatment of dimension here to better understand the idea when mentioning this word.</p>
+<h4 id="algebraic-definition-dimension">Algebraic Definition (Dimension)</h4>
+<div class="admonition success">
+<p class="admonition-title">Algebraic Definition</p>
+<p>Consider a vector <span class="arithmatex">\(\v \in \R^n\)</span>, then we can represent </p>
+<div class="arithmatex">\[
+\v= \begin{bmatrix}
+v_1 \\ v_2 \\ \vdots \\ v_n
+\end{bmatrix} \in \R^n
+\]</div>
+<p>and we can naively define the <strong>dimension</strong> of the vector to be the number of elements:</p>
+<div class="arithmatex">\[\text{dim}(\v) = |\v| = n\]</div>
+</div>
+<h4 id="geometric-definition-dimension">Geometric Definition (Dimension)</h4>
+<div class="admonition success">
+<p class="admonition-title">Geometric Definition</p>
+<p>The dimensionality of a vector is the number of
+coordinate axes in which that vector exists. A 2D vector is a line
+in a 2D space (think of the typical Cartesian XY plane); a 3D
+vector is a line in a 3D space. Note that both a 2D vector and a
+3D vector are both lines, but they exist in a different number of
+dimensions. - <strong>Mike X Cohen: Linear Algebra: Theory, Intuition, Code, 2021. (pp. 76)</strong></p>
+</div>
+<h3 id="vector-space">Vector Space</h3>
+<h4 id="definition-vector-space">Definition (Vector Space)</h4>
+<div class="admonition success">
+<p class="admonition-title">Definition (Vector Space)</p>
+<p>A vector space is a set <span class="arithmatex">\(V\)</span> consisting of the following:</p>
+<p>a) a field <span class="arithmatex">\(\F\)</span>, where the elements in <span class="arithmatex">\(\F\)</span> are called <strong>scalars</strong>.</p>
+<p>b) a non empty set <span class="arithmatex">\(V\)</span>, where the elements in <span class="arithmatex">\(V\)</span> are called <strong>vectors</strong> (be less pedantic about the word vectors as we can treat say polynomial ring as a vector space and we can also treat a field <span class="arithmatex">\(\F\)</span> over itself as a vector space as well. So the word vectors here are not only the usual ones we see in "vectors")</p>
+<p>c) an operation of vector addition <span class="arithmatex">\(\u + \v\)</span> between every pair of vectors <span class="arithmatex">\(\u, \v \in V\)</span> and</p>
+<p>d) an operation of scalar multiplication <span class="arithmatex">\(\lambda\v\)</span> between every <span class="arithmatex">\(\lambda \in \F\)</span> and every vector <span class="arithmatex">\(\v \in V\)</span>.</p>
+<hr />
+<p><strong>Furthermore, all elements in <span class="arithmatex">\(V\)</span> must satisfy the closure properties and the following axioms:</strong></p>
+<ul>
+<li>
+<p><span class="arithmatex">\(\textbf{V(0)}: \textbf{Closure (Well Defined)}\)</span>: For all <span class="arithmatex">\(\mathbf{u,v} \in V, \mathbf{u+v} \in V\)</span>; For all <span class="arithmatex">\(\lambda \in \F\)</span> and <span class="arithmatex">\(\v \in V\)</span>, then <span class="arithmatex">\(\lambda \v \in V\)</span>; Consequently, all linear combinations of vectors in <span class="arithmatex">\(V\)</span> is in <span class="arithmatex">\(V\)</span>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(1)}: \textbf{Existence of the Zero Vector (Additive Identity)}\)</span>: There exists a vector <span class="arithmatex">\(\mathbf{0} \in V\)</span>, called the zero vector, such that <span class="arithmatex">\(\mathbf{v + 0 = u = 0+v}\)</span> for all <span class="arithmatex">\(\v \in V\)</span>.  We should know it is unique. </p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(2)}: \textbf{Commutative Law for Vector Addition}\)</span>: For all <span class="arithmatex">\(\mathbf{u,v} \in V\)</span>, <span class="arithmatex">\(\mathbf{u+v = v+u}\)</span>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(3)}: \textbf{Associative Law for Vector Addition}\)</span>: For all <span class="arithmatex">\(\mathbf{u,v,w} \in V\)</span>, we have <span class="arithmatex">\(\mathbf{u + (v+w)} = \mathbf{(u+v)+w}\)</span>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(4)}: \textbf{Existence of Additive Inverse}\)</span>: For every vector <span class="arithmatex">\(\v \in V\)</span>, there exists a vector <span class="arithmatex">\(-\v \in V\)</span> such that <span class="arithmatex">\(\mathbf{v+(-v) = 0 = (-v)+v}\)</span>. </p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(5)}: \textbf{Existence of the Multiplicative Identity}\)</span>: There exists <span class="arithmatex">\(\mathbf{1}\in V\)</span> such that <span class="arithmatex">\(\mathbf{1} \times \v = \v \times \mathbf{1} = \v\)</span> for all <span class="arithmatex">\(\v \in \F\)</span>.</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(6)}: \textbf{Associative Law for Vector-Scalar Multiplication}\)</span>: For all <span class="arithmatex">\(a,b \in \F\)</span> and <span class="arithmatex">\(\v \in V\)</span>, we have <span class="arithmatex">\(a(b\v) = (ab)\v\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\textbf{V(7)}: \textbf{Distributive Law}\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(a(\mathbf{u+v}) = a\u + a\v ,~~~\forall a \in \F, \mathbf{u,v} \in V\)</span></li>
+<li><span class="arithmatex">\((a+b)\v = a\v + b\v,~~~\forall a,b \in \F, \v \in V\)</span>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<h4 id="vector-space-over-a-field">Vector Space over a Field</h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note carefully that a vector space <span class="arithmatex">\(V\)</span> is dependent on the field <span class="arithmatex">\(\F\)</span> since <strong>scalar multiplication</strong> draws <span class="arithmatex">\(\lambda\)</span> from <span class="arithmatex">\(\F\)</span>. Thus, we don't usually talk only about vector space <span class="arithmatex">\(V\)</span> alone, instead we use the notion of <strong>Vector Space over a Field</strong> <span class="arithmatex">\(\F\)</span>.</p>
+</div>
+<h4 id="example-of-vector-spaces-over-a-field">Example of Vector Spaces over a Field</h4>
+<div class="admonition example">
+<p class="admonition-title">Real Vector Space</p>
+<ul>
+<li>We can imagine elements <span class="arithmatex">\(\v \in V\)</span> as vectors/lines/points.</li>
+<li>We can take the field <span class="arithmatex">\(\F\)</span> to be <span class="arithmatex">\(\R\)</span>.</li>
+<li>Then a vector space <span class="arithmatex">\(V\)</span> over <span class="arithmatex">\(\R\)</span> is called the <strong>real vector space</strong>.</li>
+</ul>
+</div>
+<h3 id="subspaces">Subspaces</h3>
+<h4 id="geometric-definition-subspaces">Geometric Definition (Subspaces)</h4>
+<p>For a better treatment of understanding <strong>subspaces</strong> geometrically, do read page 79-80 of the book <strong>Linear Algebra: Theory, Intuition, Code</strong>.</p>
+<h4 id="algebraic-definition-subspaces">Algebraic Definition (Subspaces)</h4>
+<div class="admonition success">
+<p class="admonition-title">Algebraic Definition (Subspaces)</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. A non empty subset <span class="arithmatex">\(W \subseteq V\)</span> of a vector space <span class="arithmatex">\(V\)</span> is called a <strong>subspace</strong> of <span class="arithmatex">\(V\)</span> if <span class="arithmatex">\(W\)</span> is itself a <strong>vector space</strong> using the same vector addition and scalar multiplication as in <span class="arithmatex">\(V\)</span>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Consequence</p>
+<p>Let <span class="arithmatex">\(W \subset V\)</span> and <span class="arithmatex">\(\w \in W\)</span>, we must show that <span class="arithmatex">\(W\)</span> obeys all conditions from the definition of a <strong>vector space</strong>. For any <span class="arithmatex">\(\w \in W\)</span>, we must have <span class="arithmatex">\(w \in V\)</span> by definition of a subset; this means that <span class="arithmatex">\(V2,V3,V5,V6,V7\)</span> are automatically true since <span class="arithmatex">\(\w \in W \subset V\)</span>. We just need to check if it satisfies <span class="arithmatex">\(V0,V1,V6\)</span>, namely, the two closure properties, the existence of zero vector, and the existence of the additive inverse for vector addition.</p>
+<p>We take V2 as an example, take any two elements <span class="arithmatex">\(\w_1, \w_2 \in W\)</span>, then <span class="arithmatex">\(\w_1, \w_2 \in V\)</span>, and hence obeys V2. But we cannot say for sure about V1, as there is no guarantee the subset <span class="arithmatex">\(W\)</span> will contain the zero vector!</p>
+</div>
+<h4 id="example-and-intuition-of-subspaces">Example and Intuition of Subspaces</h4>
+<div class="admonition example">
+<p class="admonition-title">Example and Intuition of Subspaces</p>
+<p>Let us start with an informal treatment of a <strong>subspace</strong>. First, we say that a <strong>subspace</strong> <span class="arithmatex">\(W\)</span> of <span class="arithmatex">\(V\)</span> must fulfill two conditions:</p>
+<ul>
+<li><span class="arithmatex">\(W\)</span> is a <strong>subset</strong> of <span class="arithmatex">\(V\)</span> and;</li>
+<li><span class="arithmatex">\(W\)</span> is a <strong>vector space</strong> itself over the field <span class="arithmatex">\(\F\)</span>.</li>
+</ul>
+<p>The classic example of a <span class="arithmatex">\(3\)</span>-dimensional real vector space is the Euclidean space <span class="arithmatex">\(\mathbb R^3\)</span> where <span class="arithmatex">\(\R^3 = \{(x,y,z)~|~x,y,z \in \R\}\)</span>, which is the 3-dimensional space, or to be more formal, it is the vector space <span class="arithmatex">\(V\)</span> over <span class="arithmatex">\(\R\)</span>, a <strong>collection</strong> of all 3-tuple vectors. </p>
+<p>Now, consider the <strong>set</strong> <span class="arithmatex">\(L = \{\lambda(1,2,3) ~|~ \lambda \in \R\}\)</span>, we check that the set <span class="arithmatex">\(L\)</span> informally satisfies our conditions to be a subspace of <span class="arithmatex">\(\R^3\)</span>.</p>
+<ul>
+<li>
+<p>I emphasized the word <strong>set</strong> because of the idea of <strong>subset</strong>, that is, a <strong>vector subspace</strong> first must be a <strong>subset</strong> of the <strong>vector space</strong>. Our <span class="arithmatex">\(L\)</span> is a subset of <span class="arithmatex">\(\R^3\)</span> by definition, in fact, it is the <strong>set</strong> of all lines of the form <span class="arithmatex">\(\lambda(1,2,3)\)</span>. </p>
+</li>
+<li>
+<p>Only being a subset is not sufficient to be called a <strong>subspace</strong>, we have fulfilled the idea of a <strong>sub</strong>set, but not the <strong>space</strong> part. It suffices to check if our <span class="arithmatex">\(L\)</span> is a <strong>valid vector space over</strong> <span class="arithmatex">\(\R\)</span>. And to check that we can use back the definition of <strong>vector space</strong> to do so.</p>
+</li>
+</ul>
+<p>The main point is that a single vector, <span class="arithmatex">\((1,2,3)\)</span> scaled by any <span class="arithmatex">\(\lambda \in \R\)</span> makes up a <strong>subspace</strong>. It also happens to be the 1D-subspace which is just a line. <strong>It is also important to mention that the line must pass through the origin to be considered a subspace</strong>.</p>
+<hr />
+<p>Next, consider the <strong>set</strong> <span class="arithmatex">\(P = \{\lambda_1(1,0,0) + \lambda_2(0,0,1) ~|~ \lambda_i \in \R\}\)</span>. Geometrically, we have known from earlier that these two vectors form a 2D-plane and we will show later that it is the 2D-subspace, a plane.</p>
+</div>
+<h4 id="theorem-the-subspace-criterion">Theorem (The Subspace Criterion)</h4>
+<p>From the previous section, we know that we just need to check V0, V1 and V4 to be true. This reduces our conditions for <span class="arithmatex">\(W \subset V\)</span> to be a subspace to be as follows:</p>
+<hr />
+<div class="admonition info">
+<p class="admonition-title">Theorem (The Subspace Criterion)</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. A subset <span class="arithmatex">\(W\)</span> of <span class="arithmatex">\(V\)</span> is a subspace of <span class="arithmatex">\(V\)</span> if and only if </p>
+<p>S1) <span class="arithmatex">\(\textbf{(Containing the Zero Vector)}\)</span>: <span class="arithmatex">\(\0 \in W\)</span> ;</p>
+<p>S2) <span class="arithmatex">\(\textbf{(Closure under Vector Addition)}\)</span>: <span class="arithmatex">\(\forall \mathbf{u,w} \in W, \u+\w \in W\)</span></p>
+<p>S3) <span class="arithmatex">\(\textbf{(Closure under Scalar Multiplication)}\)</span>: <span class="arithmatex">\(\forall \lambda \in \F\)</span> and <span class="arithmatex">\(\w \in W\)</span>, we have <span class="arithmatex">\(\lambda\w \in W\)</span>.</p>
+</div>
+<h5 id="proof">Proof</h5>
+<div class="admonition info">
+<p class="admonition-title">Proof</p>
+<p><span class="arithmatex">\(\Rightarrow\)</span> If <span class="arithmatex">\(W\)</span> is also a <strong>subspace</strong>, then by the definition of subspace, <span class="arithmatex">\(W\)</span> is also a vector space, and hence <span class="arithmatex">\(S1,S2,S3\)</span> are satisfied.</p>
+<p><span class="arithmatex">\(\Leftarrow\)</span> We should be clear that for other conditions V2, V3, V5, V6 and V7 do not warrant checking since these axioms are automatically satisfied for <span class="arithmatex">\(W\)</span> since it holds for the larger subset <span class="arithmatex">\(V\)</span>. We need only check the following:</p>
+<p><strong>Zero Vector:</strong> If S1 is satisfied, then the corresponding V1 is satisfied.</p>
+<p><strong>Closure Properties:</strong> S2 and S3 both implies V0.</p>
+<p><strong>Additive Inverse for Vector Addition</strong>: Let <span class="arithmatex">\(\w \in W\)</span>, take <span class="arithmatex">\(-1 \in \F\)</span>, by S3 (closure of scalar multiplication), we must have <span class="arithmatex">\(-1(\w) \in W\)</span>.$ This implies V4.</p>
+<p>One thing that you notice is that by the closure of addition <span class="arithmatex">\(\mathbf{w+(-w)}  = \mathbf{0} \in W\)</span> or by the closure of scalar multiplication <span class="arithmatex">\(0 \cdot \w = \0  \in W\)</span> (note <span class="arithmatex">\(0 \in \F\)</span>). Consequently, this implies that <strong>S2 and S3</strong> are sufficient to imply <strong>S1</strong>. You can trace the proof by ignoring the S1.</p>
+</div>
+<h4 id="linear-combination-definition-revisited">Linear Combination (Definition revisited)</h4>
+<div class="admonition success">
+<p class="admonition-title">Definition</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. A vector <span class="arithmatex">\(\v\)</span> is a <strong>linear combination</strong> of vectors <span class="arithmatex">\(\mathbf{v_1,v_2,...,v_m} \in V\)</span> if </p>
+<p><span class="arithmatex">\(<span class="arithmatex">\(\v = \lambda_1\v_1+...+\lambda_m\mathbf{v_m}\)</span>\)</span> for some scalars <span class="arithmatex">\(\lambda_i \in \F\)</span>.</p>
+</div>
+<h4 id="theorem-closure-linear-combination-implies-subspace">Theorem (Closure Linear Combination implies Subspace)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Closure Linear Combination implies Subspace)</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span> and <span class="arithmatex">\(W\subseteq V\)</span> a non empty subset. Then <span class="arithmatex">\(W\)</span> is a subspace of <span class="arithmatex">\(V\)</span> if and only if <span class="arithmatex">\(W\)</span> is closed under linear combination, (i.e <span class="arithmatex">\(\forall \lambda_i \in \F, \forall \mathbf{w_i} \in W \Rightarrow \lambda_1\w_1+ \lambda_2\w_2 \in W\)</span>).</p>
+<p>This should not come as a surprise as this is just a rebranding of <strong>Conditions to be a Subspace Theorem (Equivalent Subspace Definition)</strong>. </p>
+</div>
+<h4 id="vector-subspaces-of-mathbbr2">Vector subspaces of <span class="arithmatex">\(\mathbb{R}^2\)</span></h4>
+<p>There are three types of vector subspaces of the vector space <span class="arithmatex">\(\mathbb{R}^2\)</span>.</p>
+<p>i) The origin <span class="arithmatex">\(\mathbf{0} = \{0,0\}\)</span></p>
+<p>ii) The line through the origin : <span class="arithmatex">\(L = \{\lambda\v~|~\lambda \in \mathbb{R}, \v \in \R^2\}\)</span></p>
+<p>iii) <span class="arithmatex">\(\mathbb{R}^2\)</span></p>
+<h5 id="examples-of-non-subspace">Examples of Non-Subspace</h5>
+<div class="admonition example">
+<p class="admonition-title">Non-Subspace</p>
+<p>Consider the set <span class="arithmatex">\(L = \{\lambda (0, -3) ~|~ \lambda \in \R\}\)</span>, why is it not a subspace of <span class="arithmatex">\(\R^2\)</span>?</p>
+<hr />
+<p>Though one can answer that since this line does not pass through the origin, and thus does not contain the zero vector, hence not a subspace, we can take a step back and think of it geometrically:</p>
+<blockquote>
+<p>We can check whether the line is closed under addition and vector-scalar multiplication. Geometrically, it seems that any two vectors inside the set will still be in the set since adding or subtracting vectors inside is just "line + line | line - line", which still lies on the same line. It is easy to gloss over that if you take <span class="arithmatex">\(\v\)</span> and <span class="arithmatex">\(-\v\)</span> from the set <span class="arithmatex">\(L\)</span>, then the sum is the zero vector, which is not inside <span class="arithmatex">\(L\)</span>. This can be further verified by vector-scalar, we can just take <span class="arithmatex">\(0 \in \R\)</span>, and claim that <span class="arithmatex">\(0\v\)</span> for all <span class="arithmatex">\(\v \in L\)</span> is not in <span class="arithmatex">\(L\)</span>!</p>
+</blockquote>
+</div>
+<h5 id="visualization-of-subspaces-in-mathbbr2">Visualization of Subspaces in <span class="arithmatex">\(\mathbb{R}^2\)</span></h5>
+<p>Courtesy of <a href="https://github.com/MacroAnalyst/Linear_Algebra_With_Python/blob/master/Chapter%208%20-%20Vector%20Space%20and%20Subspace.ipynb">MacroAnalyst's Linear Algebra with Python</a>. Notice that the line <span class="arithmatex">\(y = -3 + \frac{2}{3}x\)</span> does not pass through the origin <span class="arithmatex">\((0, 0)\)</span>, and hence not a subspace. <strong>Note this example (line) is the set <span class="arithmatex">\(L\)</span> in the previous example.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="c1">####################### Arrows #######################</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">x</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$y = \frac</span><span class="si">{2}{3}</span><span class="s2">x$, subspace of $\mathbf</span><span class="si">{R}</span><span class="s2">^2$&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">x</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$y = -3+\frac</span><span class="si">{2}{3}</span><span class="s2">x$, not a subspace of $\mathbf</span><span class="si">{R}</span><span class="s2">^2$&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Visualization of Subspace in $R^2$ &quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;$(0,0)$&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_vector_subspaces_files/03_linear_algebra_vector_spaces_vector_subspaces_21_0.png" /></p>
+<h4 id="vector-subspaces-of-mathbbr3">Vector subspaces of <span class="arithmatex">\(\mathbb{R}^3\)</span></h4>
+<p>There are four types of vector subspaces of the vector space <span class="arithmatex">\(\mathbb{R}^3\)</span>.</p>
+<p>i) The origin <span class="arithmatex">\(\mathbf{0} = \{0,0,0\}\)</span></p>
+<p>ii) The line <span class="arithmatex">\(L\)</span> passing through the origin: <span class="arithmatex">\(L = \{\lambda \v~|~\lambda \in \mathbb{R}, \v \in \R^3\}\)</span></p>
+<p>iii) A plane <span class="arithmatex">\(P\)</span> passing through the origin: <span class="arithmatex">\(P = \{(x,y,z) \in \mathbb{R}^3~|~ ax + by + cz = 0\}\)</span></p>
+<p>iv) <span class="arithmatex">\(\mathbb{R}^3\)</span></p>
+<h5 id="visualization-of-subspaces-in-mathbbr3">Visualization of Subspaces in <span class="arithmatex">\(\mathbb{R}^3\)</span></h5>
+<p>Courtesy of <a href="https://github.com/MacroAnalyst/Linear_Algebra_With_Python/blob/master/Chapter%208%20-%20Vector%20Space%20and%20Subspace.ipynb">MacroAnalyst's Linear Algebra with Python</a>.</p>
+<p>We have not learnt of the term <strong>span</strong>, but for now when we say a span of two vectors <span class="arithmatex">\(\u\)</span> and <span class="arithmatex">\(\v\)</span> in <span class="arithmatex">\(\R^3\)</span>, it means these two vectors are not multiple of each other.</p>
+<p>Consider a span of two vectors <span class="arithmatex">\(u = (1,-2,1)^T\)</span> and <span class="arithmatex">\(v=(2,1,2)^T\)</span>. The span of <span class="arithmatex">\((u,v)\)</span> is a subspace of <span class="arithmatex">\(\R^3\)</span>, where <span class="arithmatex">\(s\)</span> and <span class="arithmatex">\(t\)</span> are the scalars of the vectors.</p>
+<hr />
+<p>We also plot a plane which is not a subspace by adding <span class="arithmatex">\(2\)</span> to the third equation: <span class="arithmatex">\(z = s + 2t + 2\)</span>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># %matplotlib</span>
+<span class="c1"># %matplotlib notebook, use this only if you are in Jupyter Notebook</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">S</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">T</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="n">T</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">T</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">)</span>
+
+<span class="n">Z2</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">T</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c1"># this is not a subspace anymore</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;$(0,0,0)$&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Visualization of Subspace of $\mathbb</span><span class="si">{R}</span><span class="s2">^3$&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s2">&quot;z-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=-</span><span class="mi">29</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_vector_subspaces_files/03_linear_algebra_vector_spaces_vector_subspaces_24_0.png" /></p>
+<h4 id="theorem-intersection-of-subspaces-is-a-subspace">Theorem (Intersection of Subspaces is a Subspace)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Intersection of Subspaces is a Subspace)</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span> and let <span class="arithmatex">\(W_\alpha \subseteq V\)</span> (<span class="arithmatex">\(\alpha \in I\)</span>) be vector subspaces of <span class="arithmatex">\(V\)</span>, then the intersection <span class="arithmatex">\(<span class="arithmatex">\(\cap_{\alpha \in I}W_\alpha\)</span>\)</span> is again a vector subspace of <span class="arithmatex">\(V\)</span>.</p>
+</div>
+<h5 id="proof_1">Proof</h5>
+<div class="admonition info">
+<p class="admonition-title">Proof</p>
+<p>Before we start, the intuition is simple, call <span class="arithmatex">\(C = A \cap B\)</span>, and to think intuitively that <span class="arithmatex">\(C\)</span> is itself a subspace, we just take an element <span class="arithmatex">\(\mathbf{c_1}, \mathbf{c_2} \in C\)</span> and <span class="arithmatex">\(\lambda \in \F\)</span>, and ask whether these vectors obey the closure property. For a start, for any two vectors in <span class="arithmatex">\(C\)</span>, they are closed under addition because both vectors are elements of <span class="arithmatex">\(A\)</span> and (or) <span class="arithmatex">\(B\)</span>.</p>
+<hr />
+<p>Let <span class="arithmatex">\(W_1\)</span> and <span class="arithmatex">\(W_2\)</span> be subspaces of a vector space <span class="arithmatex">\(V\)</span>, then it suffices for us to just prove <span class="arithmatex">\(W_1 \cap W_2\)</span> is a subspace of <span class="arithmatex">\(V\)</span> as we can use induction to prove for <span class="arithmatex">\(n\)</span> intersections.</p>
+<p>We denote the subset <span class="arithmatex">\(W_1 \cap W_2\)</span> to be <span class="arithmatex">\(U\)</span>.</p>
+<p><strong>Closed under Vector Addition:</strong> To show that <span class="arithmatex">\(U\)</span> has closure properties, we take any element <span class="arithmatex">\(\mathbf{u_1}, \mathbf{u_2} \in U\)</span>, any <span class="arithmatex">\(\lambda \in \mathbb{F}\)</span> and show that <span class="arithmatex">\(\mathbf{u_1} + \mathbf{u_2} \in U\)</span> and <span class="arithmatex">\(\lambda \mathbf{u} \in U\)</span>.</p>
+<p>Since <span class="arithmatex">\(\mathbf{u_1}, \mathbf{u_2} \in U\)</span>, then <span class="arithmatex">\(\mathbf{u_1}, \mathbf{u_2} \in W_1\)</span> and <span class="arithmatex">\(\mathbf{u_1}, \mathbf{u_2} \in W_2\)</span> respectively. This means that <span class="arithmatex">\(\mathbf{u_1} + \mathbf{u_2} \in W_1\)</span> and <span class="arithmatex">\(\mathbf{u_1} + \mathbf{u_2} \in W_2\)</span> since both <span class="arithmatex">\(W_1\)</span> and <span class="arithmatex">\(W_2\)</span> are closed under addition. Consequently, another way of saying <span class="arithmatex">\(\mathbf{u_1} + \mathbf{u_2} \in W_1\)</span> and <span class="arithmatex">\(\mathbf{u_1} + \mathbf{u_2} \in W_2\)</span> is <span class="arithmatex">\(\mathbf{u_1} + \mathbf{u_2} \in W_1 \cap W_2 = U\)</span>, which implies that <span class="arithmatex">\(U\)</span> is closed under vector addition.</p>
+<p><strong>Closed under Vector-Scalar Multiplication:</strong> 
+The same line of logic can be applied for closure under vector-scalar multiplication.</p>
+<p>We have shown that <span class="arithmatex">\(W_1 \cap W_2\)</span> is a subspace.</p>
+</div>
+<h4 id="union-of-two-subspaces-may-not-be-a-subspace">Union of Two Subspaces may not be a Subspace</h4>
+<p>The union of two subspaces may not be a subspace.</p>
+<p>The reason why this can happen is that all vector spaces, and hence subspaces too, must be closed under addition (and scalar multiplication). The union of two subspaces takes all the elements already in those spaces, and nothing more. In the union of subspaces <span class="arithmatex">\(W_1\)</span> and <span class="arithmatex">\(W_2\)</span>, there are new combinations of vectors we can add together that we couldn't before, like <span class="arithmatex">\(\w_1 + \w_2\)</span> where <span class="arithmatex">\(\w_1 \in W_1\)</span> and <span class="arithmatex">\(\w_2 \in W_2\)</span>. </p>
+<blockquote>
+<p>For example, take <span class="arithmatex">\(W_1\)</span> to be the <span class="arithmatex">\(x\)</span>-axis and <span class="arithmatex">\(W_2\)</span> the <span class="arithmatex">\(y\)</span>-axis, both subspaces of <span class="arithmatex">\(\mathbb{R}^2\)</span>.
+Their union includes both <span class="arithmatex">\((3,0)\)</span> and <span class="arithmatex">\((0,5)\)</span>, whose sum, <span class="arithmatex">\((3,5)\)</span>, is not in the union. Hence, the union is not a vector space.</p>
+</blockquote>
+<h3 id="ambient-space">Ambient Space</h3>
+<p>The term ambient space is used frequently in the book. We can understand it with an example:</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>If you are dealing with a vector subspace <span class="arithmatex">\(U\)</span> as a subset of <span class="arithmatex">\(\mathbb R^2\)</span>, the ambient space is <span class="arithmatex">\(\mathbb R^2\)</span>. So basically, the ambient space is the "parent space" of the subspace.</p>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../02_vectors/02_linear_algebra_vectors_exercises/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Exercises" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Exercises
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../03_linear_algebra_vector_spaces_vector_span/" class="md-footer__link md-footer__link--next" aria-label="Next: Vector Span" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Vector Span
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate"], "search": "../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

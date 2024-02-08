@@ -1,0 +1,2804 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/">
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Linear Independence - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#linear-independence" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Linear Independence
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Linear Independence
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Linear Independence
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#linear-independence" class="md-nav__link">
+    Linear Independence
+  </a>
+  
+    <nav class="md-nav" aria-label="Linear Independence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-linear-dependence" class="md-nav__link">
+    Algebraic Definition (Linear Dependence)
+  </a>
+  
+    <nav class="md-nav" aria-label="Algebraic Definition (Linear Dependence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-linear-dependence-in-mathbb-r2" class="md-nav__link">
+    Example (Linear Dependence in \(\mathbb R^2\))
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-linear-independence-in-mathbb-r3" class="md-nav__link">
+    Example (Linear Independence in \(\mathbb R^3\))
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-linear-independence" class="md-nav__link">
+    Algebraic Definition (Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#equivalent-algebraic-definition-linear-independence" class="md-nav__link">
+    Equivalent Algebraic Definition (Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-linear-combination-implies-linear-dependence" class="md-nav__link">
+    Theorem (Linear Combination Implies Linear Dependence)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Linear Combination Implies Linear Dependence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-the-zero-vector-and-linear-independence" class="md-nav__link">
+    Theorem (The zero vector and linear independence)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (The zero vector and linear independence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof_1" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-union-of-linearly-independent-vectors" class="md-nav__link">
+    Theorem (Union of linearly independent vectors)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intuition-linear-independence" class="md-nav__link">
+    Intuition (Linear (In)Dependence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-uniqueness-of-representation" class="md-nav__link">
+    Theorem (Uniqueness of Representation)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-the-span-of-linearly-dependent-vectors-is-identical-v2" class="md-nav__link">
+    Theorem (The Span of Linearly Dependent Vectors is Identical V2)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-inheritance-of-linear-independence" class="md-nav__link">
+    Theorem (Inheritance of Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-length-of-linear-independent-set-leq-length-of-spanning-set" class="md-nav__link">
+    Theorem (Length of Linear Independent Set \(\leq\) Length of Spanning Set)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Length of Linear Independent Set \(\leq\) Length of Spanning Set)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage-of-theorem" class="md-nav__link">
+    Example (Usage of Theorem)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corollary-length-of-linear-indepedent-set-and-spanning-set" class="md-nav__link">
+    Corollary (Length of Linear Indepedent Set and Spanning Set)
+  </a>
+  
+    <nav class="md-nav" aria-label="Corollary (Length of Linear Indepedent Set and Spanning Set)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof_2" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometric-definition-linear-independence" class="md-nav__link">
+    Geometric Definition (Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-determine-if-a-set-is-linearly-independent-non-matrix-algorithmic-way" class="md-nav__link">
+    How to determine if a set is Linearly Independent (Non-Matrix Algorithmic Way)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkedin-summary" class="md-nav__link">
+    Linkedin Summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-independence-references" class="md-nav__link">
+    Linear Independence References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#linear-independence" class="md-nav__link">
+    Linear Independence
+  </a>
+  
+    <nav class="md-nav" aria-label="Linear Independence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-linear-dependence" class="md-nav__link">
+    Algebraic Definition (Linear Dependence)
+  </a>
+  
+    <nav class="md-nav" aria-label="Algebraic Definition (Linear Dependence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-linear-dependence-in-mathbb-r2" class="md-nav__link">
+    Example (Linear Dependence in \(\mathbb R^2\))
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-linear-independence-in-mathbb-r3" class="md-nav__link">
+    Example (Linear Independence in \(\mathbb R^3\))
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-linear-independence" class="md-nav__link">
+    Algebraic Definition (Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#equivalent-algebraic-definition-linear-independence" class="md-nav__link">
+    Equivalent Algebraic Definition (Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-linear-combination-implies-linear-dependence" class="md-nav__link">
+    Theorem (Linear Combination Implies Linear Dependence)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Linear Combination Implies Linear Dependence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-the-zero-vector-and-linear-independence" class="md-nav__link">
+    Theorem (The zero vector and linear independence)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (The zero vector and linear independence)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof_1" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-union-of-linearly-independent-vectors" class="md-nav__link">
+    Theorem (Union of linearly independent vectors)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intuition-linear-independence" class="md-nav__link">
+    Intuition (Linear (In)Dependence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-uniqueness-of-representation" class="md-nav__link">
+    Theorem (Uniqueness of Representation)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-the-span-of-linearly-dependent-vectors-is-identical-v2" class="md-nav__link">
+    Theorem (The Span of Linearly Dependent Vectors is Identical V2)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-inheritance-of-linear-independence" class="md-nav__link">
+    Theorem (Inheritance of Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-length-of-linear-independent-set-leq-length-of-spanning-set" class="md-nav__link">
+    Theorem (Length of Linear Independent Set \(\leq\) Length of Spanning Set)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Length of Linear Independent Set \(\leq\) Length of Spanning Set)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage-of-theorem" class="md-nav__link">
+    Example (Usage of Theorem)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corollary-length-of-linear-indepedent-set-and-spanning-set" class="md-nav__link">
+    Corollary (Length of Linear Indepedent Set and Spanning Set)
+  </a>
+  
+    <nav class="md-nav" aria-label="Corollary (Length of Linear Indepedent Set and Spanning Set)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof_2" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometric-definition-linear-independence" class="md-nav__link">
+    Geometric Definition (Linear Independence)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-determine-if-a-set-is-linearly-independent-non-matrix-algorithmic-way" class="md-nav__link">
+    How to determine if a set is Linearly Independent (Non-Matrix Algorithmic Way)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkedin-summary" class="md-nav__link">
+    Linkedin Summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-independence-references" class="md-nav__link">
+    Linear Independence References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Linear Independence</h1>
+
+<div class="arithmatex">\[\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\v}{\mathbf{v}}
+\newcommand{\a}{\mathbf{a}}
+\newcommand{\b}{\mathbf{b}}
+\newcommand{\c}{\mathbf{c}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\u}{\mathbf{u}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\C}{\mathbf{C}}\]</div>
+<ul>
+<li><a href="#linear-independence">Linear Independence</a></li>
+<li><a href="#algebraic-definition-linear-dependence">Algebraic Definition (Linear Dependence)</a><ul>
+<li><a href="#example-linear-dependence-in-mathbb-r2">Example (Linear Dependence in <span class="arithmatex">\(\mathbb R^2\)</span>)</a></li>
+<li><a href="#example-linear-independence-in-mathbb-r3">Example (Linear Independence in <span class="arithmatex">\(\mathbb R^3\)</span>)</a></li>
+</ul>
+</li>
+<li><a href="#algebraic-definition-linear-independence">Algebraic Definition (Linear Independence)</a></li>
+<li><a href="#equivalent-algebraic-definition-linear-independence">Equivalent Algebraic Definition (Linear Independence)</a></li>
+<li><a href="#theorem-linear-combination-implies-linear-dependence">Theorem (Linear Combination Implies Linear Dependence)</a><ul>
+<li><a href="#proof">Proof</a></li>
+</ul>
+</li>
+<li><a href="#theorem-the-zero-vector-and-linear-independence">Theorem (The zero vector and linear independence)</a><ul>
+<li><a href="#proof-1">Proof</a></li>
+</ul>
+</li>
+<li><a href="#theorem-union-of-linearly-independent-vectors">Theorem (Union of linearly independent vectors)</a></li>
+<li><a href="#intuition-linear-independence">Intuition (Linear (In)Dependence)</a></li>
+<li><a href="#theorem-uniqueness-of-representation">Theorem (Uniqueness of Representation)</a></li>
+<li><a href="#theorem-the-span-of-linearly-dependent-vectors-is-identical-v2">Theorem (The Span of Linearly Dependent Vectors is Identical V2)</a></li>
+<li><a href="#theorem-inheritance-of-linear-independence">Theorem (Inheritance of Linear Independence)</a></li>
+<li><a href="#theorem-length-of-linear-independent-set-leq-length-of-spanning-set">Theorem (Length of Linear Independent Set <span class="arithmatex">\(\leq\)</span> Length of Spanning Set)</a><ul>
+<li><a href="#example-usage-of-theorem">Example (Usage of Theorem)</a></li>
+</ul>
+</li>
+<li><a href="#corollary-length-of-linear-indepedent-set-and-spanning-set">Corollary (Length of Linear Indepedent Set and Spanning Set)</a><ul>
+<li><a href="#proof-2">Proof</a></li>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+<li><a href="#geometric-definition-linear-independence">Geometric Definition (Linear Independence)</a></li>
+<li><a href="#how-to-determine-if-a-set-is-linearly-independent-non-matrix-algorithmic-way">How to determine if a set is Linearly Independent (Non-Matrix Algorithmic Way)</a></li>
+<li><a href="#linkedin-summary">Linkedin Summary</a></li>
+<li><a href="#linear-independence-references">Linear Independence References</a></li>
+</ul>
+<h3 id="linear-independence">Linear Independence</h3>
+<h4 id="algebraic-definition-linear-dependence">Algebraic Definition (Linear Dependence)</h4>
+<div class="admonition success">
+<p class="admonition-title">Definition</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. The set of vectors <span class="arithmatex">\(\v_1, \v_2, ..., \v_m \in V\)</span> is <strong>linearly dependent</strong> if and only if one of the vectors <span class="arithmatex">\(\v_i\)</span>, where <span class="arithmatex">\(i \in [1, m]\)</span>, is the zero vector or that at least <strong>one of</strong> <span class="arithmatex">\(\v_i\)</span> is a <strong>linear combination</strong> of the rest of the vectors (i.e. <span class="arithmatex">\(\v_i = \sum_{j \neq i}\alpha_j\v_j\)</span>).</p>
+<p>More formally<sup id="fnref:wikipedia_linear_independence"><a class="footnote-ref" href="#fn:wikipedia_linear_independence">1</a></sup>, a sequence of vectors <span class="arithmatex">\(\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_m\)</span> from a vector space <span class="arithmatex">\(V\)</span> is said to be <strong>linearly dependent</strong>, if there exist <strong>scalars</strong> <span class="arithmatex">\(a_1, a_2, \dots, a_m\)</span>, not all zero, such that <span class="arithmatex">\(a_1\mathbf{v}_1 + a_2\mathbf{v}_2 + \cdots + a_m\mathbf{v}_m = \mathbf{0}\)</span>, where <span class="arithmatex">\(\mathbf{0}\)</span> denotes the zero vector.</p>
+<p>This implies that at least one of the scalars is nonzero, say <span class="arithmatex">\(a_1\neq 0\)</span>, and the above equation can be written as</p>
+<div class="arithmatex">\[\mathbf{v}_1 = \frac{-a_2}{a_1}\mathbf{v}_2 + \cdots + \frac{-a_m}{a_1} \mathbf{v}_m, a_i \in \F, a_1 \neq 0\]</div>
+</div>
+<h5 id="example-linear-dependence-in-mathbb-r2">Example (Linear Dependence in <span class="arithmatex">\(\mathbb R^2\)</span>)</h5>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>Consider column vectors</p>
+<div class="arithmatex">\[\v_1 = \begin{bmatrix}1 \\ 2 \end{bmatrix},\quad \v_2 = \begin{bmatrix}3 \\ 6 \end{bmatrix},\quad \v_3 = \begin{bmatrix}-6 \\ -12 \end{bmatrix}\]</div>
+<p>in the ambient <span class="arithmatex">\(\R^2\)</span> space.</p>
+<p>They are <strong>linearly dependent</strong> because the vector </p>
+<div class="arithmatex">\[\v_2 = \begin{bmatrix}3 \\ 6 \end{bmatrix} = 3\v_1 + 0\v_3\]</div>
+<p>and note that we are using <span class="arithmatex">\(\v_2\)</span> as an example here, you can also say that <span class="arithmatex">\(\v_1\)</span> is a linear combination of the other 2 vectors; but so long there is <strong>at least one</strong> such vector in the set, then this set is <strong>linearly dependent</strong>. Note I put a coefficient <span class="arithmatex">\(0\)</span> in front of <span class="arithmatex">\(\v_3\)</span> to indicate that the scalars are <strong>not all zero</strong> but can have some zeros.</p>
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/linear_algebra/linear_dependence.svg" style="margin-left:auto; margin-right:auto"/>
+<p style="text-align: center">
+    <b>Fig; Linear Dependent Vectors; By Hongnan G.</b>
+</p></p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Courtesy of https://github.com/MacroAnalyst/Linear_Algebra_With_Python</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="c1">#######################Arrows#######################</span>
+<span class="n">arrows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">]]])</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arrows</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">arrows</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">V</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">width</span><span class="o">=</span><span class="mf">0.18</span><span class="p">,</span>
+        <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">head_width</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>  <span class="c1"># default: 3*width</span>
+        <span class="n">head_length</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">overhang</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=-</span><span class="n">i</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;$(1, 2)$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;$(3, 6)$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;$(-9, -12)$&quot;</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Linear Dependence Visualization ((1,2), (3, 6), (-9, -12))&quot;</span><span class="p">)</span>
+<span class="c1"># axis([xmin, xmax, ymin, ymax])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y-axis&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;linear_dependence.svg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_linear_independence_files/03_linear_algebra_vector_spaces_linear_independence_5_0.png" /></p>
+<h5 id="example-linear-independence-in-mathbb-r3">Example (Linear Independence in <span class="arithmatex">\(\mathbb R^3\)</span>)</h5>
+<p>Courtesy of <a href="https://github.com/MacroAnalyst/Linear_Algebra_With_Python">MacroAnalyst's Linear Algebra with Python</a>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>Next, we visualize linear independence in <span class="arithmatex">\(\mathbb{R}^3\)</span> with vectors <span class="arithmatex">\((1,-2,1)^T\)</span>, <span class="arithmatex">\((2,1,2)^T\)</span>, <span class="arithmatex">\((-1,2,3)^T\)</span>.</p>
+<blockquote>
+<p>Pan around the image (either by setting <code>ax.view_init</code> or using JupyterLab widget), we can see that the <font face="gotham" color="green">green</font> vector is not in the plane spanned by <font face="gotham" color="red">red</font> and <font face="gotham" color="blue">blue</font> vector, thus they are linearly independent.</p>
+</blockquote>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># %matplotlib notebook, use this only when you are in Jupyter Notebook, it doesn&#39;t work in Jupyterlab</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># %matplotlib notebook, use this only when you are in Jupyter Notebook, it doesn&#39;t work in Jupyterlab</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">S</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">S</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">T</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">S</span><span class="o">+</span><span class="n">T</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">S</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">T</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">.6</span><span class="p">)</span>
+
+<span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>
+               <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
+               <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]])</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+              <span class="n">arrow_length_ratio</span> <span class="o">=</span> <span class="mf">.08</span><span class="p">,</span> <span class="n">pivot</span> <span class="o">=</span> <span class="s1">&#39;tail&#39;</span><span class="p">,</span>
+              <span class="n">linestyles</span> <span class="o">=</span> <span class="s1">&#39;solid&#39;</span><span class="p">,</span><span class="n">linewidths</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">.6</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Linear Independence Visualization&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x-axis&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y-axis&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;z-axis&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mf">60.</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_linear_independence_files/03_linear_algebra_vector_spaces_linear_independence_7_0.png" /></p>
+<h4 id="algebraic-definition-linear-independence">Algebraic Definition (Linear Independence)</h4>
+<div class="admonition success">
+<p class="admonition-title">Definition</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. The set of vectors <span class="arithmatex">\(\v_1, \v_2, ..., \v_m \in V\)</span> is <strong>linearly independent</strong> if and only if the only solution to the equation <span class="arithmatex">\(a_1\mathbf{v}_1 + a_2\mathbf{v}_2 + \cdots + a_m\mathbf{v}_m = \mathbf{0}\)</span> is the trivial solution, the zero vector <span class="arithmatex">\(\0\)</span>.</p>
+</div>
+<h4 id="equivalent-algebraic-definition-linear-independence">Equivalent Algebraic Definition (Linear Independence)</h4>
+<div class="admonition success">
+<p class="admonition-title">Equivalent Linear Independence Definition</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. Let the set of vectors <span class="arithmatex">\(S = \v_1, \v_2, ..., \v_m \in V\)</span>; </p>
+<p>Then <span class="arithmatex">\(S\)</span> is <strong>linearly independent</strong> if and only if</p>
+<p>i) the only solution to the equation <span class="arithmatex">\(a_1\mathbf{v}_1 + a_2\mathbf{v}_2 + \cdots + a_m\mathbf{v}_m = \mathbf{0}\)</span> is the trivial solution, the zero vector <span class="arithmatex">\(\0\)</span>;</p>
+<p><strong>iif</strong></p>
+<p>ii) <span class="arithmatex">\(S\)</span> is called a linearly dependent set and <span class="arithmatex">\(\mathbf{\v_1,\v_2,...,\v_m}\)</span> are said to be linearly dependent iff <span class="arithmatex">\(a_1\mathbf{v}_1 + a_2\mathbf{v}_2 + \cdots + a_m\mathbf{v}_m = \mathbf{0}\)</span> has non - trivial solutions. That is there exists real numbers <span class="arithmatex">\(a_1,a_2,...,a_m\)</span> not all of them are zero, such that <span class="arithmatex">\(a_1\v_1+a_2\v_2+...+a_m\v_m=0\)</span>;</p>
+<p><strong>iif</strong></p>
+<p>iii) The set <span class="arithmatex">\(S\)</span> is a linearly independent set if every non empty finite subset of <span class="arithmatex">\(S\)</span> is linearly independent. The set <span class="arithmatex">\(S\)</span> is a linearly dependent set  if at least one non empty finite subset of <span class="arithmatex">\(S\)</span> is linearly dependent.</p>
+</div>
+<h4 id="theorem-linear-combination-implies-linear-dependence">Theorem (Linear Combination Implies Linear Dependence)</h4>
+<p>This is a very useful, and often better understood theorem!</p>
+<div class="admonition info">
+<p class="admonition-title">Theorem</p>
+<p>i) Let <span class="arithmatex">\(S = \{\mathbf{v_1,v_2,...,v_m}\}\)</span>  be a <strong>finite subset</strong> of a vector space <span class="arithmatex">\(V\)</span> over a field <span class="arithmatex">\(\F\)</span> where <span class="arithmatex">\(m \geq 2\)</span>, then <span class="arithmatex">\(S\)</span> is linearly dependent if and only if at least one vector <span class="arithmatex">\(\mathbf{v_i} \in S\)</span> can be written as a linear combination of other vectors in <span class="arithmatex">\(S\)</span>.</p>
+<p>This means that there are scalars <span class="arithmatex">\(a_1,a_2,...a_{i-1},a_{i+1},...,a_m \in \F\)</span> (scalars vanishing allowed) such that </p>
+<div class="arithmatex">\[\mathbf{v_i} = a_1\v_1+...+a_{i-1}\mathbf{v_{i-1}}+a_{i+1}\mathbf{v_{i+1}}+...+a_m\v_m\]</div>
+<p>ii) It follows that the contrapositive of this theorem: <span class="arithmatex">\(S\)</span> is linearly independent if and only if no vector in <span class="arithmatex">\(S\)</span> can be written as a linear combination of other vectors in <span class="arithmatex">\(S\)</span>.</p>
+</div>
+<hr />
+<h5 id="proof">Proof</h5>
+<div class="admonition info">
+<p class="admonition-title">Proof</p>
+<p>We will just prove part i).</p>
+<p><span class="arithmatex">\(\implies\)</span></p>
+<p><span class="arithmatex">\(S = \{\mathbf{v_{1}, \cdots , v_{m}}\}\)</span> is finite <span class="arithmatex">\(\implies\)</span> <span class="arithmatex">\(|S| = n &lt; \infty\)</span> , <span class="arithmatex">\(S \subseteq V\)</span>.</p>
+<p>If S is LD, then <span class="arithmatex">\(a_{1}\v_1 + a_{2}\v_2 + \cdots + a_{m}\mathbf{v_{m}} = 0\)</span> has non trivial solutions.
+This means not all <span class="arithmatex">\(a_{i} = 0\)</span>. Suppose <span class="arithmatex">\(a_{k} \ne 0\)</span>, thus one can write in this way:</p>
+<div class="arithmatex">\[
+\begin{eqnarray}
+a_{k}\mathbf{v_m} &amp; = &amp; -a_{1}\v_1 - a_{2}\v_2  \cdots -a_{m-1}\mathbf{v_{m-1}} - \cdots -a_{m}\mathbf{v_{m}} \nonumber \\
+\mathbf{v_m} &amp; = &amp; \frac{-a_{1}}{a_{k}}\v_1 - \cdots - \frac{a_{m-1}}{a_{k}}\mathbf{v_{m-1}} - \frac{a_{m}}{a_{k}}\mathbf{v_{m}} \nonumber \\
+&amp; = &amp; b_{1}\v_1 + \cdots + b_{m-1}\mathbf{v_{m-1}} + \cdots + b_{m}\mathbf{v_{m}} \nonumber
+\end{eqnarray}
+\]</div>
+<p>where <span class="arithmatex">\(b_{i} = \frac{-a_{1}}{a_{k}}\)</span>.</p>
+<p><span class="arithmatex">\(\Leftarrow\)</span> If <span class="arithmatex">\(\exists \mathbf{v_m} = a_{1}\v_1 + \cdots + a_{m-1}\mathbf{v_{m-1}} + \cdots a_{m}\mathbf{v_{m}}\)</span>, Then <span class="arithmatex">\(a_{1}\v_1 + \cdots + a_{m-1}\mathbf{v_{m-1}} + \cdots a_{m}\mathbf{v_{m}} = 0\)</span> will have non-trivial solution. Note <span class="arithmatex">\((-1)\mathbf{v_m} = a_{1}\v_1 - \cdots - a_{m-1}\mathbf{v_{m-1}} - \cdots - a_{m}\mathbf{v_{m}}\)</span>.</p>
+<p>Then set <span class="arithmatex">\(a_{k} = -1\)</span>, we have</p>
+<div class="arithmatex">\[a_{1}\v_1 + \cdots + (-1)\mathbf{v_{k}} + \cdots a_{m}\mathbf{v_{m}} = a_1\v_1+ \cdots -a_{1}\v_1 - a_2\v_2 \cdots - a_{m}\mathbf{v_{m}} + \cdots a_{m}\mathbf{v_{m}} = 0\]</div>
+<p>Hence, <span class="arithmatex">\((a_{1}, \cdots a_{m-1},-1, a_{k+1}, \cdots a_{m})\)</span> is non trivial solution. Thus <span class="arithmatex">\(\v_1, \cdots \mathbf{v_{m}}\)</span> is LD.</p>
+</div>
+<h4 id="theorem-the-zero-vector-and-linear-independence">Theorem (The zero vector and linear independence)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (The zero vector and linear independence)</p>
+<p>Note that <span class="arithmatex">\(\{\mathbf{0}\}\)</span> is a linearly dependent set, which means that if <span class="arithmatex">\(\mathbf{0} \in S\)</span>, then <span class="arithmatex">\(S\)</span> is a linearly dependent set. </p>
+</div>
+<h5 id="proof_1">Proof</h5>
+<div class="admonition info">
+<p class="admonition-title">Proof</p>
+<p>Write <span class="arithmatex">\(c \cdot \mathbf{0} = 0\)</span>. Then one can easily see this equation has solutions other than <span class="arithmatex">\(c = 0\)</span>. Since by killing power of zero, we can have the variable <span class="arithmatex">\(c\)</span> to be any number. Hence by definition, <span class="arithmatex">\(\{\mathbf{0}\}\)</span> is a linearly dependent set.</p>
+<p>If <span class="arithmatex">\(\mathbf{0} \in S\)</span>, then <span class="arithmatex">\(\mathbf{0}\)</span> can be expressed as a linear combination of any other vectors in the set by setting coefficients to be <span class="arithmatex">\(0\)</span>. Hence it is considered a redundant vector and therefore causing <span class="arithmatex">\(S\)</span> to be a linearly dependent set.</p>
+</div>
+<h4 id="theorem-union-of-linearly-independent-vectors">Theorem (Union of linearly independent vectors)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Union of linearly independent vectors)</p>
+<p>Let <span class="arithmatex">\(\mathbf{v_1, v_2,...,v_k}\)</span> be LI vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span>. If <span class="arithmatex">\(\mathbf{v_{k+1}}\)</span> is a vector in <span class="arithmatex">\(\mathbb{R}^n\)</span> and it is not a linearly combination of <span class="arithmatex">\(\mathbf{v_1,v_2,...,v_k}\)</span>, then <span class="arithmatex">\(\mathbf{v_1,...,v_k,v_{k+1}}\)</span> are linearly independent.</p>
+</div>
+<h4 id="intuition-linear-independence">Intuition (Linear (In)Dependence)</h4>
+<p>Consider a xy cartesian plane, we have the x axis, where we can visualize as walking left or right (east or west), and the y axis, walking forward and backwards (north or south). We claim that the set of vectors </p>
+<div class="arithmatex">\[
+S = \left\{\begin{bmatrix}
+\color{red}1 \\ \color{red}0
+\end{bmatrix}, \begin{bmatrix}
+\color{red}0 \\ \color{red}{1}
+\end{bmatrix} \right\}
+\]</div>
+<p>is linearly independent, as neither vector can be represented by the other in any way. But if we add one more vector </p>
+<div class="arithmatex">\[
+S_1 = \left\{\begin{bmatrix}
+\color{red}1 \\ \color{red}0
+\end{bmatrix}, \begin{bmatrix}
+\color{red}0 \\ \color{red}{1}
+\end{bmatrix}, 
+\begin{bmatrix}
+\color{red}1 \\ \color{red}{1}
+\end{bmatrix} \right\}\]</div>
+<p>then we say this set is linearly dependent because the vector <span class="arithmatex">\([1, 1]\)</span> can be linearly combined by the other two, and is thus redundant.</p>
+<hr />
+<p>But why the weird definition? Why does having a non-trivial solution to the equation means <strong>linear dependence</strong>? A good intuition from the post in mathstackexchange<sup id="fnref:intuition_linear_independence"><a class="footnote-ref" href="#fn:intuition_linear_independence">2</a></sup>:</p>
+<div class="admonition note">
+<p class="admonition-title">Intuition</p>
+<p>Your basic intuition is quite right --- a set of vectors are <em>linearly independent</em> if they don't affect each other (which, as it stands, is a somewhat ambiguous statement, hence the formal definition).</p>
+<p>Perhaps it would be helpful to start with just two vectors, say the standard vectors
+$$
+\begin{pmatrix} 1\ 0 \end{pmatrix} \hspace{20pt}\text{and}\hspace{20pt} \begin{pmatrix} 0\ 1 \end{pmatrix}
+$$
+which are linearly independent in <span class="arithmatex">\(\mathbb{R}^{2}\)</span> (two-dimensional coordinate space). Natural intuition would be to think that these two are linearly independent because there is no scalar that you can multiply one by to get the other. That is, for <span class="arithmatex">\(\alpha \in \mathbb{R}\)</span>, the equation
+$$
+\alpha\begin{pmatrix} 1\ 0 \end{pmatrix} = \begin{pmatrix} 0\ 1 \end{pmatrix}
+$$
+has no solutions. This is a good rule for any set of two vectors, and is in fact equivalent to the formal definition for if there <em>were</em> scalars <span class="arithmatex">\(\alpha_{1}, \alpha_{2} \in \mathbb{R}\)</span> such that
+$$
+\alpha_{1}\begin{pmatrix} 1\ 0 \end{pmatrix} + \alpha_{2}\begin{pmatrix} 0\ 1 \end{pmatrix} = 0
+$$
+(which is just the formal definition), then we could rearrange it to get
+$$
+-\frac{\alpha_{1}}{\alpha_{2}}\begin{pmatrix} 1\ 0 \end{pmatrix} = \begin{pmatrix} 0\ 1 \end{pmatrix}.
+$$
+This is clearly false!</p>
+<p>The formal definition for an arbitrary number of vectors is an extension of this idea. We pick <span class="arithmatex">\(0\)</span> to be the right hand side for convenience, since every vector space <em>must</em> have the zero vector (by definition), so that if some vectors affect each other in some way, they must be able to be combined some way to give you the zero vector. In fact, if a set of vectors are linearly independent, then the <em>only</em> vector that they agree on is the zero vector, and it can <em>only</em> be obtained by multiplying each vector by zero (and summing them up). Here I chime in a bit: consider <span class="arithmatex">\((0, 1), (1, 0), (1, 1)\)</span> in <span class="arithmatex">\(\R^2\)</span>, then we know <span class="arithmatex">\((0, 1) + (1, 0) = (1, 1)\)</span> where <span class="arithmatex">\((1, 1)\)</span> is a linear combination of the former two vectors; and since <span class="arithmatex">\((0, 1) + (1, 0) = (1, 1)\)</span>, then <span class="arithmatex">\(((0, 1) + (1, 0)) - (1, 1) = (0, 0)\)</span>, the zero vector, this must be true for every vector that can be expressed as a linear combination of the rest.</p>
+<p>If they can be combined in some way to give you the zero vector, then you can just rearrange them (like above) and find one of the vectors as a linear combination of the others, which would clearly imply that it is not independent of the others.</p>
+<p>To make this more clear, let <span class="arithmatex">\(\{v_{1}, v_{2}, \ldots, v_{n}\}\)</span> be a set of vectors, and suppose there exists non-zero scalars <span class="arithmatex">\(\alpha_{i} \in \mathbb{R}\)</span> such that
+$$
+\alpha_{1}v_{1} + \alpha_{2}v_{2} + \ldots + \alpha_{n}v_{n} = 0.
+$$
+Then you can just rearrange this to get, for example, the equation
+$$
+\frac{-\alpha_{1}}{\alpha_{n}}v_{1} + \frac{-\alpha_{2}}{\alpha_{n}}v_{2} + \ldots + \frac{-\alpha_{n-1}}{\alpha_{n}}v_{n-1} = v_{n}.
+$$
+Then <span class="arithmatex">\(v_{n}\)</span> <em>depends</em> on the other vectors, so the set is not linearly <em>independent</em>! Thus, the <em>only</em> way that you can get a set of linearly independent vectors to all give you the zero vector, is that <em>all</em> must be multiplied by zero, else you can rearrange the equation to show that one of the vectors depends on the others, which would be a contradiction. This is why the definition is the way it is.</p>
+<p>As a note for your third point, the definition wants <span class="arithmatex">\(\alpha_{i} = 0\)</span> <em>for all</em> <span class="arithmatex">\(i = 1, \ldots, n\)</span>. That is, every coefficient has to be zero, not just one of them.</p>
+</div>
+<hr />
+<div class="admonition note">
+<p class="admonition-title">Machine Learning</p>
+<p>Though a bit too early, but we often represent the variable/feature space of the dataset using the <strong>Design Matrix</strong> and each column (or row) represents the encoded information of the variables. If there are many <strong>redundant vectors</strong> inside the Design Matrix, this means that we are having additional information that we do not need (which may hurt performance). PCA can also help to reduce the dimensionality too.</p>
+</div>
+<h4 id="theorem-uniqueness-of-representation">Theorem (Uniqueness of Representation)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Uniqueness of Representation)</p>
+<p>From the above, we can deduce something less apparent from linear independence, that is, for the same <span class="arithmatex">\(\v \in V\)</span>, and the same set of vectors <span class="arithmatex">\(\v_1, \v_2, ..., \v_m \in V\)</span>, there is only <strong>one unique representation</strong> of <span class="arithmatex">\(\v \in V\)</span> using the set of vectors. For example, if we consider a simple example where <span class="arithmatex">\(\v = a_1 \v_1 + a_2 \v_2\)</span> and <span class="arithmatex">\(\v = b_1 \v_1 + b_2 \v_2\)</span>, where <span class="arithmatex">\(a_1, a_2, b_1, b_2\)</span> are assumed to be <strong>distinct scalars</strong> in <span class="arithmatex">\(\F\)</span>, then subtracting both results in </p>
+<div class="arithmatex">\[\0 = (a_1-b_1)\v_1 + (a_2-b_2)\v_2 \implies a_i-b_i = 0\]</div>
+<p>because we note that the equation can only have the trivial solution <span class="arithmatex">\(\0\)</span>. This results in a contradiction as we stated that <span class="arithmatex">\(a_i, b_i\)</span> are distinct. So conclusion, if a set of vectors are linearly independent in <span class="arithmatex">\(V\)</span>, then any vectors in <span class="arithmatex">\(\v \in V\)</span> can only have a unique representation in <span class="arithmatex">\(V\)</span>.</p>
+<hr />
+<p>Using the example in <strong>Intuition (Linear (In)Dependence)</strong>, we know that <span class="arithmatex">\(S\)</span> is a <strong>linearly independent</strong> set, and imagine we take a vector <span class="arithmatex">\((1, 1)\)</span>, can we actually find another way to represent <span class="arithmatex">\((1, 1)\)</span> using this exact set of vectors? In other words, using <span class="arithmatex">\((1, 0), (0, 1)\)</span> as the "base vectors", we must move 1 unit to the right and 1 unit up to reach <span class="arithmatex">\((1, 1)\)</span>, can we move in any other way to get to <span class="arithmatex">\((1, 1)\)</span>? The answer is no.</p>
+</div>
+<h4 id="theorem-the-span-of-linearly-dependent-vectors-is-identical-v2">Theorem (The Span of Linearly Dependent Vectors is Identical V2)</h4>
+<p>Branching from the Theorem (Linear Dependence Span equals each other) in the Chapter Span and taken from <strong>Sheldon Axler: Linear Algebra Done Right, pp. 35</strong>:</p>
+<div class="admonition info">
+<p class="admonition-title">Theorem (The Span of Linearly Dependent Vectors is Identical V2)</p>
+<p>Let <span class="arithmatex">\(\v_1,...,\v_m\)</span> be <strong>linearly dependent</strong> vectors in a vector space <span class="arithmatex">\(V\)</span>. Then there exists <span class="arithmatex">\(j \in \{1,2,\cdots,m\}\)</span> such that the following holds:</p>
+<ul>
+<li><span class="arithmatex">\(\v_j \in \textbf{span}(\v_1,\cdots,\v_{j-1})\)</span>;</li>
+<li>if the <span class="arithmatex">\(j\)</span>-th term is removed from the <strong>linearly dependent</strong> set, then $\textbf{span}(\v_1, \cdots, \v_{j-1}, \v_{j+1}, \cdots \v_m) = \textbf{span}(\v_1, \cdots, \v_{j-1},\v_j, \v_{j+1}, \cdots \v_m) $.</li>
+</ul>
+</div>
+<h4 id="theorem-inheritance-of-linear-independence">Theorem (Inheritance of Linear Independence)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Inheritance of Linear Independence)</p>
+<p>Let <span class="arithmatex">\(S_1 \subseteq S_2\)</span>, if the smaller set <span class="arithmatex">\(S_1\)</span> is linearly dependent then so is the larger set <span class="arithmatex">\(S_2\)</span>.  <span class="arithmatex">\(S_2\)</span> is linearly dependent follows from part iii) of <strong>Equivalent Definition of Linear independence</strong>. Now the contrapositive of this is if the larger set <span class="arithmatex">\(S_2\)</span> is linearly independent then so is <span class="arithmatex">\(S_1\)</span> being linearly independent. </p>
+</div>
+<h4 id="theorem-length-of-linear-independent-set-leq-length-of-spanning-set">Theorem (Length of Linear Independent Set <span class="arithmatex">\(\leq\)</span> Length of Spanning Set)</h4>
+<div class="admonition tip">
+<p class="admonition-title">Theorem</p>
+<p>Taken from <strong>Sheldon Axler: Linear Algebra Done Right, pp. 35:</strong> In a finite-dimensional vector space, the length of every linearly independent set of vectors is less than or equal to the length of every spanning set of vectors.</p>
+</div>
+<h5 id="example-usage-of-theorem">Example (Usage of Theorem)</h5>
+<div class="admonition example">
+<p class="admonition-title"><strong>Example 1: Usage of Theorem to show a set of vectors cannot be linear independent</strong></p>
+<p>Show that the set of vectors <span class="arithmatex">\(\{(1,2,3), (4,5,8), (9,6,7), (-3,2,8)\}\)</span> is not linearly independent in <span class="arithmatex">\(\R^3\)</span>.</p>
+<p>Solution: We know that the set of vectors (basis) <span class="arithmatex">\(\{(1,0,0), (0,1,0), (0,0,1)\}\)</span> spans <span class="arithmatex">\(\R^3\)</span>. And hence, if the set of vectors in question is linearly indepedent, then its cardinality cannot exceed 3.</p>
+</div>
+<hr />
+<div class="admonition example">
+<p class="admonition-title"><strong>Example 2: Usage of Theorem to show a set of vectors cannot span the vector space</strong></p>
+<p>Show that the set of vectors <span class="arithmatex">\(\{(1,2,3,5), (4, 5, 8, 3), (9, 6, 7, 1)\}\)</span> does not span <span class="arithmatex">\(\R^4\)</span>.</p>
+<p>Solution: We know that the set of vectors (basis) <span class="arithmatex">\(\{(1,0,0,0), (0,1,0,0), (0,0,1,0), (0,0,0,1)\}\)</span> is linearly independent in <span class="arithmatex">\(\R^4\)</span>. From theorem, we know the length (cardinality) of the set of linearly independent vectors is 4, and in the question, the set of vectors has only cardinality 3, and hence, it cannot span <span class="arithmatex">\(\R^4\)</span>.</p>
+</div>
+<h4 id="corollary-length-of-linear-indepedent-set-and-spanning-set">Corollary (Length of Linear Indepedent Set and Spanning Set)</h4>
+<div class="admonition tip">
+<p class="admonition-title">Corollary</p>
+<p>As a <strong>corollary</strong> of the Theorem (Inheritance of Linear Independence) above:</p>
+<p>Let <span class="arithmatex">\(S = \{\mathbf{u_1,u_2, \cdots, u_k}\} \subseteq \mathbb{R}^{n}\)</span>. If <span class="arithmatex">\(k &gt;n\)</span>, then <span class="arithmatex">\(S\)</span> is linearly dependent.</p>
+</div>
+<hr />
+<h5 id="proof_2">Proof</h5>
+<div class="admonition tip">
+<p class="admonition-title">Proof</p>
+<p>Let <span class="arithmatex">\(\mathbf{u_i} = (a_{{i1}},a_{{i2}},...,a_{{in}})\)</span> for <span class="arithmatex">\(i=1,2,...,k\)</span>. Then we write </p>
+<div class="arithmatex">\[c_1\u_1+c_2\u_2+...+c_k\u_k=0\]</div>
+<p>and check if it has the trivial solution only or has non trivial solutions.</p>
+<p><span class="arithmatex">\(\begin{cases}
+a_{11}c_1+a_{21}c_2+...+a_{k1}c_k = 0\\
+a_{12}c_1+a_{22}c_2+...+a_{k2}c_k = 0\\
+~~~~~~~~~~~\vdots\\
+a_{1n}c_1+a_{2n}c_2+...+a_{kn}c_k = 0
+\end{cases}\)</span></p>
+<p>This system has <span class="arithmatex">\(k\)</span> unknowns and <span class="arithmatex">\(n\)</span> equations. By our previous results, since <span class="arithmatex">\(k &gt; n\)</span>, the system must have non trivial solution. </p>
+<p>Hence <span class="arithmatex">\(S\)</span> is linearly dependent.</p>
+</div>
+<h5 id="example">Example</h5>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<ul>
+<li>In <span class="arithmatex">\(\mathbb{R}^{2}\)</span>, a set of three or more vectors must be linearly dependent;</li>
+<li>In <span class="arithmatex">\(\mathbb{R}^{3}\)</span>, a set of four or more vectors must be linearly dependent.</li>
+</ul>
+<hr />
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/linear_algebra/linear_independence_length_LI_set_smaller_than_spanning.svg" style="margin-left:auto; margin-right:auto"/>
+<p style="text-align: center">
+    <b>Fig; Note that the first figure shows a set of dependent vectors; the second figure shows a set of independent vectors; and the third figure shows a set of dependent vectors; By Hongnan G.</b>
+</p></p>
+<p>The above image illustrates that in <span class="arithmatex">\(\R^2\)</span> space, if a set of vectors has cardinality more than the dimension of its ambient space (read: 2), then it must be <strong>linearly dependent</strong>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Intuition</p>
+<p>In the example above, our ambient space is <span class="arithmatex">\(\R^2\)</span>, the author Mike provided a good intuition here on why a set of vectors whose cardinality is more than its ambient space cannot be linearly independent. Assume a contradiction, that they are linearly independent, then these 3 vectors span a 3d-subspace, which cannot happen if all 3 vectors are in 2d-subspace. To visualize it, imagine drawing 3 vectors on a 2d-plane (a piece of paper), then can you ever construct a cube (3d-space) from these 3 vectors? No.</p>
+</div>
+<h4 id="geometric-definition-linear-independence">Geometric Definition (Linear Independence)</h4>
+<p>We go through the Geometric Definition after the previous theorem.</p>
+<p>From <strong>Mike X Cohen: Linear Algebra: Theory, Intuition, Code, 2021. (pp. 90)</strong>, a set of vectors <strong>independent</strong> if the subspace dimensions <strong>spanned</strong> by the set of vectors is equal to the number of vectors in the set. Recall that up till now, the <strong>subspace</strong> dimension simply means the "number of axes" in the subspace. This can be understood with the following example:</p>
+<p>For example, a set with one vector spans a line (assuming it is not the zeros vector) and is always an independent set (1 vector, 1 dimension); a linearly independent set of two vectors spans a plane (2 vectors, 2 dimensions); an independent set with three vectors spans a 3D space (3 vectors, 3 dimensions).</p>
+<p>For more info, read <strong>Mike X Cohen: Linear Algebra: Theory, Intuition, Code, 2021. (pp. 90-92)</strong>.</p>
+<h4 id="how-to-determine-if-a-set-is-linearly-independent-non-matrix-algorithmic-way">How to determine if a set is Linearly Independent (Non-Matrix Algorithmic Way)</h4>
+<p>pp. 95-96 Mike's book.</p>
+<h4 id="linkedin-summary">Linkedin Summary</h4>
+<p>Today marks day 9 of round 1, continuing my journey in #linearalgebra, following the book "Linear Algebra, Theory, Intuition and Code", I went through the definition and some examples of what constitutes a <strong>linear in(dependent) set</strong>.</p>
+<p>In short, for a vector space V over a field F^n, a subset S = {v_1, v_2, ..., v_m} of V is a linearly independent set if a_1v_1 + a_2v_2 + ... + a_m_vm = 0 has <strong>only</strong> the trivial solution. This definition might seem a bit weird at first sight, we can break down and see what it really means.</p>
+<p>We can understand this definition better from its contraposition: if subset S of V is linearly dependent, then it must have at least <strong>one</strong> non-trivial solution; consider this solution to be (a_1, a_2, ..., a_m) = (1, 2, 0, ..., 0), this implies that v_1 = -2v_2. Though not a proof, we now know that if at least one vector can be represented by a <strong>linear combination</strong> of the other vectors in the set, then this set is <strong>linearly dependent</strong>. So another way to word the <strong>linear independence</strong> definition is that no vector in S can be represented as a <strong>linear combination</strong> of the other vectors in S.</p>
+<p>An immediate consequence of this definition is that an <strong>linearly independent set</strong> must have an <strong>unique representation</strong> in the vector space spanned by this set. Suppose not (a contradiction), then there exists a_i, b_i's such that a_1v_1 + ... a_mv_m = 0 and b_1v_1 + ... + b_mv_m = 0, where a_i and b_i's are not all the same. This implies (a_1-b_1)v_1 + ... + (a_m-b_m)v_m = 0 has a non-trivial solution since there exists at least one pair of a_i != b_i.</p>
+<p>Geometrically, one can see the below image, 3 vectors in a 2d-plane is necessarily linearly dependent, you can also verify that to get (10, 10) can be made up by (0, 10) + (10, 0), or 1*(10, 10), which has two representations.</p>
+<h4 id="linear-independence-references">Linear Independence References</h4>
+<ul>
+<li>https://www.machinelearningmindset.com/linear-independence-of-vectors/</li>
+<li>https://math.stackexchange.com/questions/2779918/intuition-for-formal-definition-of-linear-independence</li>
+<li>https://medium.com/swlh/how-to-understand-linear-independence-linear-algebra-8bab1d918509</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:wikipedia_linear_independence">
+<p><a href="https://en.wikipedia.org/wiki/Linear_independence">Linear Independence Wikipedia</a>&#160;<a class="footnote-backref" href="#fnref:wikipedia_linear_independence" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:intuition_linear_independence">
+<p>https://math.stackexchange.com/questions/2779918/intuition-for-formal-definition-of-linear-independence&#160;<a class="footnote-backref" href="#fnref:intuition_linear_independence" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../03_linear_algebra_vector_spaces_vector_span/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Vector Span" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Vector Span
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../03_linear_algebra_vector_spaces_basis_dimension/" class="md-footer__link md-footer__link--next" aria-label="Next: Basis and Dimension" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Basis and Dimension
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate"], "search": "../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

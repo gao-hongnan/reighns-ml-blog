@@ -1,0 +1,2652 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/">
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Vector Span - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#span" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Vector Span
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Vector Span
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Vector Span
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#span" class="md-nav__link">
+    Span
+  </a>
+  
+    <nav class="md-nav" aria-label="Span">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-span" class="md-nav__link">
+    Algebraic Definition (Span)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometrical-definition-span" class="md-nav__link">
+    Geometrical Definition (Span)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spanned-by" class="md-nav__link">
+    Spanned By
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#span-membership-examples" class="md-nav__link">
+    Span Membership (Examples)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-span-is-a-subspace" class="md-nav__link">
+    Theorem (Span is a subspace)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-span-is-a-subspace-and-is-the-smallest-subspace-of-v" class="md-nav__link">
+    Theorem (Span is a subspace and is the smallest subspace of V)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Span is a subspace and is the smallest subspace of V)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-different-sets-can-span-the-same-vector-space" class="md-nav__link">
+    Example (Different Sets can span the same Vector Space)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proof" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-linear-dependence-span-equals-each-other" class="md-nav__link">
+    Theorem (Linear Dependence Span equals each other)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geometrical-interpretation-of-span" class="md-nav__link">
+    (Geometrical Interpretation of Span)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-two-linearly-independent-vectors-in-mathbb-r3-spans-a-plane" class="md-nav__link">
+    Python (Two Linearly Independent Vectors in \(\mathbb R^3\) Spans a Plane)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-two-linearly-dependent-vectors-in-mathbb-r3-spans-a-line" class="md-nav__link">
+    Python (Two Linearly Dependent Vectors in \(\mathbb R^3\) Spans a Line)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-three-linearly-inependent-vectors-in-mathbb-r3-spans-the-whole-ambient-space" class="md-nav__link">
+    Python (Three Linearly Inependent Vectors in \(\mathbb R^3\) Spans the whole Ambient Space)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#span" class="md-nav__link">
+    Span
+  </a>
+  
+    <nav class="md-nav" aria-label="Span">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algebraic-definition-span" class="md-nav__link">
+    Algebraic Definition (Span)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometrical-definition-span" class="md-nav__link">
+    Geometrical Definition (Span)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spanned-by" class="md-nav__link">
+    Spanned By
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#span-membership-examples" class="md-nav__link">
+    Span Membership (Examples)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-span-is-a-subspace" class="md-nav__link">
+    Theorem (Span is a subspace)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-span-is-a-subspace-and-is-the-smallest-subspace-of-v" class="md-nav__link">
+    Theorem (Span is a subspace and is the smallest subspace of V)
+  </a>
+  
+    <nav class="md-nav" aria-label="Theorem (Span is a subspace and is the smallest subspace of V)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-different-sets-can-span-the-same-vector-space" class="md-nav__link">
+    Example (Different Sets can span the same Vector Space)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proof" class="md-nav__link">
+    Proof
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#theorem-linear-dependence-span-equals-each-other" class="md-nav__link">
+    Theorem (Linear Dependence Span equals each other)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geometrical-interpretation-of-span" class="md-nav__link">
+    (Geometrical Interpretation of Span)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-two-linearly-independent-vectors-in-mathbb-r3-spans-a-plane" class="md-nav__link">
+    Python (Two Linearly Independent Vectors in \(\mathbb R^3\) Spans a Plane)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-two-linearly-dependent-vectors-in-mathbb-r3-spans-a-line" class="md-nav__link">
+    Python (Two Linearly Dependent Vectors in \(\mathbb R^3\) Spans a Line)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-three-linearly-inependent-vectors-in-mathbb-r3-spans-the-whole-ambient-space" class="md-nav__link">
+    Python (Three Linearly Inependent Vectors in \(\mathbb R^3\) Spans the whole Ambient Space)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Vector Span</h1>
+
+<div class="arithmatex">\[\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\v}{\mathbf{v}}
+\newcommand{\a}{\mathbf{a}}
+\newcommand{\b}{\mathbf{b}}
+\newcommand{\c}{\mathbf{c}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\u}{\mathbf{u}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\C}{\mathbf{C}}\]</div>
+<ul>
+<li><a href="#span">Span</a></li>
+<li><a href="#algebraic-definition-span">Algebraic Definition (Span)</a></li>
+<li><a href="#geometrical-definition-span">Geometrical Definition (Span)</a></li>
+<li><a href="#spanned-by">Spanned By</a></li>
+<li><a href="#span-membership-examples">Span Membership (Examples)</a></li>
+<li><a href="#theorem-span-is-a-subspace">Theorem (Span is a subspace)</a></li>
+<li><a href="#theorem-span-is-a-subspace-and-is-the-smallest-subspace-of-v">Theorem (Span is a subspace and is the smallest subspace of V)</a><ul>
+<li><a href="#example-different-sets-can-span-the-same-vector-space">Example (Different Sets can span the same Vector Space)</a></li>
+<li><a href="#proof">Proof</a></li>
+</ul>
+</li>
+<li><a href="#theorem-linear-dependence-span-equals-each-other">Theorem (Linear Dependence Span equals each other)</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#geometrical-interpretation-of-span">(Geometrical Interpretation of Span)</a></li>
+<li><a href="#python-two-linearly-independent-vectors-in-mathbb-r3-spans-a-plane">Python (Two Linearly Independent Vectors in <span class="arithmatex">\(\mathbb R^3\)</span> Spans a Plane)</a></li>
+<li><a href="#python-two-linearly-dependent-vectors-in-mathbb-r3-spans-a-line">Python (Two Linearly Dependent Vectors in <span class="arithmatex">\(\mathbb R^3\)</span> Spans a Line)</a></li>
+<li><a href="#python-three-linearly-inependent-vectors-in-mathbb-r3-spans-the-whole-ambient-space">Python (Three Linearly Inependent Vectors in <span class="arithmatex">\(\mathbb R^3\)</span> Spans the whole Ambient Space)</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="span">Span</h3>
+<h4 id="algebraic-definition-span">Algebraic Definition (Span)</h4>
+<div class="admonition success">
+<p class="admonition-title">Algebraic Definition (Span)</p>
+<p>Let <span class="arithmatex">\(S \subseteq V\)</span> be a non-empty subset of the vector space <span class="arithmatex">\(V\)</span>. To be more explicit, define <span class="arithmatex">\(S = \{\v_1, \v_2, ..., \v_m\}\)</span> to be a <strong>subset</strong> in <span class="arithmatex">\(V\)</span>, then the <strong>linear combination</strong> of all the vectors <span class="arithmatex">\(\v_1, \v_2, ..., \v_m\)</span> is called the <strong>span</strong> of <span class="arithmatex">\(\v_1, \v_2, ..., \v_m\)</span>, which we denote as follows:</p>
+<div class="arithmatex">\[\text{span}(S) = \text{span}(\v_1, \v_2,...,\v_m) := \{\lambda_1\v_1 + \lambda_2\v_2 + ... + \lambda_m\v_m : \lambda_i \in \F, \v_i \in S\}\]</div>
+</div>
+<h4 id="geometrical-definition-span">Geometrical Definition (Span)</h4>
+<blockquote>
+<p>Span is a really similar concept as subspace, and they
+are easy to confuse. A subspace is the region of ambient space
+that can be reached by any linear combination of a set of vectors.
+And then those vectors span that subspace. You can think about
+the difference using grammar: a subspace is a noun and span is a
+verb. A set of vectors spans, and the result of their spanning is a
+subspace. 
+For example, the subspace defined as all of <span class="arithmatex">\(\R^2\)</span> can be created by the span of the vectors <span class="arithmatex">\([0, 1]\)</span> and <span class="arithmatex">\([1, 0]\)</span>. 
+Another good example is the vector <span class="arithmatex">\([0,1]\)</span> spans a 1D subspace that is embedded inside <span class="arithmatex">\(\R^2\)</span> (not <span class="arithmatex">\(\R^1\)</span> since the vector has 2 elements). Then the vector <span class="arithmatex">\([1, 2]\)</span> also spans 1D subspace but it is a difference 1D subspace from that spanned by <span class="arithmatex">\([0,1]\)</span>. <strong>- Mike X Cohen: Linear Algebra: Theory, Intuition, Code, 2021. (pp. 86)</strong></p>
+</blockquote>
+<h4 id="spanned-by">Spanned By</h4>
+<p>If <span class="arithmatex">\(W\)</span> is a vector subspace of <span class="arithmatex">\(V\)</span> and <span class="arithmatex">\(W = \text{Span}(S)\)</span>, we say that <span class="arithmatex">\(S\)</span> is a <strong>spanning set (or generating set)</strong> of <span class="arithmatex">\(W\)</span> and <span class="arithmatex">\(W\)</span> is spanned or generated by <span class="arithmatex">\(S\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Important</p>
+<p>The intuition is that if a <strong>vector space</strong> <span class="arithmatex">\(W\)</span> is spanned by a set of vectors <span class="arithmatex">\(S\)</span>, then this means for every vector <span class="arithmatex">\(\w_i \in W\)</span>, there exists scalars <span class="arithmatex">\(\lambda_i \in \F\)</span>, such that <span class="arithmatex">\(\w_i = \lambda_1 \w_1 + \lambda_2 \w_2 + \cdots + \lambda_m \w_m\)</span>. In laymen terms, this set of vectors <span class="arithmatex">\(S\)</span> can build up <strong>every single element in</strong> <span class="arithmatex">\(W\)</span>.</p>
+</div>
+<h4 id="span-membership-examples">Span Membership (Examples)</h4>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>The author mentioned a commonly used terms in linear algebra, which is to check if one vector <span class="arithmatex">\(\v\)</span> is "in the span" of a set of vectors. This is illustrated clearly with the example provided below:</p>
+<div class="arithmatex">\[
+\v= \begin{bmatrix}
+\color{red}6 \\ \color{red}3 \\ \color{red}{0}
+\end{bmatrix} ,\quad
+\w= \begin{bmatrix}
+\color{red}2 \\ \color{red}3 \\ \color{red}{-5}
+\end{bmatrix}
+\]</div>
+<p>and the set</p>
+<div class="arithmatex">\[
+S = \left\{\begin{bmatrix}
+\color{red}2 \\ \color{red}4 \\ \color{red}{0}
+\end{bmatrix}, \begin{bmatrix}
+\color{red}4 \\ \color{red}{-1}\\ \color{red}{0}
+\end{bmatrix} \right\}\]</div>
+<p>Then the question is whether <span class="arithmatex">\(\v\)</span> and <span class="arithmatex">\(\w\)</span> are in the <strong>span</strong> of <span class="arithmatex">\(S\)</span>. In simple words, can the linear combination of the vectors <span class="arithmatex">\(\begin{bmatrix}
+\color{red}2 \\ \color{red}4 \\ \color{red}{0}
+\end{bmatrix}\)</span> and <span class="arithmatex">\(\begin{bmatrix}
+\color{red}4 \\ \color{red}{-1}\\ \color{red}{0}
+\end{bmatrix}\)</span> form <span class="arithmatex">\(\v\)</span> or <span class="arithmatex">\(\w\)</span>? Well the answer for <span class="arithmatex">\(\v\)</span> is easy (purposely made easy), we just add them up and get <span class="arithmatex">\(\v\)</span>, and in this case, we say <span class="arithmatex">\(\v\)</span> is in the <span class="arithmatex">\(\text{span}(S)\)</span>. But for <span class="arithmatex">\(\w\)</span>, we can quickly conclude that <span class="arithmatex">\(\w \not \in \text{span}(S)\)</span> because the third component of the span of <span class="arithmatex">\(S\)</span> is still <span class="arithmatex">\(0\)</span>, and thus no linear combination can ever form to <span class="arithmatex">\(\w\)</span>'s third component, <span class="arithmatex">\(-5\)</span>.</p>
+</div>
+<h4 id="theorem-span-is-a-subspace">Theorem (Span is a subspace)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Span is a subspace)</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. Let <span class="arithmatex">\(S \subseteq V\)</span> be a subset of <span class="arithmatex">\(V\)</span>. Then Span<span class="arithmatex">\((S)\)</span> of <span class="arithmatex">\(V\)</span> is a vector subspace of <span class="arithmatex">\(V\)</span>. </p>
+<p>An immediate consequence of this definition is that span(S) must be a subspace of V. Why? Recall that to be a subspace, closure under vector addition and vector-scalar multiplication must be satisfied; this follows because the definition of span(S) is the linear combination of all vectors in S, and hence any vector addition or vector-scalar multiplication is a member of the linear combination.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We will prove this together in the next theorem.</p>
+</div>
+<h4 id="theorem-span-is-a-subspace-and-is-the-smallest-subspace-of-v">Theorem (Span is a subspace and is the smallest subspace of V)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Span is a subspace and is the smallest subspace of V)</p>
+<p>Let <span class="arithmatex">\(V\)</span> be a vector space over a field <span class="arithmatex">\(\F\)</span>. Let <span class="arithmatex">\(S \subseteq V\)</span> be a subset of <span class="arithmatex">\(V\)</span>. Then <span class="arithmatex">\(\text{span}(S)\)</span> of <span class="arithmatex">\(V\)</span> is a vector subspace of <span class="arithmatex">\(V\)</span>. In particular, <span class="arithmatex">\(\text{span}(S)\)</span> is the smallest vector subspace of <span class="arithmatex">\(V\)</span> containing the set <span class="arithmatex">\(S\)</span> (or containing all the vectors in <span class="arithmatex">\(S\)</span>). </p>
+</div>
+<hr />
+<h5 id="example-different-sets-can-span-the-same-vector-space">Example (Different Sets can span the same Vector Space)</h5>
+<div class="admonition example">
+<p class="admonition-title">Different Sets can span the same Vector Space</p>
+<p>Before we go through the proof, it is important to understand some possible confusions. One might be confused over the notion of <strong>smallest</strong>. We can motivate it with an example:</p>
+<div class="arithmatex">\[
+S = \left\{\begin{bmatrix}
+\color{red}1 \\ \color{red}0
+\end{bmatrix}, \begin{bmatrix}
+\color{red}0 \\ \color{red}{1}
+\end{bmatrix} \right\}\]</div>
+<p>spans the whole <span class="arithmatex">\(\R^2\)</span> space, although we have yet to learn any algorithmic way of checking whether a set spans a particular vector space, this is an obvious enough example (hopefully one can see that the linear combination of these two vectors can reach the whole ambient space <span class="arithmatex">\(\R^2\)</span>). This is because the linear combination of vectors in <span class="arithmatex">\(S\)</span> can form any <strong>vectors in the 2 dimensional space</strong>. Then consider</p>
+<div class="arithmatex">\[
+S_1 = \left\{\begin{bmatrix}
+\color{red}1 \\ \color{red}0
+\end{bmatrix}, \begin{bmatrix}
+\color{red}0 \\ \color{red}{1}
+\end{bmatrix}, 
+\begin{bmatrix}
+\color{red}1 \\ \color{red}{1}
+\end{bmatrix} \right\}\]</div>
+<p>which also spans the whole <span class="arithmatex">\(\R^2\)</span> space as well. Both <span class="arithmatex">\(S\)</span> and <span class="arithmatex">\(S_1\)</span> are subsets of <span class="arithmatex">\(\R^2\)</span> and are <strong>subspaces</strong> themselves (by inspection). However, the cardinality or the <code>len</code> of <span class="arithmatex">\(S\)</span> is 2 and <span class="arithmatex">\(S_1\)</span> is 3. Since both sets span the <span class="arithmatex">\(\R^2\)</span> space, why do we say that the span is the smallest subspace of <span class="arithmatex">\(V\)</span> when <span class="arithmatex">\(S_1\)</span> has more "elements"? The confusion is that the <strong>theorem</strong> states that the <strong>span of a set of vectors in <span class="arithmatex">\(V\)</span> is the smallest subspace of <span class="arithmatex">\(V\)</span> which contains this set of vectors</strong>, not <strong>span of ANY set of vectors in <span class="arithmatex">\(V\)</span> is the smallest subspace of <span class="arithmatex">\(V\)</span></strong>. Therefore, <span class="arithmatex">\(S\)</span> is the smallest subspace of <span class="arithmatex">\(V\)</span> which contains the <strong>two vectors</strong> <span class="arithmatex">\(\left\{\begin{bmatrix}
+\color{red}1 \\ \color{red}0
+\end{bmatrix}, \begin{bmatrix}
+\color{red}0 \\ \color{red}{1} 
+\end{bmatrix} \right\}\)</span> 
+and <span class="arithmatex">\(S_1\)</span> is the smallest subspace of <span class="arithmatex">\(V\)</span> which contains the <strong>three vectors</strong> <span class="arithmatex">\(\left\{\begin{bmatrix}
+\color{red}1 \\ \color{red}0
+\end{bmatrix}, \begin{bmatrix}
+\color{red}0 \\ \color{red}{1}
+\end{bmatrix}, 
+\begin{bmatrix}
+\color{red}1 \\ \color{red}{1}
+\end{bmatrix} \right\}\)</span>.</p>
+<hr />
+<p>An extract from <strong><a href="https://math.stackexchange.com/questions/2396515/span-of-a-subset-of-a-vector-space-is-the-smallest-subspace-containing-that-set">StackExchange</a></strong>:</p>
+<blockquote>
+<p>Written in words that theorem states, that any subspace <span class="arithmatex">\(W\)</span>, that exists and contains <span class="arithmatex">\(v_1,…,v_n\)</span>, also contains <span class="arithmatex">\(\text{span}(v_1,…,v_k)\)</span>. 
+Hence <span class="arithmatex">\(W\)</span> is larger (or equal) to <span class="arithmatex">\(\text{span}(v_1,…,v_k)\)</span>, since it contains <span class="arithmatex">\(\text{span}(v_1,…,v_k)\)</span> and could contain some more elements.<br />
+And since <em>any</em> other subspace <span class="arithmatex">\(W\)</span> is larger (or equal) it follows that <span class="arithmatex">\(\text{span}(v_1,…,v_k)\)</span> the smallest subspace. 
+That is like saying: Any number in <span class="arithmatex">\(ℕ∪\{0\}\)</span> is larger (or equal) to <span class="arithmatex">\(0\)</span>, hence <span class="arithmatex">\(0\)</span> is the smallest number in <span class="arithmatex">\(ℕ∪\{0\}\)</span>.
+Or even closer to the original problem: Any subset <span class="arithmatex">\(M⊂(ℕ∪\{0\})\)</span> with <span class="arithmatex">\(0∈M\)</span> is larger or equal to <span class="arithmatex">\(\{0\}\)</span>, hence <span class="arithmatex">\(\{0\}\)</span> has to be the smallest subset of <span class="arithmatex">\(ℕ∪\{0\}\)</span> that contains <span class="arithmatex">\(0\)</span>. </p>
+</blockquote>
+</div>
+<hr />
+<h5 id="proof">Proof</h5>
+<div class="admonition info">
+<p class="admonition-title">Proof</p>
+<blockquote>
+<p>We first show that <span class="arithmatex">\(\text{span}(S)\)</span> is a vector subspace of <span class="arithmatex">\(V\)</span>. And then we show that if <span class="arithmatex">\(\text{span}(S)\)</span> is a vector subspace of <span class="arithmatex">\(V\)</span> containing <span class="arithmatex">\(S\)</span>, then if <span class="arithmatex">\(T\)</span> is another vector subspace of <span class="arithmatex">\(V\)</span> containing <span class="arithmatex">\(S\)</span>, we must have <span class="arithmatex">\(\text{span}(S) \subseteq T\)</span>.</p>
+</blockquote>
+<p><strong><span class="arithmatex">\(\text{span}(S)\)</span> is a subspace</strong>: It suffices to check for the conditions S2 and S3 of <strong>subspaces</strong>. To show S2, we need to show that for any <span class="arithmatex">\(\v, \w \in \text{span}(S)\)</span>, <span class="arithmatex">\(\v + \w \in \text{span}(S)\)</span>. We also note that for both <span class="arithmatex">\(\v\)</span> and <span class="arithmatex">\(\w\)</span>, they can be expressed as linear combination of the set of vectors in <span class="arithmatex">\(S\)</span>, (i.e. <span class="arithmatex">\(\v = a_1 \v_1 + a_2 \v2 + ... + a_m \v_m\)</span>, <span class="arithmatex">\(\w = \b_1 \v_1 + \b_2 \v_2 + ... + \b_m \v_m\)</span> for some <span class="arithmatex">\(a_i, b_i \in \F\)</span>) Then adding them up we yield:</p>
+<div class="arithmatex">\[\begin{align}
+    \v + \w &amp;=  (a_1 \v_1 + a_2 \v2 + ... + a_m \v_m) + (\b_1 \v_1 + \b_2 \v_2 + ... + \b_m \v_m) \label{eq1}\tag{1} \\
+            &amp;= (a_1 + b_1)\v_1 + (a_2 + b_2)\v_2 + ... + (a_m + b_m)\v_m \label{eq2}\tag{2}
+\end{align}\]</div>
+<p>Equation (\ref{eq2}) shows us that it is still a linear combination of the set of vectors in <span class="arithmatex">\(S\)</span>, and hence also in <span class="arithmatex">\(\text{span}(S)\)</span>, which is closed under addition.</p>
+<p>For S3, the same logic applies (can you show it?).</p>
+<p><strong><span class="arithmatex">\(\text{span}(S)\)</span> is the smallest subspace that contains <span class="arithmatex">\(S\)</span>:</strong> Let <span class="arithmatex">\(T\)</span> be any <strong>subspace</strong> of <span class="arithmatex">\(V\)</span> that <strong>contains</strong> the set <span class="arithmatex">\(S\)</span>. In order to show <span class="arithmatex">\(\text{span}(S) \subseteq T\)</span>, we will use a proving method by showing that for all elements <span class="arithmatex">\(\v \in \text{span}(S)\)</span>, <span class="arithmatex">\(\v\)</span> is in <span class="arithmatex">\(T\)</span> as well. We start off by picking <strong>any</strong> element <span class="arithmatex">\(\v \in \text{span}(S)\)</span>, (note that <span class="arithmatex">\(\v\)</span> may not be in <span class="arithmatex">\(S\)</span>, but it definitely must be in <span class="arithmatex">\(\text{span}(S)\)</span>! Do not get confused here!), for this <span class="arithmatex">\(\v\)</span>, it can be expressed as the linear combination of the vectors of <span class="arithmatex">\(S\)</span>, <span class="arithmatex">\(\v =\lambda_1\v_1 + \lambda_2\v_2 + ... + \lambda_m\v_m\)</span>, then <span class="arithmatex">\(\v \in T\)</span> as well since <span class="arithmatex">\(T\)</span> contains the set <span class="arithmatex">\(S\)</span>, and also is a <strong>subspace</strong>, thus closed under scalar multiplication and vector addition.</p>
+</div>
+<h4 id="theorem-linear-dependence-span-equals-each-other">Theorem (Linear Dependence Span equals each other)</h4>
+<div class="admonition info">
+<p class="admonition-title">Theorem (Linear Dependence Span equals each other)</p>
+<p>Let <span class="arithmatex">\(\u_1,...,\u_k\)</span> be vectors in <span class="arithmatex">\(\mathbb{R}^n\)</span>. If <span class="arithmatex">\(\u_k\)</span> is a linear combination of <span class="arithmatex">\(\mathbf{u_1,...,u_{k-1}}\)</span>, then </p>
+<div class="arithmatex">\[\text{Span}\{\mathbf{u_1,...,u_{k-1}}\} = \text{Span}\{\mathbf{u_1,...,u_{k-1},u_k}\}\]</div>
+<p>This should be an obvious fact by using the same example in the <strong>Theorem (Span is a subspace and is the smallest subspace of <span class="arithmatex">\(V\)</span>)</strong>.</p>
+</div>
+<h4 id="examples">Examples</h4>
+<h5 id="geometrical-interpretation-of-span">(Geometrical Interpretation of Span)</h5>
+<div class="admonition example">
+<p class="admonition-title">Geometrical Interpretation of Span</p>
+<p>The <span class="arithmatex">\(xz\)</span>-plane in <span class="arithmatex">\(\R^3\)</span> can be parameterized by the equations</p>
+<div class="arithmatex">\[x = t_1, \;\;\; y = 0, \;\;\; z = t_2.\]</div>
+<p>As a subspace, the <span class="arithmatex">\(xz\)</span>-plane is spanned by the vectors (1,&nbsp;0,&nbsp;0) and (0,&nbsp;0,&nbsp;1). Every vector in the <span class="arithmatex">\(xz\)</span>-plane can be written as a linear combination of these two:</p>
+<div class="arithmatex">\[(t_1, 0, t_2) = t_1(1,0,0) + t_2(0,0,1)\]</div>
+<p>Geometrically, this corresponds to the fact that every point on the <span class="arithmatex">\(xz\)</span>-plane can be reached from the origin by first moving some distance in the direction of (1,&nbsp;0,&nbsp;0) and then moving some distance in the direction of (0,&nbsp;0,&nbsp;1).</p>
+</div>
+<h5 id="python-two-linearly-independent-vectors-in-mathbb-r3-spans-a-plane">Python (Two Linearly Independent Vectors in <span class="arithmatex">\(\mathbb R^3\)</span> Spans a Plane)</h5>
+<p>The below three examples are referenced from Macro Analyst's notes here<sup id="fnref:MacroAnalystSpan"><a class="footnote-ref" href="#fn:MacroAnalystSpan">1</a></sup>.</p>
+<p>The example below assumes the ambient space <span class="arithmatex">\(\R^3\)</span> and assumes that the term <strong>2 linearly independent</strong> vectors just simply mean that these two vectors are not multiple of each other.</p>
+<p>We know that in earlier chapter that two <strong>linearly indepedent vectors</strong> in <span class="arithmatex">\(\R^3\)</span> space forms a subspace that is a plane. In fact, we can also say that two <strong>linearly independent vectors</strong> span a plane in <span class="arithmatex">\(\R^3\)</span>. </p>
+<p>We can verify below visually using python, with courtesy of <a href="https://github.com/MacroAnalyst/Linear_Algebra_With_Python/blob/master/Chapter%208%20-%20Vector%20Space%20and%20Subspace.ipynb">MacroAnalyst's Linear Algebra with Python</a>.</p>
+<p>Firstly, let's say we have two vectors: <span class="arithmatex">\((3, 9, 2)\)</span>, <span class="arithmatex">\((1,7,5)\)</span> which are <strong>linearly independent</strong>. The author made use of matrix multiplication in his code to demonstrate span.</p>
+<p>For more general span, a basic fact of matrix multiplication can assist us in demonstrating:</p>
+<div class="arithmatex">\[
+AB = A[b_1\ b_2\  b_3,...,b_p]=[Ab_1\ Ab_2\ Ab_3,...,Ab_p]
+\]</div>
+<p>where <span class="arithmatex">\(A\)</span> is the spanning set of vectors, <span class="arithmatex">\(b_k\)</span> is vector of weights for linear combination. We can generate a random matrix <span class="arithmatex">\(B\)</span> to form various linear combinations to visually verify if they are all contained in the spanned plane.</p>
+<p>We define 
+$$
+A=\left[\begin{array}{rr}
+3 &amp; 1 \
+9 &amp; 7 \
+2 &amp; 5 
+\end{array}\right]\qquad b_i\sim N(\mathbb{0}, 1)
+$$</p>
+<hr />
+<p>In other words, the columns of <span class="arithmatex">\(\A\)</span> are the set of vectors</p>
+<div class="arithmatex">\[
+S = \left\{\begin{bmatrix}
+\color{red}3 \\ \color{red}9 \\ \color{red}2
+\end{bmatrix}, \begin{bmatrix}
+\color{red}1 \\ \color{red}7 \\ \color{red}5
+\end{bmatrix} \right\}\]</div>
+<p>and we want to generate say, 300 random linear combinations of this set of vectors and show <strong>visually</strong> that all these linear combinations are <strong>IN THE PLANE SPANNED BY THE SET OF VECTORS</strong>. Technically, there are infinite number of linear combinations, but we just show 300 for good illustration. Note that these 300 random linear combination are stored in the matrix <span class="arithmatex">\(\B\)</span>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="c1"># The plane spanned by {[1,0,1], [0,1,1]}</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>  <span class="c1"># i = 300, i.e. 300 random weight vectors</span>
+<span class="n">vecs</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">B</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">S</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">S</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">T</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">S</span><span class="o">+</span><span class="n">T</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">]]])</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vec</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">Y</span><span class="p">,</span>
+        <span class="n">Z</span><span class="p">,</span>
+        <span class="n">U</span><span class="p">,</span>
+        <span class="n">V</span><span class="p">,</span>
+        <span class="n">W</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span>
+        <span class="n">pivot</span><span class="o">=</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span>
+        <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span>
+        <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=-</span><span class="mi">156</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">56</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;span_plane.svg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_vector_span_files/03_linear_algebra_vector_spaces_vector_span_14_0.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="c1"># The plane spanned by {[3,9,2], [1,7,5]}</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>  <span class="c1"># i = 300, i.e. 300 random weight vectors</span>
+<span class="n">vecs</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">B</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">S</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="n">T</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">T</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">T</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">]]])</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">Y</span><span class="p">,</span>
+        <span class="n">Z</span><span class="p">,</span>
+        <span class="n">U</span><span class="p">,</span>
+        <span class="n">V</span><span class="p">,</span>
+        <span class="n">W</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span>
+        <span class="n">pivot</span><span class="o">=</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span>
+        <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span>
+        <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=-</span><span class="mi">156</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">56</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_vector_span_files/03_linear_algebra_vector_spaces_vector_span_15_0.png" /></p>
+<h5 id="python-two-linearly-dependent-vectors-in-mathbb-r3-spans-a-line">Python (Two Linearly Dependent Vectors in <span class="arithmatex">\(\mathbb R^3\)</span> Spans a Line)</h5>
+<p>What if the two vectors are not linear independent? Then the following example will convince you that two <strong>linearly dependent</strong> vectors span a line in <span class="arithmatex">\(\R^3\)</span> space. Note that this is equivalent to "one vector" in <span class="arithmatex">\(\R^3\)</span> spans a line.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Although spanned by 2 vectors, but actually reduces to 1 vector.</span>
+<span class="c1"># So it is a line.</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>  <span class="c1"># i = 300, i.e. 300 random weight vectors</span>
+<span class="n">vecs</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">B</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">S</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">T</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">18</span> <span class="o">*</span> <span class="n">T</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">S</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">T</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">]]])</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">Y</span><span class="p">,</span>
+        <span class="n">Z</span><span class="p">,</span>
+        <span class="n">U</span><span class="p">,</span>
+        <span class="n">V</span><span class="p">,</span>
+        <span class="n">W</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span>
+        <span class="n">pivot</span><span class="o">=</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span>
+        <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span>
+        <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=-</span><span class="mi">156</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">56</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;span_line.svg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_vector_span_files/03_linear_algebra_vector_spaces_vector_span_17_0.png" /></p>
+<h5 id="python-three-linearly-inependent-vectors-in-mathbb-r3-spans-the-whole-ambient-space">Python (Three Linearly Inependent Vectors in <span class="arithmatex">\(\mathbb R^3\)</span> Spans the whole Ambient Space)</h5>
+<p>Reproduce the code above, but we have three vectors: <span class="arithmatex">\((1,0,1)\)</span>, <span class="arithmatex">\((1,1,0)\)</span>, <span class="arithmatex">\((0,1,1)\)</span>. Again we create a random coefficent matrix to form different linear combinations.</p>
+<div class="highlight"><pre><span></span><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="n">vecs</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">B</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">S</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="n">T</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">T</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">S</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">vecs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">]]])</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">Y</span><span class="p">,</span>
+        <span class="n">Z</span><span class="p">,</span>
+        <span class="n">U</span><span class="p">,</span>
+        <span class="n">V</span><span class="p">,</span>
+        <span class="n">W</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+        <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">arrow_length_ratio</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span>
+        <span class="n">pivot</span><span class="o">=</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span>
+        <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span>
+        <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">110</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;span_ambient_space.svg&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;svg&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="png" src="../03_linear_algebra_vector_spaces_vector_span_files/03_linear_algebra_vector_spaces_vector_span_19_0.png" /></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:MacroAnalystSpan">
+<p><a href="https://github.com/MacroAnalyst/Linear_Algebra_With_Python/blob/master/Chapter%208%20-%20Vector%20Space%20and%20Subspace.ipynb">MacroAnalyst's Linear Algebra with Python</a>.&#160;<a class="footnote-backref" href="#fnref:MacroAnalystSpan" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../03_linear_algebra_vector_spaces_vector_subspaces/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Vector Space and Subspaces" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Vector Space and Subspaces
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../03_linear_algebra_vector_spaces_linear_independence/" class="md-footer__link md-footer__link--next" aria-label="Next: Linear Independence" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Linear Independence
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate"], "search": "../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

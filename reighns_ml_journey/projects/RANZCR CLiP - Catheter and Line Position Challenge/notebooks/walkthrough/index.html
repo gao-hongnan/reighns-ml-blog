@@ -1,0 +1,3604 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/">
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>RANZCR CLiP - Catheter and Line Position Challenge - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#seeding-and-device" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RANZCR CLiP - Catheter and Line Position Challenge
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/" class="md-nav__link">
+        Grad-CAM Explained
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/computer_vision/image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          RANZCR CLiP - Catheter and Line Position Challenge
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#seeding-and-device" class="md-nav__link">
+    Seeding and Device
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-understanding-our-data" class="md-nav__link">
+    Dataset: Understanding our Data
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataset: Understanding our Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-catalogdescription" class="md-nav__link">
+    Data Catalog/Description
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objective-multi-label-binary-classification" class="md-nav__link">
+    Objective: Multi-Label Binary Classification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics-establish-metrics" class="md-nav__link">
+    Metrics: Establish Metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics: Establish Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macro-averaged-auroc" class="md-nav__link">
+    Macro-Averaged AUROC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-and-resampling-cross-validation" class="md-nav__link">
+    Validation and Resampling: Cross-Validation
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation and Resampling: Cross-Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-should-we-split-out-data-into-folds" class="md-nav__link">
+    How should we split out data into folds?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratifiedgroupkfold" class="md-nav__link">
+    StratifiedGroupKFold
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation-workflow" class="md-nav__link">
+    Cross-Validation Workflow
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transfer-learning-the-core-of-deep-learning" class="md-nav__link">
+    Transfer Learning: The core of Deep Learning
+  </a>
+  
+    <nav class="md-nav" aria-label="Transfer Learning: The core of Deep Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fine-tuning" class="md-nav__link">
+    Fine-Tuning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-extraction" class="md-nav__link">
+    Feature Extraction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preprocessing" class="md-nav__link">
+    Preprocessing
+  </a>
+  
+    <nav class="md-nav" aria-label="Preprocessing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mean-and-standard-deviation" class="md-nav__link">
+    Mean and Standard Deviation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#channel-distribution" class="md-nav__link">
+    Channel Distribution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-gray-to-rgb" class="md-nav__link">
+    Convert Gray to RGB
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#augmentations" class="md-nav__link">
+    Augmentations
+  </a>
+  
+    <nav class="md-nav" aria-label="Augmentations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#train-time-augmentation" class="md-nav__link">
+    Train-Time Augmentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-time-augmentation" class="md-nav__link">
+    Test-Time Augmentation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-architectures-training-parameters-tricks" class="md-nav__link">
+    Model Architectures, Training Parameters &amp; Tricks
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Architectures, Training Parameters &amp; Tricks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#model-architecture" class="md-nav__link">
+    Model Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backbone" class="md-nav__link">
+    Backbone
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classifier-heads-multi-head-approach" class="md-nav__link">
+    Classifier Heads - Multi-Head Approach
+  </a>
+  
+    <nav class="md-nav" aria-label="Classifier Heads - Multi-Head Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intuition" class="md-nav__link">
+    Intuition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-head-for-multi-label" class="md-nav__link">
+    Multi-Head for Multi-Label
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activation-functions" class="md-nav__link">
+    Activation Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Activation Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swish" class="md-nav__link">
+    Swish
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-architecture-final-activation-layer" class="md-nav__link">
+    Model Architecture: Final Activation Layer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-size-and-tricks" class="md-nav__link">
+    Batch Size and Tricks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimizer-scheduler-and-loss" class="md-nav__link">
+    Optimizer, Scheduler and Loss
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimizer, Scheduler and Loss">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scheduler" class="md-nav__link">
+    Scheduler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loss" class="md-nav__link">
+    Loss
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensembling" class="md-nav__link">
+    Ensembling
+  </a>
+  
+    <nav class="md-nav" aria-label="Ensembling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forward-ensembling" class="md-nav__link">
+    Forward Ensembling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#seeding-and-device" class="md-nav__link">
+    Seeding and Device
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-understanding-our-data" class="md-nav__link">
+    Dataset: Understanding our Data
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataset: Understanding our Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-catalogdescription" class="md-nav__link">
+    Data Catalog/Description
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objective-multi-label-binary-classification" class="md-nav__link">
+    Objective: Multi-Label Binary Classification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics-establish-metrics" class="md-nav__link">
+    Metrics: Establish Metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics: Establish Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#macro-averaged-auroc" class="md-nav__link">
+    Macro-Averaged AUROC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-and-resampling-cross-validation" class="md-nav__link">
+    Validation and Resampling: Cross-Validation
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation and Resampling: Cross-Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-should-we-split-out-data-into-folds" class="md-nav__link">
+    How should we split out data into folds?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratifiedgroupkfold" class="md-nav__link">
+    StratifiedGroupKFold
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation-workflow" class="md-nav__link">
+    Cross-Validation Workflow
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transfer-learning-the-core-of-deep-learning" class="md-nav__link">
+    Transfer Learning: The core of Deep Learning
+  </a>
+  
+    <nav class="md-nav" aria-label="Transfer Learning: The core of Deep Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fine-tuning" class="md-nav__link">
+    Fine-Tuning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-extraction" class="md-nav__link">
+    Feature Extraction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#preprocessing" class="md-nav__link">
+    Preprocessing
+  </a>
+  
+    <nav class="md-nav" aria-label="Preprocessing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mean-and-standard-deviation" class="md-nav__link">
+    Mean and Standard Deviation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#channel-distribution" class="md-nav__link">
+    Channel Distribution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#convert-gray-to-rgb" class="md-nav__link">
+    Convert Gray to RGB
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#augmentations" class="md-nav__link">
+    Augmentations
+  </a>
+  
+    <nav class="md-nav" aria-label="Augmentations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#train-time-augmentation" class="md-nav__link">
+    Train-Time Augmentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-time-augmentation" class="md-nav__link">
+    Test-Time Augmentation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-architectures-training-parameters-tricks" class="md-nav__link">
+    Model Architectures, Training Parameters &amp; Tricks
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Architectures, Training Parameters &amp; Tricks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#model-architecture" class="md-nav__link">
+    Model Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backbone" class="md-nav__link">
+    Backbone
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classifier-heads-multi-head-approach" class="md-nav__link">
+    Classifier Heads - Multi-Head Approach
+  </a>
+  
+    <nav class="md-nav" aria-label="Classifier Heads - Multi-Head Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intuition" class="md-nav__link">
+    Intuition
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-head-for-multi-label" class="md-nav__link">
+    Multi-Head for Multi-Label
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activation-functions" class="md-nav__link">
+    Activation Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Activation Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swish" class="md-nav__link">
+    Swish
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model-architecture-final-activation-layer" class="md-nav__link">
+    Model Architecture: Final Activation Layer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-size-and-tricks" class="md-nav__link">
+    Batch Size and Tricks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimizer-scheduler-and-loss" class="md-nav__link">
+    Optimizer, Scheduler and Loss
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimizer, Scheduler and Loss">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scheduler" class="md-nav__link">
+    Scheduler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loss" class="md-nav__link">
+    Loss
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensembling" class="md-nav__link">
+    Ensembling
+  </a>
+  
+    <nav class="md-nav" aria-label="Ensembling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#forward-ensembling" class="md-nav__link">
+    Forward Ensembling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/projects/RANZCR CLiP - Catheter and Line Position Challenge/notebooks/walkthrough.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>RANZCR CLiP - Catheter and Line Position Challenge</h1>
+
+<h2 id="seeding-and-device">Seeding and Device</h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1930</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed all random number generators.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using Seed Number </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONHASHSEED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+        <span class="n">seed</span>
+    <span class="p">)</span>  <span class="c1"># set PYTHONHASHSEED env var at fixed value</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># pytorch (both CPU and CUDA)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># for numpy pseudo-random generator</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span>
+        <span class="n">seed</span>
+    <span class="p">)</span>  <span class="c1"># set fixed value for python built-in pseudo-random generator</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">seed_worker</span><span class="p">(</span><span class="n">_worker_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seed a worker with the given ID.&quot;&quot;&quot;</span>
+    <span class="n">worker_seed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">initial_seed</span><span class="p">()</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">worker_seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">worker_seed</span><span class="p">)</span>
+
+
+<span class="n">_</span> <span class="o">=</span> <span class="n">seed_all</span><span class="p">(</span><span class="mi">1992</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Using Seed Number 1992
+</code></pre></div>
+<h2 id="introduction">Introduction</h2>
+<blockquote>
+<p>Extracted from Kaggle </p>
+</blockquote>
+<p>Serious complications can occur as a result of malpositioned lines and tubes in patients. Doctors and nurses frequently use checklists for placement of lifesaving equipment to ensure they follow protocol in managing patients. Yet, these steps can be time consuming and are still prone to human error, especially in stressful situations when hospitals are at capacity.</p>
+<p>Hospital patients can have catheters and lines inserted during the course of their admission and serious complications can arise if they are positioned incorrectly. Nasogastric tube malpositioning into the airways has been reported in up to 3% of cases, with up to 40% of these cases demonstrating complications [1-3]. Airway tube malposition in adult patients intubated outside the operating room is seen in up to 25% of cases [4,5]. The likelihood of complication is directly related to both the experience level and specialty of the proceduralist. Early recognition of malpositioned tubes is the key to preventing risky complications (even death), even more so now that millions of COVID-19 patients are in need of these tubes and lines.</p>
+<p>The gold standard for the confirmation of line and tube positions are chest radiographs. However, a physician or radiologist must manually check these chest x-rays to verify that the lines and tubes are in the optimal position. Not only does this leave room for human error, but delays are also common as radiologists can be busy reporting other scans. Deep learning algorithms may be able to automatically detect malpositioned catheters and lines. Once alerted, clinicians can reposition or remove them to avoid life-threatening complications.</p>
+<p>The Royal Australian and New Zealand College of Radiologists (RANZCR) is a not-for-profit professional organisation for clinical radiologists and radiation oncologists in Australia, New Zealand, and Singapore. The group is one of many medical organisations around the world (including the NHS) that recognizes malpositioned tubes and lines as preventable. RANZCR is helping design safety systems where such errors will be caught.</p>
+<p>In this competition, you’ll detect the presence and position of catheters and lines on chest x-rays. Use machine learning to train and test your model on 40,000 images to categorize a tube that is poorly placed.</p>
+<p>The dataset has been labelled with a set of definitions to ensure consistency with labelling. The normal category includes lines that were appropriately positioned and did not require repositioning. The borderline category includes lines that would ideally require some repositioning but would in most cases still function adequately in their current position. The abnormal category included lines that required immediate repositioning.</p>
+<p>If successful, your efforts may help clinicians save lives. Earlier detection of malpositioned catheters and lines is even more important as COVID-19 cases continue to surge. Many hospitals are at capacity and more patients are in need of these tubes and lines. Quick feedback on catheter and line placement could help clinicians better treat these patients. Beyond COVID-19, detection of line and tube position will ALWAYS be a requirement in many ill hospital patients.</p>
+<h2 id="dataset-understanding-our-data">Dataset: Understanding our Data</h2>
+<p>We will go through the data that we were given.</p>
+<h3 id="data-catalogdescription">Data Catalog/Description</h3>
+<p>In this competition, you'll detect the presence and position of catheters and lines on chest x-rays. Use machine learning to train and test your model on <span class="arithmatex">\(40,000\)</span> images to categorize a tube that is poorly placed.</p>
+<ul>
+<li>Train Set: <span class="arithmatex">\(30083\)</span> images</li>
+<li>Public Test Set: <span class="arithmatex">\(3582\)</span> images</li>
+<li>Private Test Set: ~<span class="arithmatex">\(14000\)</span> images</li>
+<li><code>train.csv</code>: containing <strong>image IDs, labels and patient IDs</strong>.</li>
+<li><code>sample_submission.csv</code>: a sample submission file in the correct format</li>
+<li><code>test/</code>: test images</li>
+<li><code>train/</code>: training images</li>
+</ul>
+<p>In particular the train csv has these columns:</p>
+<ul>
+<li>StudyInstanceUID - unique ID for each image</li>
+<li>ETT - Abnormal - endotracheal tube placement abnormal</li>
+<li>ETT - Borderline - endotracheal tube placement borderline abnormal</li>
+<li>ETT - Normal - endotracheal tube placement normal</li>
+<li>NGT - Abnormal - nasogastric tube placement abnormal</li>
+<li>NGT - Borderline - nasogastric tube placement borderline abnormal</li>
+<li>NGT - Incompletely Imaged - nasogastric tube placement inconclusive due to imaging</li>
+<li>NGT - Normal - nasogastric tube placement borderline normal</li>
+<li>CVC - Abnormal - central venous catheter placement abnormal</li>
+<li>CVC - Borderline - central venous catheter placement borderline abnormal</li>
+<li>CVC - Normal - central venous catheter placement normal</li>
+<li>Swan Ganz Catheter Present</li>
+<li>PatientID - unique ID for each patient in the dataset</li>
+</ul>
+<h2 id="objective-multi-label-binary-classification">Objective: Multi-Label Binary Classification</h2>
+<p>In general, a patient's single chest X-ray could present multiple medical conditions.</p>
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/images/patient_id_323464123.PNG" style="margin-left:auto; margin-right:auto"/></p>
+<p style="text-align: center">
+    <b>Fig 1: Patient ID 323464123; By Hongnan G.</b>
+</p>
+
+<ul>
+<li>Patient 323464123's first row corresponds to an unique image defined by the study instance UID.</li>
+<li>Noticed the 1's under the columns <code>ETT-Normal</code>, <code>NGT - Incompletely Images</code>, <code>CVC-Borderline</code> and <code>CVC-Normal</code> and 0's elsewhere.</li>
+<li>Unlike multi-class classification, where <strong>classes are mutually exclusive</strong>, <strong>multi-label</strong> is not.</li>
+<li>For example, a patient's X-ray scan of the lungs can show up <strong>pneumonia and covid-19</strong> (both are conditions), as a result the <em>class labels</em> are not mutually exclusive (unlike multi-class). The same logic is applied in this setting, where the tube can be labelled differently.</li>
+</ul>
+<h2 id="metrics-establish-metrics">Metrics: Establish Metrics</h2>
+<h3 id="macro-averaged-auroc">Macro-Averaged AUROC</h3>
+<p>Then Macro-Average AUROC is calculated for each individual class, and then averaged over the total number of classes.</p>
+<div class="arithmatex">\[\text{Macro-Average AUROC} = \frac{1}{\text{num_class}}\sum_{i=1}^{\text{num_class}}R_{i}\]</div>
+<p>where <span class="arithmatex">\(R_i\)</span> is the AUROC score for each individual class.</p>
+<p>A small example clears up the air:</p>
+<ul>
+<li>Consider 3 classes of apple, banana and carrot as a multi-label problem with class index <span class="arithmatex">\([0, 1, 2]\)</span>.</li>
+<li><code>y_true</code>: is a one-hot encoded matrix of 4 rows and 3 columns. The rows means 4 samples, and columns mean the class where 1 means positive and 0 negative. 
+            It is not a surprise that each row can hold multiple 1's since it is a multi-label problem. <code>[0, 1, 1]</code> just means that the "image data" contains both banana and carrot;</li>
+<li><code>y_pred</code>: the predicted matrix, and is the same shape as <code>y_true</code>.</li>
+</ul>
+<p>We now treat the problem running multiple binary ROC computation:</p>
+<ul>
+<li>Calculate the ROC score between column <span class="arithmatex">\(i\)</span> of <code>y_true</code> and <code>y_pred</code> respectively and call them <span class="arithmatex">\(R_i\)</span>;</li>
+<li>Sum <span class="arithmatex">\(R_i\)</span> and divide by the number of classes and get the Macro-Averaged AUROC.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span>
+
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">macro_auroc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">y_pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="n">macro_auroc</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>0.75
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For a more wholesome treatment of metrics, see my Melanoma write-up and <a href="https://reighns92.github.io/reighns-ml-blog/reighns_ml_journey/machine_learning_and_deep_learning/metrics/classification_metrics/roc_pr_curve/">blog</a>.</p>
+</div>
+<h2 id="validation-and-resampling-cross-validation">Validation and Resampling: Cross-Validation</h2>
+<h3 id="how-should-we-split-out-data-into-folds">How should we split out data into folds?</h3>
+<p>We should examine the data for a few factors:</p>
+<ol>
+<li>Is the data <span class="arithmatex">\(\mathcal{X}\)</span> imbalanced?</li>
+<li>Is the data <span class="arithmatex">\(\mathcal{X}\)</span> generated in a <strong>i.i.d.</strong> manner, more specifically, if I split <span class="arithmatex">\(\mathcal{X}\)</span> to <span class="arithmatex">\(\mathcal{X}_{train}\)</span> and <span class="arithmatex">\(\mathcal{X}_{val}\)</span>, can we ensure that <span class="arithmatex">\(\mathcal{X}_{val}\)</span> has no dependency on <span class="arithmatex">\(\mathcal{X}_{train}\)</span>?</li>
+</ol>
+<p>We came to the conclusion:</p>
+<ol>
+<li>
+<p>Yes, there is quite some imbalanced distribution, in particular, <strong>CVC - Normal</strong>, <strong>ETT - Normal</strong> and <strong>CVC - Borderline</strong> are significantly more than the rest of the classes. Therefore, a stratified cross validation is reasonable. Stratified KFold ensures that relative class frequencies is approximately preserved in each train and validation fold. More concretely, we will not experience the scenario where <span class="arithmatex">\(X_{train}\)</span> has <span class="arithmatex">\(m^{+}\)</span> and <span class="arithmatex">\(m^{-}\)</span> positive and negative samples, but <span class="arithmatex">\(X_{val}\)</span> has only <span class="arithmatex">\(p^{+}\)</span> positive samples only and 0 negative samples, simply due to the scarcity of negative samples</p>
+</li>
+<li>
+<p>In medical imaging, it is a well known fact that most of the data contains patient level repeatedly. To put it bluntly, if I have 100 samples, and according to <strong>PatientID</strong>, we see that the id 123456 (John Doe) appeared 20 times, this is normal as a patient can undergo multiple settings of say, X-rays. If we allow John Doe's data to appear in both train and validation set, then this poses a problem of information leakage, in which the data is no longer <strong>i.i.d.</strong>. One can think of each patient has an "unique, underlying features" which are highly correlated across their different samples. As a result, it is paramount to ensure that amongst this 3255 unique patients, we need to ensure that each unique patients' images <strong>DO NOT</strong> appear in the validation fold. That is to say, if patient John Doe has 100 X-ray images, but during our 5-fold splits, he has 70 images in Fold 1-4, while 30 images are in Fold 5, then if we were to train on Fold 1-4 and validate on Fold 5, there may be potential leakage and the model will predict with confidence for John Doe's images. This is under the assumption that John Doe's data does not fulfill the i.i.d process.</p>
+</li>
+</ol>
+<h3 id="stratifiedgroupkfold">StratifiedGroupKFold</h3>
+<p>With the above consideration, we will use <code>StratifiedGroupKFold</code> where <span class="arithmatex">\(K = 5\)</span> splits. There wasn't this splitting function in scikit-learn at the time of competition and as a result, we used a custom written (by someone else) <code>RepeatedStratifiedGroupKFold</code> function and just set <code>n_splits = 1</code> to get <strong>StratifiedGroupKFold</strong> (yes we cannot afford to do repeated sample, so setting the split to be 1 will collapse the repeated function to just the normal stratified group kfold). However, as of 2022, this function is readily available in the <strong>Scikit-Learn</strong> library.</p>
+<p>To recap, we applied stratified logic such that each train and validation set has an <strong>equal</strong> weightage of positive and negative samples. We also grouped the patients in the process such that patient <span class="arithmatex">\(i\)</span> will not appear in both training and validation set.</p>
+<blockquote>
+<p>Data leakage can cause you to have blind confidence on your model. We are also guilty of committing one since we trained our models with the NiH pretrained weights, without taking into consideration if the weights overlap with the training and validation folds information. In other words, we did not check properly if the weights trained on the NiH dataset has information in our RANZCR dataset. Take note this is different from training altogether on the NiH dataset, we are merely using the weights instead of the imagenet weights, which brings to the next point.</p>
+</blockquote>
+<p>Referring to figure 1, patient 323464123 has 6 images uniquely recorded on different visits. We should absolutely put them all in either train or validation set, as if say 2 images are in train and 4 in validation, there might be data leakage.</p>
+<h3 id="cross-validation-workflow">Cross-Validation Workflow</h3>
+<p>To recap, we have the following:</p>
+<ul>
+<li><strong>Training Set (<span class="arithmatex">\(X_{\text{train}}\)</span>)</strong>: This will be further split into K validation sets during our cross-validation. This set is used to fit a particular hypothesis <span class="arithmatex">\(h \in \mathcal{H}\)</span>.</li>
+<li><strong>Validation Set (<span class="arithmatex">\(X_{\text{val}}\)</span>)</strong>: This is split from our <span class="arithmatex">\(X_{\text{train}}\)</span> during cross-validation. This set is used for model selection (i.e. find best hyperparameters, attempt to produce a best hypothesis <span class="arithmatex">\(g \in \mathcal{H}\)</span>).</li>
+<li><strong>Test Set (<span class="arithmatex">\(X_{\text{test}}\)</span>)</strong>: This is an unseen test set, and we will only use it after we finish tuning our model/hypothesis. Suppose we have a final best model <span class="arithmatex">\(g\)</span>, we will use <span class="arithmatex">\(g\)</span> to predict on the test set to get an estimate of the generalization error (also called out-of-sample error).</li>
+</ul>
+<figure>
+<img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/aiap-coronary-artery-disease/data/images/cv.PNG' width="500"/>
+<figcaption align = "center"><b>Pipeline.</b></figcaption>
+</figure>
+
+<hr />
+<figure>
+<img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/supervised_learning/classification/breast-cancer-wisconsin/data/images/grid_search_workflow.png' width="500"/>
+<figcaption align = "center"><b>Courtesy of scikit-learn on a typical Cross-Validation workflow.</b></figcaption>
+</figure>
+
+<h2 id="transfer-learning-the-core-of-deep-learning">Transfer Learning: The core of Deep Learning</h2>
+<p>As we all know, if we train on <code>imagenet</code> weights, we may take quite a while to converge, even if we finetune it. The intuition is simple, <code>imagenet</code> were trained on many common items in life, and none of them resemble closely to the <strong>image structures of X-rays</strong>. Therefore, we have a few options.</p>
+<ul>
+<li>Freeze earlier layers but unfreeze the later Conv Layers: this is intuitive as earlier layers detect shapes and colors, all low level details that is very useful even for such <strong>dissimilar tasks</strong>, and unfreeze the later conv layers which is what we call the "abstract feature layers", where it is more important for the model to learn from scratch. </li>
+<li>Fine-Tuning;</li>
+<li>Feature Extraction;</li>
+</ul>
+<h3 id="fine-tuning">Fine-Tuning</h3>
+<p>Instead of random initialization, we initialize the network with a pretrained network, like the one that is trained on imagenet 1000 dataset. This is what we will be doing and we managed to find a set of <code>pretrained</code> weights trained specifically on this dataset as a starting point. The weights can be found <strong><a href="https://www.kaggle.com/c/ranzcr-clip-catheter-line-classification/discussion/215910">here</a></strong>.</p>
+<p>We used a few models and found out that <code>resnet200d</code> has the best results on this set of training images. The reason we used this is mostly empirical, but using <code>gradcam</code> we can see how the model sees the images. </p>
+<h3 id="feature-extraction">Feature Extraction</h3>
+<p>ConvNet as fixed feature extractor: Here, we will freeze the weights for all of the network except that of the final fully connected layer. This last fully connected layer is replaced with a new one with random weights and only this layer is trained. This is less relevant to us as we aren't using it for feature extractions.</p>
+<p>Therefore, the model may have a hard time detecting abstract features such shapes and details from the X-rays. We can of course unfreeze all the layers and retrain them from scratch, using various backbones, </p>
+<h2 id="preprocessing">Preprocessing</h2>
+<p>Most preprocessing techniques we do in an image recognition competition is mostly as follows:</p>
+<h3 id="mean-and-standard-deviation">Mean and Standard Deviation</h3>
+<ul>
+<li>
+<p>Perform <strong>mean and std</strong> for the dataset given to us. Note that this step may make sense on paper, but empirically, using imagenet's default mean std will always work as well, if not better. Nevertheless, here are the stats:</p>
+<ul>
+<li>
+<p>Imagenet:</p>
+<ul>
+<li><code>mean = [0.485, 0.456, 0.406]</code> and;</li>
+<li><code>std = [0.229, 0.224, 0.225]</code></li>
+</ul>
+</li>
+<li>
+<p>RANZCR:</p>
+<ul>
+<li><code>mean = [0.4887381077884414, ...]</code> and;</li>
+<li><code>std = [0.23064819430546407, ...]</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="channel-distribution">Channel Distribution</h3>
+<p>This is usually done to check for "surprises". More specifically, I remember vividly when participating in Singapore Airline challenge where the classifier recognize weird objects as luggages. After plotting the pixel histogram, we observed that the luggages colors are all of a non-normal distribution, in fact, it is quite scattered. Then it dawned upon us that the classifier is learning the "color" too much, instead of the shape of the luggage. When we grayed out the images, the classifier starts to ignore the noise in the colors, and instead focus on other features like shapes. So this removes signal to noise in a way - using the objection detection example such as detecting a strawberry in a tree full of green leaves, then color is important, but if we detect leaves in a tree full of green leaves, we do not wish to incorporate color here as anything green might suggest that it is a leaf.</p>
+<p>We found, and as mentioned also by <a href="https://www.kaggle.com/reubenschmidt">Rueben Schmidt</a> in <a href="https://www.kaggle.com/c/ranzcr-clip-catheter-line-classification/discussion/224146">this post</a>, there are some images that have black borders around them. I experimented by removed them during both the training process. There was no significant increase on the LB score, even if there was, it is in the 3-4th decimal places, but I noticed my local cv increased, so I think that some noise are removed locally, but not reflected in the test set. Therefore, during inference, I also removed the black borders, which should be the correct approach (learning from mistakes!). In conclusion, there is a small boost in score, if I keep this consistent in both training and inference, I reckon that no surprise factor would pop out.</p>
+<p>Here is the code:</p>
+<div class="highlight"><pre><span></span><code><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+<span class="n">mask</span>  <span class="o">=</span> <span class="n">image</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="mi">0</span><span class="p">))]</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_GRAY2RGB</span><span class="p">)</span>
+</code></pre></div>
+<p>Notice that the code removes any pixel that is &gt; 0, where black pixel is 0.</p>
+<blockquote>
+<p>On hindsight for the Singapore Airline project, I now know there is <strong>GradCam</strong>, where we can see how the model is learning, as it will highlight the areas on which the model is focusing on in an image. </p>
+</blockquote>
+<h3 id="convert-gray-to-rgb">Convert Gray to RGB</h3>
+<p>We know that <strong>X-rays</strong> are <strong>Grayscale</strong> images so converting a grayscale image to RGB is just setting <code>R=G=B=Grayscale</code> pixel for all channels.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;../images/1.2.826.0.1.3680043.8.498.10000428974990117276582711948006105617.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>(256, 256)
+(256, 256, 3)
+</code></pre></div>
+<h2 id="augmentations">Augmentations</h2>
+<p>We know that augmentation is central in an image competition, as essentially we are adding more data into the training process, effectively <strong>reducing overfitting and improve generalization</strong>.</p>
+<p>Heavy augmentations are used during Train-Time-Augmentation. But during Test-Time-Augmentation, we used the same set of training augmentations to inference with <span class="arithmatex">\(100\%\)</span> probability.</p>
+<h3 id="train-time-augmentation">Train-Time Augmentation</h3>
+<p>The typicals!</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_augmentations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">RandomResizedCrop</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">image_size</span>
+    <span class="p">),</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">HorizontalFlip</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">ShiftScaleRotate</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">HueSaturationValue</span><span class="p">(</span>
+        <span class="n">hue_shift_limit</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">sat_shift_limit</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">val_shift_limit</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span>
+    <span class="p">),</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">RandomBrightnessContrast</span><span class="p">(</span>
+        <span class="n">brightness_limit</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">contrast_limit</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span>
+    <span class="p">),</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">CoarseDropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">albumentations</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+        <span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
+        <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">],</span>
+        <span class="n">max_pixel_value</span><span class="o">=</span><span class="mf">255.0</span><span class="p">,</span>
+        <span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">ToTensorV2</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div>
+<h3 id="test-time-augmentation">Test-Time Augmentation</h3>
+<p>The exact same set of augmentations were used in inference. Not all TTAs provided a increase in score.</p>
+<h2 id="model-architectures-training-parameters-tricks">Model Architectures, Training Parameters &amp; Tricks</h2>
+<h3 id="model-architecture">Model Architecture</h3>
+<h4 id="overview">Overview</h4>
+<p>A brief overview of our model architecture is shown in fig 2.1 and 2.2:</p>
+<div class="container" style="display: inline-block;">  
+  <figure>
+  <div style="float: left; padding: 10px;">
+    <img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/images/single_head.png' width="666" height="666" align="center"/>
+    <figcaption align="center"><b>Fig 2.1; Single-Head Approach<br> courtesy of Tawara</b></figcaption>
+  </div>
+
+  <div style="float: right; padding: 10px;">
+    <img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/images/multi_heads.png' width="666" height="666" align="center"/>
+    <figcaption align="center"><b>Fig 2.2; Multi-Head Approach<br> courtesy of Tawara</b></figcaption>
+  </div>
+  </figure>
+</div>
+
+<h4 id="backbone">Backbone</h4>
+<p>We used both <code>resnet200d</code> and <code>seresnet152d</code> but will focus more on the first model.</p>
+<p>We used <code>resnet200d</code>, a ResNet variant model as our main backbone. </p>
+<p><code>ResNet-D</code> is a modification on the ResNet architecture that utilises an average pooling tweak for downsampling. The motivation is that in the unmodified ResNet, the 1×1 convolution for the downsampling block ignores 3/4 of input feature maps, so this is modified so no information will be ignored.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>So 1x1 convolutional reduces the feature maps depth but not the width or height while pooling reduces the width or height but not the depth. I think the results are better with the latter.</p>
+</div>
+<p>In our case, we did the following:</p>
+<ul>
+<li>Create the model with: <code>model = timm.create_model('resnet200d', pretrained=True, num_classes=1000)</code>;</li>
+<li>Load the pretrained weights from <a href="https://www.kaggle.com/ammarali32/startingpointschestx">NiH trained</a>;</li>
+<li>Reset Classifier Head with Global Average Pooling: <code>self.model.reset_classifier(num_classes=0, global_pool="avg")</code>;</li>
+<li>Attach our own Classifier Head with 11 classes.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">timm</span>
+<span class="kn">from</span> <span class="nn">torchinfo</span> <span class="kn">import</span> <span class="n">summary</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">timm</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">image_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+<span class="n">input_image_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">*</span><span class="n">image_shape</span><span class="p">))</span>
+
+
+<span class="c1"># print(summary(model, (2, 3, 224, 224)))</span>
+</code></pre></div>
+<ul>
+<li><code>model.reset_classifier(num_classes=0, global_pool="")</code> means we <strong>do not want global average pooling</strong> and thus the shape at the last conv layer (penultimate layer) is <span class="arithmatex">\((2, 512, 7, 7)\)</span></li>
+<li><code>model.reset_classifier(num_classes=0, global_pool="avg")</code> means we <strong>do want global average pooling</strong> and thus the shape at the last conv layer (penultimate layer) is <span class="arithmatex">\((2, 512)\)</span>
+   whereby for each and every of the 512 feature maps <span class="arithmatex">\(f_i\)</span>, we average <span class="arithmatex">\(f_i\)</span> across all pixels (i.e. if <span class="arithmatex">\(f_i\)</span> is 3 by 3 then average means add all <span class="arithmatex">\(3 \times 3 = 9\)</span> pixels and average) and concat to become one <span class="arithmatex">\(512\)</span> vector. </li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">timm</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">reset_classifier</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">global_pool</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unpooled shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Original shape: torch.Size([2, 1000])
+Unpooled shape: torch.Size([2, 512, 7, 7])
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">timm</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s1">&#39;resnet18&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">reset_classifier</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">global_pool</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_image_tensor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Pooled shape: </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Original shape: torch.Size([2, 1000])
+Pooled shape: torch.Size([2, 512])
+</code></pre></div>
+<p><strong>Note:</strong></p>
+<p>Empirically, we realized the <code>ResNet200D</code> works very well for this particular task. We all asked ourselves why, and it was also discussed by many, but we all agreed that through various experiments, this model seems to consistently outperform their other SOTA counterparts. However, the closest possible paper on <a href="https://arxiv.org/abs/2103.07579">Revisiting ResNets: Improved Training and Scaling Strategies</a>.</p>
+<p>Of course, to add diversity to our final predictions, we trained one more <code>SeResNet152d</code> as well. In general, ensembling models with vastly different architectures may result in a more robust solution. As an example, you can think of each model as a "average learner", and if their structure is different, it may very well so learn information that the other model might miss, hence ensembling them will average out such differences. Later on I will touch upon an ensembling technique called <strong>Forward Ensembling/Selection</strong> in this task, it has since worked well for other similar competitions.</p>
+<h4 id="classifier-heads-multi-head-approach">Classifier Heads - Multi-Head Approach</h4>
+<p>We will focus a bit more on the multi-heads we used.</p>
+<ul>
+<li>
+<p><a href="https://towardsdatascience.com/self-attention-in-computer-vision-2782727021f6">Reading on self attention in X-ray</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/56004483/what-is-a-multi-headed-model-and-what-exactly-is-a-head-in-a-model/56004582">What is a multi-headed model? And what exactly is a 'head' in a model?</a></p>
+</li>
+</ul>
+<h5 id="intuition">Intuition</h5>
+<p>The usage of multi-heads is not uncommon, let us detail a simple example in Object Detection.</p>
+<p>The image below shows the general architecture:</p>
+<p><img alt="alt" src="../../images/object_detection_head.png" /> </p>
+<ul>
+<li>In object detection, we want to predict two things, the <strong>image class label</strong> and its <strong>bounding box coordinates</strong>;</li>
+<li>The backbone network ("convolution and pooling") is responsible for extracting a feature map from the image that contains higher level summarized information. Each head uses this feature map as input to predict its desired outcome. </li>
+<li>The main intuition why feature maps of the last few layers (last layer usually) are important is one needs to recognize the earlier conv layer's feature maps find simple features like shapes, sizes, edges from an image, while the deep conv layers will be of more abstract features in an image. As a result, we really just want the abstract feature maps as they are <strong>more class specific to the image</strong> instead of the earlier layers which gives <strong>generic shapes</strong>.</li>
+<li>Let us say you used a <strong>ResNet</strong> as the backbone, then:<ul>
+<li>Remove the classifier head, or rather just take the backbone which is all layers up to the last conv layer: say at the last layer. the output feature maps has a shape of (512, 7, 7);</li>
+<li>These 512 feature maps of 7 by 7 are high level information of the image encoded;</li>
+<li>We then connect a classification head to the backbone to predict the image's class given the true class labels;</li>
+<li>We then connect a regression head to the backbone to predict the image's bounding box coordinates given the true bounding box coordinates;</li>
+</ul>
+</li>
+<li>We can create two heads, one responsible for <strong>classification</strong> for the class label and the other <strong>regression</strong> to work on the localization of the bounding boxes;</li>
+<li>Thus here we have 2 heads, one for classifying what class the image object is, the other is to localize where the image object is.</li>
+<li>The loss that you optimize for during training is usually a weighted sum of the individual losses for each prediction head. </li>
+</ul>
+<h5 id="multi-head-for-multi-label">Multi-Head for Multi-Label</h5>
+<p>Since we have 11 targets in this competition and they can be divided into 4 distinct groups: </p>
+<ul>
+<li><code>ETT</code>,</li>
+<li><code>NGT</code>,</li>
+<li><code>CVC</code> and</li>
+<li><code>Swan</code>. </li>
+</ul>
+<p>We envision that different groups have different areas in images to focus on. One possible way to leverage this idea is a <strong>multi-head approach</strong> we talked about. Multipe groups can share one single CNN backbone but have independent <strong>classifier</strong> heads.</p>
+<div class="container" style="display: inline-block;">  
+  <figure>
+  <div style="float: left; padding: 10px;">
+    <img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/images/single_head.png' width="666" height="666" align="center"/>
+    <figcaption align="center"><b>Fig 2.1; Single-Head Approach<br> courtesy of Tawara</b></figcaption>
+  </div>
+
+  <div style="float: right; padding: 10px;">
+    <img src='https://storage.googleapis.com/reighns/reighns_ml_projects/docs/projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/images/multi_heads.png' width="666" height="666" align="center"/>
+    <figcaption align="center"><b>Fig 2.2; Multi-Head Approach<br> courtesy of Tawara</b></figcaption>
+  </div>
+  </figure>
+</div>
+<p>With this in mind, let us move on:</p>
+<p><strong>Multi-Label</strong></p>
+<p>This is a multi-label classification problem. The section on the activation functions fully explained the single head version of using sigmoid layer. In fact, it is not uncommon to train N number of heads on a N-class Multi-Label problem. One thing to note is that if your classification head is <code>Linear</code> layer only (with BCE loss), then the back gradient propagation is the same whether you train one head, or multiple heads. However, we have non-linear layers in the head, including the <code>SpatialAttentionBlock</code>! At the time of writing, I won't say I fully grasp of all the inner workings of an Attention Module across various use cases, but an analogy to aid my understanding is as follows:</p>
+<blockquote>
+<p>Having taken Learning From Data from Professor Yaser, the inner joke is about the Hypothesis Space. Let me elaborate, given a resnet200D as our hypothesis space <span class="arithmatex">\(\mathcal{H}\)</span>, we aim to find a <span class="arithmatex">\(h \in \mathcal{H}\)</span> that best represents our true function <span class="arithmatex">\(f\)</span>. Now suppose our learning algorithm <span class="arithmatex">\(\mathcal{A}\)</span> does a good job in helping us to find such a optimal <span class="arithmatex">\(h\)</span>, it may take time, maybe say 100 epochs before finding it. Now if I break down the problem into 4 parts, each corresponding to a group, and we "aid" the learning algorithm by giving more attention to 4 focused areas, then we might find both a good <span class="arithmatex">\(h\)</span> that estimate the <span class="arithmatex">\(f\)</span> well, and may even be faster!</p>
+<p>If the above is too meh for understanding, imagine you are taking an exam in Machine Learning, as we all know, this field is a rabbit hole with never ending topics, let us say that there are 20 topics for you to study for the exam, you are dilligent and does that. But you have limited time and you decided to devote equal time to each topic, the consequence is you may not perform well for the exam due to limited understanding of each topic. Now, if I were to tell you that, hey, out of the 20 topics, can you study these 4 topics, as I think they have a higher chance of coming out, you will likely do better in the exam given that you devoted much more time on those "focused (attention!)" topics.</p>
+</blockquote>
+<p>The following code explains this methodology with reference to the above images.</p>
+<p>We first note to the readers that typically, if we use a single head approach, where if we were given a problem set <span class="arithmatex">\(\mathcal{D} = X \times y\)</span>, a hypothesis space <span class="arithmatex">\(\mathcal{H}\)</span> we learn from a learning algorithm <span class="arithmatex">\(\mathcal{A}\)</span>, producing a final hypothesis <span class="arithmatex">\(g\)</span> (or h, depends on your notation), that predicts as such <span class="arithmatex">\(g(X_{val}) = y_{\text{val_pred}}\)</span>, where each element in <span class="arithmatex">\(y_{\text{val_pred}}\)</span> corresponds to the class. Think of the basic MNIST example, our prediction vector's first element corresponds to the probability of it being an 0, and so on and so forth (assuming we use soft labels here). </p>
+<p>The change here is after the feature extraction layer (i.e. the feature logits after backbone), instead of just connecting it to a linear head for classification, we instead split the 11 outputs to 4 distinct groups. Each group will go through the head independent of the others, and this may prompt the model to put more <strong>attention</strong> on the independent groups. Finally, we <code>torch.cat(..,axis=1)</code> the outputs after they gone through their respective heads to recover the 11 outputs.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">CustomModel</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">,</span>
+    <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">load_weight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">load_url</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">out_dim_heads</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="c1"># Multi Head</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">out_dim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_dim_heads</span><span class="p">):</span>
+    <span class="n">layer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;head_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">SpatialAttentionBlock</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(</span><span class="n">start_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="n">in_features</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">,</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_neurons</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define the computation performed at every call.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_custom_layers</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">output_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_neurons</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_dim_heads</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">output_logits_backbone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">architecture</span><span class="p">[</span><span class="s2">&quot;backbone&quot;</span><span class="p">](</span><span class="n">input_neurons</span><span class="p">)</span>
+            <span class="n">multi_outputs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;head_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">output_logits_backbone</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">output_predictions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">multi_outputs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>We built-upon fellow Kaggler <strong>Tawara’s</strong> Multi-head model for our best scoring models. In particular, we experimented with the activation functions and dropout rates. We found models with <code>Swish</code> activation in the <code>multi-head</code> component of the network to perform &gt; best in our experiments. Our best scoring single model is a multi-head model with a <code>resnet200d</code> backbone. In particular, one single fold of <code>resnet200d</code> gives a private score of 0.970. 
+Another very interesting approach is 3-4 stage training. We did not have time to experiment with the 3-4 stage training as we joined the competition late.</p>
+</blockquote>
+<p><strong>Model Architectures:</strong>
+                    layer = torch.nn.Sequential(
+                        SpatialAttentionBlock(in_features, [64, 32, 16, 1]),
+                        torch.nn.AdaptiveAvgPool2d(output_size=1),
+                        torch.nn.Flatten(start_dim=1),
+                        torch.nn.Linear(in_features, in_features),
+                        self.activation,
+                        torch.nn.Dropout(0.3),
+                        torch.nn.Linear(in_features, out_dim),
+                    )
+- <strong>Backbone</strong>: <code>ResNet200D</code> and <code>SeResNet152d</code>
+- <strong>Classifier Head:</strong> Separated and Independent <strong>Spatial-Attention Module</strong> and the typical Multi-Layer Perceptron for Target Group (ETT(3), NGT(4), CVC(3), and Swan(1)).
+    - <strong>Spatial-Attention Module:</strong> <code>SpatialAttentionBlock(in_features, [64, 32, 16, 1])</code>
+    - <strong>MLP:</strong>: <code>Linear -&gt; Swish -&gt; Dropout -&gt; Linear</code>; It is worth noting after the <code>Linear</code> layer, there is a <code>Sigmoid</code> layer in this particular setup as we are using <code>BCEWITHLOGITSLOSS</code> from PyTorch for numerical stability.
+- <strong>Activation:</strong> One thing to note is we used <code>Swish</code> in our Classifier Head. Swish is a smooth and non-monotonic function, the latter contrasts when compared to many other activations. I will explain a bit in the next section.</p>
+<h3 id="activation-functions">Activation Functions</h3>
+<p>As we all know, activation functions are used to transform a neurons' linearity to non-linearity and decide whether to "fire" a neuron or not.</p>
+<p>We chose <strong>Swish</strong> as our main activation function in the classifier head layers.</p>
+<h4 id="swish">Swish</h4>
+<p>When we design or choose an activation function, we need to ensure the follows:</p>
+<ul>
+<li>
+<p>(Smoothness) Differentiable and Continuous: For example, the sigmoid function is continuous and hence differentiable. If the property is not fulfilled, we might face issues as backpropagation may not be performed properly since we cannot differentiate it.If you notice, the heaviside function is not. We cant perform GD using the HF as we cannot compute gradients but for the logistic function we can. The gradient of sigmoid function g is g(1-g) conveniently</p>
+</li>
+<li>
+<p>Monotonic: This helps the model to converge faster. But spoiler alert, Swish is not monotonic.</p>
+</li>
+</ul>
+<p>The properties of Swish are as follows:</p>
+<ul>
+<li>Bounded below: It is claimed in the paper it serves as a strong regularization.</li>
+<li>Smoothness: More smooth than ReLU which allows the model to optimize better, the error landscape, when smoothed, is easier to traverse in order to find a minima. An intuitive idea is the hill again, imagine you traverse down Bukit Timah Hill, vs traversing down Mount Himalaya LOL!!!</li>
+</ul>
+<p>Let us see how swish looks like when plotted.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">swish</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">sigmoid</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">swish</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">sigmoid</span>
+    <span class="k">return</span> <span class="n">swish</span>
+
+
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-20</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">swish</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x=</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">z=swish(x)=</span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">min z = </span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>x=[-10.          -7.77777778  -5.55555556  -3.33333333  -1.11111111
+   1.11111111   3.33333333   5.55555556   7.77777778  10.        ]
+
+z=swish(x)=[-4.53978687e-04 -3.25707421e-03 -2.13946242e-02 -1.14817319e-01
+ -2.75182001e-01  8.35929110e-01  3.21851601e+00  5.53416093e+00
+  7.77452070e+00  9.99954602e+00]
+
+min z = -0.27518200126563513
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Swish(X)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+</code></pre></div>
+<p><img alt="png" src="../walkthrough_files/walkthrough_46_0.png" /></p>
+<h3 id="model-architecture-final-activation-layer">Model Architecture: Final Activation Layer</h3>
+<blockquote>
+<p><a href="https://stats.stackexchange.com/questions/233658/softmax-vs-sigmoid-function-in-logistic-classifier">Sigmoid vs Softmax</a> I've noticed people often get directed to this question when searching whether to use sigmoid vs softmax in neural networks. If you are one of those people building a neural network classifier, here is how to decide whether to apply sigmoid or softmax to the raw output values from your network:</p>
+</blockquote>
+<ul>
+<li>If you have a multi-label classification problem = there is more than one "right answer" = the outputs are NOT mutually exclusive, then use a sigmoid function on each raw output independently. The sigmoid will allow you to have high probability for all of your classes, some of them, or none of them. Example: classifying diseases in a chest x-ray image. The image might contain pneumonia, emphysema, and/or cancer, or none of those findings.</li>
+</ul>
+<hr />
+<ul>
+<li>If you have a multi-class classification problem = there is only one "right answer" = the outputs are mutually exclusive, then use a softmax function. The softmax will enforce that the sum of the probabilities of your output classes are equal to one, so in order to increase the probability of a particular class, your model must correspondingly decrease the probability of at least one of the other classes. Example: classifying images from the MNIST data set of handwritten digits. A single picture of a digit has only one true identity - the picture cannot be a 7 and an 8 at the same time.</li>
+</ul>
+<hr />
+<p>In the below code we understand that our model's <code>forward()</code> call gives us a output <code>output_logits</code> of shape (8, 11) if the batch size is 8, and the 11 represents each logit for each of the class. </p>
+<ul>
+<li>
+<p>If we apply <code>Softmax</code> to this function on <code>dimension=1</code>, it simply means we are applying the function each row, from row 1 to 8. Take row 1 for example, the softmax function will squash all the 11 values into a 0-1 range, you can say this is a probability calibration, and the <code>output_predictions</code> is also of shape <code>(8, 11)</code> but all sums up to 1.</p>
+</li>
+<li>
+<p>If we apply <code>Sigmoid</code> to this function on <code>dimension=1</code>, although PyTorch does not specifiy this because it automatically assumes we are applying sigmoid elementwise, that is to say you cannot simply pass an array of 11 elements to sigmoid function and but we are applying the sigmoid function each row as well. There is a lot of nuance and intricacies here. We take the first row as an example, the first element corresponds to the class <strong>ETT-Abnormal</strong>, when we apply <code>sigmoid</code> to this element 0.0762, we get 0.5190, and for the second element class <strong>ETT-Borderline</strong>, we have 0.0877 and when we apply sigmoid, we get 0.5219, so on and so forth for the first row. You should by now observe that they do not sum to 1. This is because each time sigmoid is applied, it is in a <strong>one-vs-all</strong> scenario. Meaning to say, the 0.519 for <strong>ETT-Abnormal</strong> means that <strong>ETT-Abnormal</strong> is treated as the positive class, and the remaining 10 classes are treated as negative class 0. In other words, with 11 elements and sigmoid, we are essentially performing 11 binary classification on the said 11 classes. So 0.519 actually means that the probability of it being class 1 (<strong>ETT-Abnormal</strong>) is 0.519, and the probability of it being NOT class 1 (ALL other classes) is 0.481. The same logic applies to each of the element in the first row. One thing worth noting is that the predictions for row 1 is not <strong>mutually exclusive</strong>, meaning that from the 11 classes, we can have say, <strong>ETT-Abnormal, NGH-Abnormal, CVC-Abnormal</strong> to all have say probability score of 0.9, meaning to say, it is highly likely to be all 3 conditions! This is okay and common in X-Ray imaging.</p>
+<ul>
+<li>In the table dataframe below, I put them into a dataframe for easy visualization.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;ETT - Abnormal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ETT - Borderline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ETT - Normal&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;NGT - Abnormal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGT - Borderline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGT - Incompletely Imaged&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGT - Normal&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;CVC - Abnormal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CVC - Borderline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CVC - Normal&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;Swan Ganz Catheter Present&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">output_logits</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>  <span class="p">[</span> <span class="mf">0.0762</span><span class="p">,</span>  <span class="mf">0.0877</span><span class="p">,</span>  <span class="mf">0.1205</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0615</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0054</span><span class="p">,</span>  <span class="mf">0.0661</span><span class="p">,</span>  <span class="mf">0.1567</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0978</span><span class="p">,</span> <span class="mf">0.0248</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0350</span><span class="p">,</span>  <span class="mf">0.0084</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0196</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0729</span><span class="p">,</span>  <span class="mf">0.0534</span><span class="p">,</span>  <span class="mf">0.0307</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0428</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0016</span><span class="p">,</span>  <span class="mf">0.0013</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0247</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0094</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0424</span><span class="p">,</span>  <span class="mf">0.0192</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0125</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0310</span><span class="p">,</span>  <span class="mf">0.0118</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1301</span><span class="p">,</span>  <span class="mf">0.0418</span><span class="p">,</span>  <span class="mf">0.0229</span><span class="p">,</span>  <span class="mf">0.0139</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0526</span><span class="p">,</span> <span class="mf">0.0870</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0681</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0068</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0259</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0544</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0262</span><span class="p">,</span>  <span class="mf">0.0018</span><span class="p">,</span>  <span class="mf">0.0161</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0369</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0370</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0157</span><span class="p">,</span> <span class="mf">0.0036</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0592</span><span class="p">,</span>  <span class="mf">0.0107</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0366</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0695</span><span class="p">,</span>  <span class="mf">0.0740</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0353</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0363</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0019</span><span class="p">,</span>  <span class="mf">0.0085</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0144</span><span class="p">,</span> <span class="mf">0.0129</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0470</span><span class="p">,</span>  <span class="mf">0.0043</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0445</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0822</span><span class="p">,</span>  <span class="mf">0.0487</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0851</span><span class="p">,</span>  <span class="mf">0.0269</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0809</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0434</span><span class="p">,</span>  <span class="mf">0.0110</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0631</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0733</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0188</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0304</span><span class="p">,</span>  <span class="mf">0.0012</span><span class="p">,</span>  <span class="mf">0.0233</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0121</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0406</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0459</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0363</span><span class="p">,</span>  <span class="mf">0.0089</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0009</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0797</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0017</span><span class="p">],</span>
+                                <span class="p">[</span><span class="o">-</span><span class="mf">0.0415</span><span class="p">,</span>  <span class="mf">0.0787</span><span class="p">,</span>  <span class="mf">0.0283</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0617</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0526</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0016</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0409</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0481</span><span class="p">,</span> <span class="mf">0.0583</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0810</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0050</span><span class="p">]],</span>
+                                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">sigmoid</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+<span class="n">softmax</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">output_predictions_sigmoid</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">output_logits</span><span class="p">)</span>
+<span class="n">output_predictions_softmax</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">output_logits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output_predictions_sigmoid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output_predictions_softmax</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>tensor([[0.5190, 0.5219, 0.5301, 0.4846, 0.4987, 0.5165, 0.5391, 0.4756, 0.5062,
+         0.4913, 0.5021],
+        [0.4951, 0.4818, 0.5133, 0.5077, 0.4893, 0.4996, 0.5003, 0.4938, 0.4977,
+         0.4894, 0.5048],
+        [0.4969, 0.4923, 0.5029, 0.4675, 0.5104, 0.5057, 0.5035, 0.4869, 0.5217,
+         0.4830, 0.4983],
+        [0.4935, 0.4864, 0.4935, 0.5004, 0.5040, 0.4908, 0.4908, 0.4961, 0.5009,
+         0.4852, 0.5027],
+        [0.4909, 0.4826, 0.5185, 0.4912, 0.4909, 0.4995, 0.5021, 0.4964, 0.5032,
+         0.4883, 0.5011],
+        [0.4889, 0.4795, 0.5122, 0.4787, 0.5067, 0.4798, 0.4892, 0.5027, 0.4842,
+         0.4817, 0.4953],
+        [0.4924, 0.5003, 0.5058, 0.4970, 0.4899, 0.4885, 0.4909, 0.5022, 0.4998,
+         0.4801, 0.4996],
+        [0.4896, 0.5197, 0.5071, 0.4846, 0.4869, 0.4996, 0.4898, 0.4880, 0.5146,
+         0.4798, 0.4988]], dtype=torch.float64)
+tensor([[0.0948, 0.0959, 0.0991, 0.0826, 0.0874, 0.0939, 0.1028, 0.0797, 0.0901,
+         0.0849, 0.0886],
+        [0.0900, 0.0853, 0.0968, 0.0946, 0.0879, 0.0916, 0.0919, 0.0895, 0.0909,
+         0.0879, 0.0935],
+        [0.0907, 0.0890, 0.0929, 0.0806, 0.0957, 0.0939, 0.0931, 0.0871, 0.1001,
+         0.0858, 0.0912],
+        [0.0904, 0.0878, 0.0903, 0.0929, 0.0942, 0.0894, 0.0894, 0.0913, 0.0931,
+         0.0874, 0.0937],
+        [0.0887, 0.0858, 0.0991, 0.0888, 0.0887, 0.0918, 0.0928, 0.0907, 0.0932,
+         0.0878, 0.0924],
+        [0.0901, 0.0868, 0.0989, 0.0865, 0.0968, 0.0869, 0.0902, 0.0953, 0.0885,
+         0.0876, 0.0925],
+        [0.0899, 0.0928, 0.0948, 0.0915, 0.0890, 0.0885, 0.0894, 0.0935, 0.0926,
+         0.0856, 0.0925],
+        [0.0884, 0.0997, 0.0948, 0.0867, 0.0875, 0.0920, 0.0885, 0.0879, 0.0977,
+         0.0850, 0.0917]], dtype=torch.float64)
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span><span class="n">output_predictions_sigmoid</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">classes</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ETT - Abnormal</th>
+      <th>ETT - Borderline</th>
+      <th>ETT - Normal</th>
+      <th>NGT - Abnormal</th>
+      <th>NGT - Borderline</th>
+      <th>NGT - Incompletely Imaged</th>
+      <th>NGT - Normal</th>
+      <th>CVC - Abnormal</th>
+      <th>CVC - Borderline</th>
+      <th>CVC - Normal</th>
+      <th>Swan Ganz Catheter Present</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.519041</td>
+      <td>0.521911</td>
+      <td>0.530089</td>
+      <td>0.484630</td>
+      <td>0.498650</td>
+      <td>0.516519</td>
+      <td>0.539095</td>
+      <td>0.475569</td>
+      <td>0.506200</td>
+      <td>0.491251</td>
+      <td>0.502100</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.495100</td>
+      <td>0.481783</td>
+      <td>0.513347</td>
+      <td>0.507674</td>
+      <td>0.489302</td>
+      <td>0.499600</td>
+      <td>0.500325</td>
+      <td>0.493825</td>
+      <td>0.497650</td>
+      <td>0.489402</td>
+      <td>0.504800</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.496875</td>
+      <td>0.492251</td>
+      <td>0.502950</td>
+      <td>0.467521</td>
+      <td>0.510448</td>
+      <td>0.505725</td>
+      <td>0.503475</td>
+      <td>0.486853</td>
+      <td>0.521736</td>
+      <td>0.482982</td>
+      <td>0.498300</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.493525</td>
+      <td>0.486403</td>
+      <td>0.493450</td>
+      <td>0.500450</td>
+      <td>0.504025</td>
+      <td>0.490776</td>
+      <td>0.490751</td>
+      <td>0.496075</td>
+      <td>0.500900</td>
+      <td>0.485204</td>
+      <td>0.502675</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.490851</td>
+      <td>0.482632</td>
+      <td>0.518492</td>
+      <td>0.491176</td>
+      <td>0.490926</td>
+      <td>0.499525</td>
+      <td>0.502125</td>
+      <td>0.496400</td>
+      <td>0.503225</td>
+      <td>0.488252</td>
+      <td>0.501075</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.488877</td>
+      <td>0.479462</td>
+      <td>0.512173</td>
+      <td>0.478738</td>
+      <td>0.506725</td>
+      <td>0.479786</td>
+      <td>0.489152</td>
+      <td>0.502750</td>
+      <td>0.484230</td>
+      <td>0.481683</td>
+      <td>0.495300</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.492401</td>
+      <td>0.500300</td>
+      <td>0.505825</td>
+      <td>0.496975</td>
+      <td>0.489851</td>
+      <td>0.488527</td>
+      <td>0.490926</td>
+      <td>0.502225</td>
+      <td>0.499775</td>
+      <td>0.480086</td>
+      <td>0.499575</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.489626</td>
+      <td>0.519665</td>
+      <td>0.507075</td>
+      <td>0.484580</td>
+      <td>0.486853</td>
+      <td>0.499600</td>
+      <td>0.489776</td>
+      <td>0.487977</td>
+      <td>0.514571</td>
+      <td>0.479761</td>
+      <td>0.498750</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="batch-size-and-tricks">Batch Size and Tricks</h3>
+<p>Due to hardware limitation, we can barely fit in anything more than a <code>batch_size</code> of 8.</p>
+<p>Quoting from <a href="https://arxiv.org/abs/1609.04836">here</a>:</p>
+<blockquote>
+<p>It has been observed in practice that when using a larger batch there is a degradation in the quality of the model, as measured by its ability to generalize [...]</p>
+<p>large-batch methods tend to converge to sharp minimizers of the training and testing functions—and as is well known, sharp minima lead to poorer generalization. In contrast, small-batch methods consistently converge to flat minimizers, and our experiments support a commonly held view that this is due to the inherent noise in the gradient estimation.</p>
+</blockquote>
+<p>The above shows that large batch size may <code>fit</code> the model too well, as the model will learn features of the dataset in less iterations, and may memorize this particular dataset's features, leading to overfitting and poor generalization. However, too small a batch size causes our convergence to go too slow, empirically, we take 32 or 64 as the ideal batch size in this competition. </p>
+<p>We used both <code>torch.amp</code> and <code>gradient accumulation</code> to be able to fit more batch sizes. We did not freeze the <code>batch_norm</code> layers, which still yielded great results. What we should have done is to experiment more on how to freeze the batch norm layers properly, as I believe that it may help. In the end, we used a batch size of 8 and fit 4 iterations using <code>gradient accumulation</code>  and trained a total number of 20 epochs to get a local CV score of roughly 0.969.</p>
+<h3 id="optimizer-scheduler-and-loss">Optimizer, Scheduler and Loss</h3>
+<h4 id="scheduler">Scheduler</h4>
+<p>The configuration can be seen here. But note that we incorporated <code>GradualWarmUpScheduler</code> along with <code>CosineAnnealingLR</code>, we also experimented with <code>CosineAnnealingWarmRestarts</code>, the results are similar.</p>
+<p>From the paper <a href="https://arxiv.org/abs/1706.02677">Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour</a>, we learnt about the warmup technique. Although the context of the paper was training under large batch size, we find it helpful even in small batches for the training to converge. </p>
+<p>The basic algorithm is as follows:</p>
+<ol>
+<li>Set a base_lr or initial lr for what you want in a model, say 1e-4.</li>
+<li>If we set our warmup epoch to be 10, then we will start from with 1e-4/10 in the first epoch, and take equal steps each time to converge to 1e-4 in the 10th epoch.</li>
+<li>After the 10th epoch, warmup ends, we start applying our scheduler's normal steps.</li>
+</ol>
+<p>However, I took quite some time to understand the idea of gradual warmup, I made my understanding <a href="https://github.com/reigHns/reighns-pytorch-gradual-warmup-scheduler/blob/master/src/run.py">here</a>.</p>
+<p>We should try <code>OneCyclePolicy</code> as detailed by fastai.</p>
+<div class="highlight"><pre><span></span><code><span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">CosineAnnealingLR</span><span class="p">:</span>
+    <span class="n">T_max</span><span class="p">:</span> <span class="n">num_epochs</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">eta_min</span><span class="p">:</span> <span class="mf">1.0e-07</span>
+    <span class="n">last_epoch</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="n">true</span>
+</code></pre></div>
+<p>Notice in my configuration above, we set the parameter <code>T_max</code> to be the 19, which is like a one-shot training.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">cosine_annealing_lr_scheduler_one_shot</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span> <span class="n">eta_min</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">)</span>
+
+<span class="n">cosine_annealing_lr_one_shot</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">cosine_annealing_lr_one_shot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lr&quot;</span><span class="p">])</span>
+
+<span class="c1">#     print(&quot;Factor = &quot;,i,&quot; , Learning Rate = &quot;,optimizer.param_groups[0][&quot;lr&quot;])</span>
+    <span class="n">cosine_annealing_lr_scheduler_one_shot</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cosine_annealing_lr_one_shot</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="png" src="../walkthrough_files/walkthrough_56_0.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">cosine_annealing_lr_scheduler_normal</span><span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">eta_min</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">)</span>
+<span class="n">cosine_annealing_lr_normal</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">cosine_annealing_lr_normal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lr&quot;</span><span class="p">])</span>
+
+<span class="c1">#     print(&quot;Factor = &quot;,i,&quot; , Learning Rate = &quot;,optimizer.param_groups[0][&quot;lr&quot;])</span>
+    <span class="n">cosine_annealing_lr_scheduler_normal</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cosine_annealing_lr_normal</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>[&lt;matplotlib.lines.Line2D at 0x260cde7e7c0&gt;]
+</code></pre></div>
+<p><img alt="png" src="../walkthrough_files/walkthrough_57_1.png" /></p>
+<h4 id="loss">Loss</h4>
+<p>We should also experiment with <code>Focal Loss</code> but seeing negative results from fellow Kagglers, on top with limited resources, we did not try it.</p>
+<h2 id="ensembling">Ensembling</h2>
+<h3 id="forward-ensembling">Forward Ensembling</h3>
+<p>We made use of the <a href="https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/175614">Forward Ensembling</a> idea from Chris in SIIM-ISIC Melanoma Classification back in August 2020, I modified the code for this specific task. A simple description is as follows, modified from Chris, with more mathematical notations.</p>
+<ol>
+<li>We start off with a dataset <span class="arithmatex">\(\mathcal{D} = X \times y\)</span> where it is sampled from the true population <span class="arithmatex">\(\mathcal{X} \times \mathcal{Y}\)</span>.</li>
+<li>We apply KFold (5 splits) to the dataset, as illustrated in the diagram. </li>
+<li>We can now train five different hypothesis <span class="arithmatex">\(h_{F1}, h_{F2},...,h_{F5}\)</span>, where <span class="arithmatex">\(h_{F1}\)</span> is trained on Fold 2 to Fold 5 and predict on Fold 1, <span class="arithmatex">\(h_{F2}\)</span> is trained on Fold 1,3,4,5 and predict on Fold 2. The logic follows for all 5 hypothesis.</li>
+<li>Notice that in the five models, we are predicting on a unique validation fold, and as a result, after we trained all 5 folds, we will have the predictions made on the whole training set (F1-F5). This predictions is called the Out-of-Fold predictions.</li>
+<li>We then go a step further and calculate the AUC score with the OOF predictions with the ground truth to get the OOF AUC. We save it to a csv or dataframe called <strong>oof_1.csv</strong>, subsequent oof trained on different hypothesis space should be named <strong>oof_i.csv</strong> where <span class="arithmatex">\(i \in [2,3,...]\)</span>.</li>
+<li>After we trained all 5 folds, we will use <span class="arithmatex">\(h_{1}\)</span> to predict on <span class="arithmatex">\(X_{test}\)</span> and obtain predictions <span class="arithmatex">\(Y_{\text{h1 preds}}\)</span>, we then use <span class="arithmatex">\(h_{2}\)</span> to predict on <span class="arithmatex">\(X_{test}\)</span> and obtain predictions <span class="arithmatex">\(Y_{\text{h2 preds}}\)</span>, we do this for all five folds and finally <span class="arithmatex">\(Y_{\text{final preds}} = \dfrac{1}{5}\sum_{i=1}^{5}Y_{\text{hi preds}}\)</span>. This is a typical pipeline in most machine learning problems. We save this final predictions as <strong>sub_1.csv</strong>, subsequence predictions trained on different hypothesis space should be named <strong>sub_i.csv</strong> where <span class="arithmatex">\(i \in [2,3,...]\)</span>.</li>
+<li>Now if we train another model, a completely different hypothesis space is used, to be more pedantic, we denote the previous model to be taken from the hypothesis space <span class="arithmatex">\(\mathcal{H}_{1}\)</span>, and now we move on to <span class="arithmatex">\(\mathcal{H}_{2}\)</span>. We repeat step 1-6 on this new model (Note that you are essentially training 10 "models" now since we are doing KFold twice, and oh, please set the seed of KFold to be the same, it should never be the case that both model comes from different splitting seed for apparent reasons).</li>
+</ol>
+<hr />
+<p>Here is the key (given the above setup with 2 different models trained on 5 folds):</p>
+<ol>
+<li>Normally, most people do a simple mean ensemble, that is <span class="arithmatex">\(\dfrac{Y_{\text{final preds H1}} + Y_{\text{final preds H2}}}{2}\)</span>. This works well most of the time as we trust both model holds equal importance in the final predictions.</li>
+<li>One issue may be that certain models should be weighted more than the rest, we should not simply take Leaderboard feedback score to judge the weight assignment. A general heuristic here is called Forward Selection.</li>
+<li>(Extract from Chris) Now say that you build 2 models (that means that you did 5 KFold twice). You now have oof_1.csv, oof_2.csv, sub_1.csv, and sub_2.csv. How do we blend the two models? We find the weight w such that <code>w * oof_1.predictions + (1-w) * oof_2.predictions</code> has the largest AUC.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">all</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.00</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">]:</span>
+    <span class="n">ensemble_pred</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">oof_1</span><span class="o">.</span><span class="n">predictions</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">oof_2</span><span class="o">.</span><span class="n">predictions</span>
+    <span class="n">ensemble_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span> <span class="n">oof</span><span class="o">.</span><span class="n">target</span> <span class="p">,</span> <span class="n">ensemble_pred</span> <span class="p">)</span>
+    <span class="nb">all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">ensemble_auc</span> <span class="p">)</span>
+<span class="n">best_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span> <span class="nb">all</span> <span class="p">)</span> <span class="o">/</span> <span class="mf">100.</span>
+</code></pre></div>
+<p>Then we can assign the best weight like:</p>
+<div class="highlight"><pre><span></span><code><span class="n">final_ensemble_pred</span> <span class="o">=</span> <span class="n">best_weight</span> <span class="o">*</span> <span class="n">sub_1</span><span class="o">.</span><span class="n">target</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">best_weight</span><span class="p">)</span> <span class="o">*</span> <span class="n">sub_2</span><span class="o">.</span><span class="n">target</span>
+</code></pre></div>
+<p><img src='https://drive.google.com/uc?id=12Mpa_9pTdNYizDCVxq_VxX5qx5j84Y1X' width="500"/>
+Coutersy of Chris</p>
+<hr />
+<p>In this competition, there are two approaches, either maximize the average of the macro AUC score of all the classes, or maximize each column/class separately. It turns out that maximizing the columns separately led to disastrous results (it could be my code and idea is wrong, as ROC is a ranking metric). </p>
+<h2 id="conclusion">Conclusion</h2>
+<p>What we could have done better:</p>
+<ul>
+<li>Use more variety of <code>classifier head</code> like <code>GeM</code>.</li>
+<li>Use more variety of <code>backbone</code>.</li>
+<li>Use <a href="http://neptune.ai">Neptune.ai</a> to log our experiments as soon things start to get messy. Basically MLOps is important!</li>
+<li>Experiment on 3-4 stage training.</li>
+<li>Pseudo Labelling.</li>
+<li>Knowledge Distillation.</li>
+<li>
+<p>Experiment more on maximizing AUC during ensembles. <code>rank_pct</code> etc.</p>
+</li>
+<li>
+<p><strong>See novel three stage training: https://www.kaggle.com/yasufuminakama/ranzcr-resnet200d-3-stage-training-step1</strong></p>
+</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>
+<p><a href="https://debuggercafe.com/multi-head-deep-learning-models-for-multi-label-classification/">Multi-Head Deep Learning Model with Multi-Label Classification</a></p>
+</li>
+<li>
+<p><a href="https://towardsdatascience.com/journey-to-the-center-of-multi-label-classification-384c40229bff">AUC Metric on Multi-Label</a></p>
+</li>
+<li>
+<p><a href="https://glassboxmedicine.com/2019/05/26/classification-sigmoid-vs-softmax/">Sigmoid and Softmax for Multi-Label</a></p>
+</li>
+<li>
+<p><a href="https://towardsdatascience.com/journey-to-the-center-of-multi-label-classification-384c40229bff">Multi-Label Classification Tutorial</a></p>
+</li>
+<li>
+<p><a href="https://debuggercafe.com/multi-head-deep-learning-models-for-multi-label-classification/">Why we should use Multi-Head in Multi-Label Classification</a></p>
+<ul>
+<li><a href="https://debuggercafe.com/multi-label-image-classification-with-pytorch-and-deep-learning/">Follow Up 1</a></li>
+<li><a href="https://debuggercafe.com/multi-label-fashion-item-classification-using-deep-learning-and-pytorch/">Follow Up 2</a></li>
+<li><a href="https://debuggercafe.com/deep-learning-architectures-for-multi-label-classification-using-pytorch/">Follow Up 3</a></li>
+</ul>
+</li>
+<li>
+<p><a href="https://stats.stackexchange.com/questions/485551/1-neuron-bce-loss-vs-2-neurons-ce-loss">Sigmoid is Binary Cross Entropy</a></p>
+</li>
+<li>
+<p><a href="https://towardsdatascience.com/attention-in-computer-vision-fd289a5bd7ad">Attention Blocks in Computer Vision</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/visionwizard/understanding-attention-modules-cbam-and-bam-a-quick-read-ca8678d1c671">Spatial Attention Blocks</a></p>
+</li>
+<li>
+<p><a href="https://paperswithcode.com/method/spatial-attention-module">Spatial Attention Module</a></p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/1807.06521">Convolutional Block Attention Module</a></p>
+</li>
+<li>
+<p>[Dive Into Deep Learning - Chapter 10: Attention Mechanisms]</p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/1706.02677">Gradual Warmup: Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour</a></p>
+</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../../../machine_learning_and_deep_learning/ensemble_theory/forward_ensemble/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Forward Ensemble (Hill Climbing)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Forward Ensemble (Hill Climbing)
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../../SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-footer__link md-footer__link--next" aria-label="Next: SIIM-ISIC Melanoma Classification" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              SIIM-ISIC Melanoma Classification
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate"], "search": "../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

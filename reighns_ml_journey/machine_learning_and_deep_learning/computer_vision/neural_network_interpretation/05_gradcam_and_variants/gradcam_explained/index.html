@@ -1,0 +1,2655 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gao-hongnan.github.io/reighns-ml-blog/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained/">
+      
+      <link rel="icon" href="../../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+    
+    
+      
+        <title>Grad-CAM Explained - Hongnan G. Machine Learning Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../assets/stylesheets/main.e411adfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../../../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#grad-cam-an-introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../.." title="Hongnan G. Machine Learning Blog" class="md-header__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hongnan G. Machine Learning Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Grad-CAM Explained
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../.." title="Hongnan G. Machine Learning Blog" class="md-nav__button md-logo" aria-label="Hongnan G. Machine Learning Blog" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Hongnan G. Machine Learning Blog
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gao-hongnan" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM277.3 415.7c-8.4 1.5-11.5-3.7-11.5-8 0-5.4.2-33 .2-55.3 0-15.6-5.2-25.5-11.3-30.7 37-4.1 76-9.2 76-73.1 0-18.2-6.5-27.3-17.1-39 1.7-4.3 7.4-22-1.7-45-13.9-4.3-45.7 17.9-45.7 17.9-13.2-3.7-27.5-5.6-41.6-5.6-14.1 0-28.4 1.9-41.6 5.6 0 0-31.8-22.2-45.7-17.9-9.1 22.9-3.5 40.6-1.7 45-10.6 11.7-15.6 20.8-15.6 39 0 63.6 37.3 69 74.3 73.1-4.8 4.3-9.1 11.7-10.6 22.3-9.5 4.3-33.8 11.7-48.3-13.9-9.1-15.8-25.5-17.1-25.5-17.1-16.2-.2-1.1 10.2-1.1 10.2 10.8 5 18.4 24.2 18.4 24.2 9.7 29.7 56.1 19.7 56.1 19.7 0 13.9.2 36.5.2 40.6 0 4.3-3 9.5-11.5 8-66-22.1-112.2-84.9-112.2-158.3 0-91.8 70.2-161.5 162-161.5S388 165.6 388 257.4c.1 73.4-44.7 136.3-110.7 158.3zm-98.1-61.1c-1.9.4-3.7-.4-3.9-1.7-.2-1.5 1.1-2.8 3-3.2 1.9-.2 3.7.6 3.9 1.9.3 1.3-1 2.6-3 3zm-9.5-.9c0 1.3-1.5 2.4-3.5 2.4-2.2.2-3.7-.9-3.7-2.4 0-1.3 1.5-2.4 3.5-2.4 1.9-.2 3.7.9 3.7 2.4zm-13.7-1.1c-.4 1.3-2.4 1.9-4.1 1.3-1.9-.4-3.2-1.9-2.8-3.2.4-1.3 2.4-1.9 4.1-1.5 2 .6 3.3 2.1 2.8 3.4zm-12.3-5.4c-.9 1.1-2.8.9-4.3-.6-1.5-1.3-1.9-3.2-.9-4.1.9-1.1 2.8-.9 4.3.6 1.3 1.3 1.8 3.3.9 4.1zm-9.1-9.1c-.9.6-2.6 0-3.7-1.5s-1.1-3.2 0-3.9c1.1-.9 2.8-.2 3.7 1.3 1.1 1.5 1.1 3.3 0 4.1zm-6.5-9.7c-.9.9-2.4.4-3.5-.6-1.1-1.3-1.3-2.8-.4-3.5.9-.9 2.4-.4 3.5.6 1.1 1.3 1.3 2.8.4 3.5zm-6.7-7.4c-.4.9-1.7 1.1-2.8.4-1.3-.6-1.9-1.7-1.5-2.6.4-.6 1.5-.9 2.8-.4 1.3.7 1.9 1.8 1.5 2.6z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gao-hongnan
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../sp_ppe/" class="md-nav__link">
+        SP PPE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Mathematics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mathematics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Mathematics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/general_mathematical_terms_and_definitions.md" class="md-nav__link">
+        General Mathematic Terms and Definitions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          Linear Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Algebra" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Algebra
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1" type="checkbox" id="__nav_4_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1">
+          Vectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vectors" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vectors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_1_1" type="checkbox" id="__nav_4_2_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_1_1">
+          Vector Products
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Products" data-md-level="4">
+        <label class="md-nav__title" for="__nav_4_2_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Products
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_outer_product.md" class="md-nav__link">
+        Outer Product
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_unit_vector/" class="md-nav__link">
+        Unit Vector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/02_vectors/02_linear_algebra_vectors_exercises/" class="md-nav__link">
+        Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          Vector Spaces
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Vector Spaces" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Vector Spaces
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_subspaces/" class="md-nav__link">
+        Vector Space and Subspaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_vector_span/" class="md-nav__link">
+        Vector Span
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_linear_independence/" class="md-nav__link">
+        Linear Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/03_vector_spaces/03_linear_algebra_vector_spaces_basis_dimension/" class="md-nav__link">
+        Basis and Dimension
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_3" type="checkbox" id="__nav_4_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_3">
+          Matrix
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix/" class="md-nav__link">
+        Matrix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_matrix_types/" class="md-nav__link">
+        Basic Matrix Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_basic_operations/" class="md-nav__link">
+        Basic Matrix Operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/04_matrices/04_linear_algebra_matrix_multiplication/" class="md-nav__link">
+        Matrix Multiplication
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_4" type="checkbox" id="__nav_4_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_4">
+          Matrix Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Matrix Theory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Matrix Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.01_linear_algebra_systems_of_linear_equations.md" class="md-nav__link">
+        System of Linear Equations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.02_linear_algebra_row_reduction_preserves_rank/" class="md-nav__link">
+        Row Reduction Preserves Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.03_linear_algebra_matrix_theory_matrix_spaces_row_space/" class="md-nav__link">
+        Row Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.04_linear_algebra_matrix_theory_matrix_spaces_column_space/" class="md-nav__link">
+        Column Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.05_linear_algebra_matrix_theory_matrix_spaces_right_nullspace/" class="md-nav__link">
+        Right Nullspace (Kernel)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.06_linear_algebra_matrix_theory_matrix_spaces_left_nullspace/" class="md-nav__link">
+        Left Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.07_linear_algebra_matrix_theory_matrix_rank/" class="md-nav__link">
+        Matrix Rank
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/05_system_of_linear_equations_and_matrix_theory/05.08_linear_algebra_matrix_theory_matrix_spaces_summary/" class="md-nav__link">
+        The Four Fundamental Subspaces (Summary)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_5" type="checkbox" id="__nav_4_2_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_5">
+          Linear Transformation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Linear Transformation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Linear Transformation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.01_linear_algebra_linear_transformations/" class="md-nav__link">
+        Linear Transformation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.02_linear_algebra_linear_transformations_nullspace/" class="md-nav__link">
+        Nullspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.03_linear_algebra_linear_transformations_ranges/" class="md-nav__link">
+        Range
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.04_linear_algebra_linear_transformations_homomorphism/" class="md-nav__link">
+        Homomorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.05_linear_algebra_linear_transformations_fundamental_theorem/" class="md-nav__link">
+        Fundamental Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/06_linear_transformation/06.06_linear_algebra_linear_transformations_matrix/" class="md-nav__link">
+        Linear Transformation and Matrix
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_6" type="checkbox" id="__nav_4_2_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_6">
+          Analytic Geometry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Analytic Geometry" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Analytic Geometry
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.01_motivation/" class="md-nav__link">
+        Motivation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.02_norms/" class="md-nav__link">
+        Norms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.03_inner_products/" class="md-nav__link">
+        Inner Product Spaces
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.04_lengths_and_distances/" class="md-nav__link">
+        Lengths and Distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.05_angles_and_orthogonality/" class="md-nav__link">
+        Angles and Orthogoanlity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.06_orthogonal_subspaces/" class="md-nav__link">
+        Orthogonal Subspace
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.07_orthogonal_projections/" class="md-nav__link">
+        Orthogonal Projection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.08_orthogonal_matrices_and_basis/" class="md-nav__link">
+        Orthogonal Matrices and Basis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/08_analytic_geometry/08.09_gram_schmidt_orthogonalization/" class="md-nav__link">
+        Gram-Schmidt Orthogonalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/linear_algebra/linear_algebra_interview_questions/" class="md-nav__link">
+        Interview
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Probability and Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Probability and Statistics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Probability and Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/probability4datascience.md" class="md-nav__link">
+        Introduction to Probability for Data Science (Stanley H. Chan)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3_2" type="checkbox" id="__nav_4_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3_2">
+          Introduction to Probability
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Introduction to Probability" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction to Probability
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.01_probability_space.md" class="md-nav__link">
+        Probability Space
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.02_probability_axioms.md" class="md-nav__link">
+        Probability Axioms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.03_conditional_probability.md" class="md-nav__link">
+        Conditional Probability
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.04_independence.md" class="md-nav__link">
+        Independence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.05_bayes_theorem.md" class="md-nav__link">
+        Bayes Theorem
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../mathematics/probability_statistics_theory/02_introduction_to_probability/02.06_summary.md" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Machine Learning and Deep Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning and Deep Learning" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning and Deep Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1" type="checkbox" id="__nav_5_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1">
+          Computer Vision
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Computer Vision" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_1">
+          <span class="md-nav__icon md-icon"></span>
+          Computer Vision
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        README
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2" type="checkbox" id="__nav_5_1_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2">
+          Neural Network Interpretation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Neural Network Interpretation" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Neural Network Interpretation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_1" type="checkbox" id="__nav_5_1_2_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_1">
+          Visualization of Feature Map Activations
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Visualization of Feature Map Activations" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Visualization of Feature Map Activations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_feature_map_activation/feature_map_activation/" class="md-nav__link">
+        Feature Map Activations (Part I)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01_feature_map_activation/feature_map_activation_reduced/" class="md-nav__link">
+        Feature Map Activations (Part II)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conv_filters/Visualizing Convolutional Filters.md" class="md-nav__link">
+        Visualization of Convolutional Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../salient_map/Salient Map.md" class="md-nav__link">
+        Salient Map
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_1_2_4" type="checkbox" id="__nav_5_1_2_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_1_2_4">
+          Grad-CAM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Grad-CAM" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_1_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Grad-CAM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Grad-CAM Explained
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Grad-CAM Explained
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#grad-cam-an-introduction" class="md-nav__link">
+    Grad-CAM, an Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminologies" class="md-nav__link">
+    Terminologies
+  </a>
+  
+    <nav class="md-nav" aria-label="Terminologies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#feature-maps" class="md-nav__link">
+    Feature Maps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-average-pooling-gap" class="md-nav__link">
+    Global Average Pooling (GAP)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-intuition" class="md-nav__link">
+    The Intuition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-big-picture" class="md-nav__link">
+    The Big Picture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    The Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notation" class="md-nav__link">
+    Notation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-algorithm_1" class="md-nav__link">
+    The Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-forward-propagate" class="md-nav__link">
+    Step 1: Forward-propagate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-backward-propagate" class="md-nav__link">
+    Step 2: Backward-propagate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-global-average-pool-gradients" class="md-nav__link">
+    Step 3: Global Average Pool Gradients
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-weighted-global-sum-localized-feature-maps" class="md-nav__link">
+    Step 4: Weighted Global Sum: Localized Feature Maps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-grad-cam-localization-map-with-relu" class="md-nav__link">
+    Step 5: Grad-CAM Localization Map with ReLU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-superimpose-the-grad-cam-heatmap-to-original-image" class="md-nav__link">
+    Step 6: Superimpose the Grad-CAM Heatmap to Original Image
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dissecting-kerass-code" class="md-nav__link">
+    Dissecting KERAS's code
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gradcam_from_scratch/" class="md-nav__link">
+        Grad-CAM from Scratch
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../image_normalization/Image_Normalization_and_Standardization/" class="md-nav__link">
+        Image Normalization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          Fundamental Concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Fundamental Concepts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Fundamental Concepts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../fundamentals/loss_functions/cross_entropy_loss/cross_entropy_loss_from_scratch.md" class="md-nav__link">
+        Cross Entropy Loss
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Ensemble Theory
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Ensemble Theory" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Ensemble Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../ensemble_theory/forward_ensemble/" class="md-nav__link">
+        Forward Ensemble (Hill Climbing)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Machine Learning Projects
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Machine Learning Projects" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/RANZCR%20CLiP%20-%20Catheter%20and%20Line%20Position%20Challenge/notebooks/walkthrough/" class="md-nav__link">
+        RANZCR CLiP - Catheter and Line Position Challenge
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/SIIM-ISIC%20Melanoma%20Classification/notebooks/walkthrough/" class="md-nav__link">
+        SIIM-ISIC Melanoma Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/LTA_road_cracks_detection/notebooks/walkthrough/" class="md-nav__link">
+        LTA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4">
+          Breast Cancer Wisconsin (Supervised Classification)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Breast Cancer Wisconsin (Supervised Classification)" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Breast Cancer Wisconsin (Supervised Classification)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%200%20-%20Introduction%20and%20Problem%20Statement/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%201%20-%20Preliminary%20Data%20Inspection%20and%20Cleaning/" class="md-nav__link">
+        Preliminary Data Inspection and Cleaning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%202%20-%20Preliminary%20EDA/" class="md-nav__link">
+        EDA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%203%20-%20Feature%20Engineering/" class="md-nav__link">
+        Feature Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%204%20-%20Modelling%20%28Metric%20to%20Optimize%29/" class="md-nav__link">
+        Modelling (Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%205%20-%20Modelling%20%28Cross-Validation%20Methodology%29/" class="md-nav__link">
+        Modelling (Cross-Validation Schema)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%206%20-%20Modelling%20%28Preprocessing%20and%20Spot%20Checking%29/" class="md-nav__link">
+        Modelling (Preprocessing and Spot Checking)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%207%20-%20Modelling%20%28Model%20Selection%20and%20Hyperparameter%20Tuning%29/" class="md-nav__link">
+        Modelling (Model Selection)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/breast_cancer_wisconsin/Stage%208%20-%20Modelling%20%28Model%20Evaluation%20and%20Interpretation%29/" class="md-nav__link">
+        Modelling (Model Evaluation)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#grad-cam-an-introduction" class="md-nav__link">
+    Grad-CAM, an Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminologies" class="md-nav__link">
+    Terminologies
+  </a>
+  
+    <nav class="md-nav" aria-label="Terminologies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#feature-maps" class="md-nav__link">
+    Feature Maps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-average-pooling-gap" class="md-nav__link">
+    Global Average Pooling (GAP)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-intuition" class="md-nav__link">
+    The Intuition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-big-picture" class="md-nav__link">
+    The Big Picture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    The Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notation" class="md-nav__link">
+    Notation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-algorithm_1" class="md-nav__link">
+    The Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-forward-propagate" class="md-nav__link">
+    Step 1: Forward-propagate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-backward-propagate" class="md-nav__link">
+    Step 2: Backward-propagate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-global-average-pool-gradients" class="md-nav__link">
+    Step 3: Global Average Pool Gradients
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-weighted-global-sum-localized-feature-maps" class="md-nav__link">
+    Step 4: Weighted Global Sum: Localized Feature Maps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-grad-cam-localization-map-with-relu" class="md-nav__link">
+    Step 5: Grad-CAM Localization Map with ReLU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-superimpose-the-grad-cam-heatmap-to-original-image" class="md-nav__link">
+    Step 6: Superimpose the Grad-CAM Heatmap to Original Image
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dissecting-kerass-code" class="md-nav__link">
+    Dissecting KERAS's code
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/gao-hongnan/edit/master/docs/reighns_ml_journey/machine_learning_and_deep_learning/computer_vision/neural_network_interpretation/05_gradcam_and_variants/gradcam_explained.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Grad-CAM Explained</h1>
+
+<div class="arithmatex">\[
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\L}{\mathbf{L}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\v}{\mathbf{v}}
+\newcommand{\a}{\mathbf{a}}
+\newcommand{\b}{\mathbf{b}}
+\newcommand{\c}{\mathbf{c}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\u}{\mathbf{u}}
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\]</div>
+<h2 id="grad-cam-an-introduction">Grad-CAM, an Introduction</h2>
+<p>We will be discussing the paper written by R.R Selvaraju et al on <strong><a href="https://ieeexplore.ieee.org/document/8237336">Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization</a></strong> on how we can interpret large scale Deep Neural Networks (CNN).</p>
+<h2 id="terminologies">Terminologies</h2>
+<h3 id="feature-maps">Feature Maps</h3>
+<p><a href="https://stats.stackexchange.com/questions/291820/what-is-the-definition-of-a-feature-map-aka-activation-map-in-a-convolutio">Feature Maps</a> has an <a href="https://www.quora.com/What-is-meant-by-feature-maps-in-convolutional-neural-networks">intuitive interpretation</a>, understanding it intuitively should be prioritized than knowing the underlying mathematical structure.</p>
+<p>Imagine a 32 by 32 image, consider that a convolutional layer applied on the input and we assume only 2 kernels are applied, then only 2 feature maps are obtained:</p>
+<ul>
+<li>The first feature map is a color filter that is responsible to detect color contrast of an image;</li>
+<li>The second feature map is a <a href="https://en.wikipedia.org/wiki/Sobel_operator">sobel's filter</a> where it detects edges.</li>
+</ul>
+<p>Then assume kernel has size 5 by 5, when convolved on the 32 by 32 image, yields a feature map output of size 28 by 28, although "downsampled", this feature map should still capture valueble spatial information of the 32 by 32 image, and in this case, all edges of the input image (say a cat) will be shown in the feature map 1, we call it <span class="arithmatex">\(\A^1\)</span>, and the color contrast is displayed on feature map 2, <span class="arithmatex">\(\A^2\)</span>.</p>
+<p>So the full settings is:</p>
+<ul>
+<li>An input image <span class="arithmatex">\(\mathcal{X}\)</span> of size <span class="arithmatex">\((3, 32, 32)\)</span>.</li>
+<li>A CNN but we will only look at its very first layer, a conv layer that has:<ul>
+<li>2 kernels of size 5 by 5 and default paddings and stride such that the output feature map is 28 by 28.</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/gradcam_and_variants/cat.PNG" style="margin-left:auto; margin-right:auto"/></p>
+<p style="text-align: center">
+    <b>Original Cat Image</b>
+</p>
+
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/gradcam_and_variants/edge_detectors.PNG" style="margin-left:auto; margin-right:auto"/></p>
+<p style="text-align: center">
+    <b>Feature Map A1 and A2; By Hongnan G.</b>
+</p>
+
+<p>Notice in the 2 feature maps above, after we pass in the RGB cat image of 3 channels to the first conv layer, we will receive two outputs, called <strong>feature maps</strong>, each of them will describe the image in one way or another. One thing to note is that earlier conv layers will retain a lot detailed information of the image such as the edges, color contrast, but as we go on later, the feature maps become more abstract as they capture high level and abstract details that we human cannot comprehend easily.</p>
+<h3 id="global-average-pooling-gap">Global Average Pooling (GAP)</h3>
+<p>The GAP is usually applied after the last conv layer. But for the sake of explanation, we will assume that our "last conv layer" is our first conv layer.</p>
+<p>Instead of down sampling patches of the input feature map, global pooling down samples the entire feature map to a single value.</p>
+<p>In the last few years, experts have turned to global average pooling (GAP) layers to minimize overfitting by reducing the total number of parameters in the model. Similar to max pooling layers, GAP layers are used to reduce the spatial dimensions of a three-dimensional tensor. However, GAP layers perform a more extreme type of dimensionality reduction, where a tensor with dimensions h×w×d is reduced in size to have dimensions 1×1×d. GAP layers reduce each h×w feature map to a single number by simply taking the average of all hw values.</p>
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/gradcam_and_variants/gap.png" width="500" height="500" style="margin-left:auto; margin-right:auto"/></p>
+<p style="text-align: center">
+    <b>Visualize GAP; Courtesy of Alexis Cook</b>
+</p>
+
+<p>Eventually our task is to classify whether the image is a cat or something else. We are unable to succinctly pass these 2 feature maps directly to a linear classifier to classify the cats (i.e. passing in two 28 by 28 kernels to a linear layer does not work but we need linear layer to give us an output). Therefore, we need to flatten these feature maps generated by the conv layers. One way to do this is <strong>Global Average Pooling</strong>.</p>
+<p><strong>A wrong example</strong></p>
+<p>First, I show you a source of confusion on what some perceive GAP as:</p>
+<p>For example:</p>
+<div class="arithmatex">\[
+\A^1 = \begin{bmatrix} 2 &amp; 3 \\ 1 &amp; 5 \end{bmatrix} \quad \A^2 = \begin{bmatrix} 3 &amp; 1 \\ 2 &amp; 8 \end{bmatrix}
+\]</div>
+<p>Assume for a moment <span class="arithmatex">\(\A^1\)</span> and <span class="arithmatex">\(\A^2\)</span> are our feature maps (although I mentioned it was 28 by 28 but this illustrates the idea). Then to retain the spatial information, we can perform an <strong>averaging across depths/channels of each kernel</strong> as such:</p>
+<div class="arithmatex">\[
+\A_{\text{average feature maps across depth}} = \dfrac{\A^1 + \A^2}{\textbf{num_feature_maps}} = \dfrac{\A^1 + \A^2}{2} = \begin{bmatrix} 2.5 &amp; 2 \\ 1.5 &amp; 6.5 \end{bmatrix}
+\]</div>
+<p>Then we flatten the <span class="arithmatex">\(\A_{gap}\)</span> to a single vector and pass it to linear layer.</p>
+<p><img src="https://storage.googleapis.com/reighns/reighns_ml_projects/docs/deep_learning/computer_vision/gradcam_and_variants/feature_maps_combined.PNG" style="margin-left:auto; margin-right:auto"/></p>
+<p style="text-align: center">
+    <b>Feature Map A1 and A2 but Averaged over Channels; By Hongnan G.</b>
+</p>
+
+<p><strong>A correct example</strong></p>
+<div class="arithmatex">\[
+\A^1 = \begin{bmatrix} 2 &amp; 3 \\ 1 &amp; 5 \end{bmatrix} \quad \A^2 = \begin{bmatrix} 3 &amp; 1 \\ 2 &amp; 8 \end{bmatrix}
+\]</div>
+<p>Assume for a moment <span class="arithmatex">\(\A^1\)</span> and <span class="arithmatex">\(\A^2\)</span> are our feature maps (although I mentioned it was 28 by 28 but this illustrates the idea). Then to retain the spatial information, we can perform an <strong>averaging across each kernel</strong> as such:</p>
+<div class="arithmatex">\[
+\text{mean}\left(\A^1\right) = \dfrac{2+3+1+5}{2 \times 2} = 2.75 \quad \text{mean}\left(\A^2\right) = \dfrac{3+1+2+8}{2 \times 2} = 3.5
+\]</div>
+<p>where by <span class="arithmatex">\(2 \times 2\)</span> means the number of pixels in the feature map;</p>
+<p>and thus the</p>
+<div class="arithmatex">\[
+\A_{\text{gap}} = \begin{bmatrix}2.75 \\ 3.5 \end{bmatrix}
+\]</div>
+<p>The Grad-CAM paper also applied the <strong>GAP</strong> idea over each feature map <span class="arithmatex">\(\A_k\)</span>. One can refer to <a href="https://machinelearningmastery.com/pooling-layers-for-convolutional-neural-networks/">here</a> to understand the intuition here. </p>
+<p>Basically each unique feature map will be reduced to a single value, for eg, <span class="arithmatex">\(2.75\)</span>, which <em>summarizes</em> the entire feature map.</p>
+<h2 id="the-intuition">The Intuition</h2>
+<blockquote>
+<p>This part is referenced from <strong>Interpretable Machine Learning by Christoph Molnar</strong>. He started off with an intuitive description of Grad-CAM.</p>
+</blockquote>
+<ul>
+<li><strong>High level idea:</strong> Grad-CAM is to understand at which parts of an image a convolutional layer "looks" for a certain classification.</li>
+<li>As a reminder, the first convolutional layer of a CNN takes as input the images and outputs feature maps that encode learned features (see the chapter on <a href="#cnn-features">Learned Features</a>).<ul>
+<li>The higher-level convolutional layers do the same, but take as input the feature maps of the previous convolutional layers.</li>
+</ul>
+</li>
+<li>To understand how the CNN makes decisions, Grad-CAM analyzes which regions are activated in the feature maps of the last convolutional layers.</li>
+<li>There are <span class="arithmatex">\(k\)</span> feature maps in the last convolutional layer, and I will call them <span class="arithmatex">\(\A^1, \A^2, \ldots, \A^k\)</span>.</li>
+<li>How can we "see" from the feature maps how the convolutional neural network has made a certain classification?<ul>
+<li>In the first approach, we could simply visualize the raw values of each feature map, average over the feature maps and overlay this over our image. This is the method of visualization feature map activations.</li>
+<li>This would not be helpful since the feature maps encode information for <strong>all classes</strong>, but we are interested in a particular class.</li>
+<li>Grad-CAM has to decide how important each of the k feature map was to our class c that we are interested in.</li>
+</ul>
+</li>
+<li>We have to weight each pixel of each feature map with the gradient before we average over the feature maps.</li>
+<li>This gives us a heatmap which highlights regions that positively or negatively affect the class of interest.</li>
+<li>This heatmap is send through the <code>ReLU</code> function, which is a fancy way of saying that we set all negative values to zero.<ul>
+<li>Grad-CAM removes all negative values by using a ReLU function, with the argument that we are only interested in the parts that contribute to the selected class c and not to other classes.</li>
+</ul>
+</li>
+<li>The word pixel might be misleading here as the feature map is smaller than the image (because of the pooling units) but is mapped back to the original image.</li>
+<li>We then scale the Grad-CAM map to the interval [0,1] for visualization purposes and overlay it over the original image.</li>
+</ul>
+<h2 id="the-big-picture">The Big Picture</h2>
+<p>This part can be best understood alongside my drawings.</p>
+<p>The big picture is when you "reduce" the 3 feature maps into 1 single new "feature map" (localization map) by way of a linear sum where each feature map <span class="arithmatex">\(\A^k\)</span> is multiplied by the global average pooled gradients <span class="arithmatex">\(\alpha_k^c\)</span>. In the example on my drawings, it can be seen that feature maps <span class="arithmatex">\(\A^1\)</span> and <span class="arithmatex">\(\A^2\)</span> are more important for the model to distinguish the elephant class than that of <span class="arithmatex">\(\A^3\)</span>. </p>
+<p>By design, I made <span class="arithmatex">\(\A^3\)</span> in itself already look different in terms of values from <span class="arithmatex">\(\A^1\)</span> and <span class="arithmatex">\(\A^2\)</span> on the get go. But at this point in time, even though we know the values in feature map <span class="arithmatex">\(\A^3\)</span> are vastly different, we cannot say for sure whether <span class="arithmatex">\(\A^3\)</span> in itself contributed to the prediction of our class elephant or not. It could also be the case that <span class="arithmatex">\(\A^1\)</span> and <span class="arithmatex">\(\A^2\)</span> are bonkers. Thus, the concept of taking the <strong>gradient</strong> of the class <span class="arithmatex">\(\y^c\)</span> with respect to each of these feature maps <span class="arithmatex">\(\A^k\)</span> becomes increasingly important as now we have a mathematical way to assign some importance to each of these feature maps.</p>
+<p>Now to even further bring out the intuition, imagine the 3 feature maps for the input image elephant as follows:</p>
+<ul>
+<li>Feature map <span class="arithmatex">\(\A^1\)</span> corresponds to Sobel Filter where it detect edges in particular their <strong>trunk</strong> of the <strong>elephants</strong>.</li>
+<li>Feature map <span class="arithmatex">\(\A^2\)</span> corresponds to Another Filter where it detects the <strong>ear</strong> of the <strong>elephants</strong>.</li>
+<li>Feature map <span class="arithmatex">\(\A^3\)</span> corresponds to a Background Filter where it detect the background and in particular the grass patch under the <strong>elephants</strong>.</li>
+</ul>
+<hr />
+<p>Now this is apparent why <span class="arithmatex">\(\A^3\)</span> is vastly different in terms of values since it is actually representing the background and grass. We know that grass is a non-factor in determining an elephant since the african grass field can hold many other animals as well. We really do not want the model to assign important to the grass, if any at all. </p>
+<p>We can then compute the gradient of <span class="arithmatex">\(\y^c\)</span> wrt each feature map and we can intuitively understand it as (see my diagrams):</p>
+<ul>
+<li>Gradient map <span class="arithmatex">\(\frac{d\y^{386}}{d\A^1}\)</span> has values <span class="arithmatex">\(\begin{bmatrix} 2 &amp; 3 \\ 4 &amp; 2 \end{bmatrix}\)</span><ul>
+<li>These values are the gradients of feature map <span class="arithmatex">\(\A^1\)</span> at a pixel level. We may find it difficult to comprehend these gradients and we want a quick summary of how feature map <span class="arithmatex">\(\A^1\)</span> changes our model's decision for <span class="arithmatex">\(\y^{386}\)</span>. Thus we use GAP.</li>
+<li>and when we perform GAP on them, we have <span class="arithmatex">\(\alpha_{1}^{386} = 2.75\)</span>. </li>
+<li>This value roughly translates to a pertubation of <span class="arithmatex">\(2.75\)</span> in feature map <span class="arithmatex">\(\A^1\)</span> will result in a unit change in our class <span class="arithmatex">\(\y^{386}\)</span>.</li>
+</ul>
+</li>
+<li>Gradient map <span class="arithmatex">\(\frac{d\y^{386}}{d\A^2}\)</span> has values <span class="arithmatex">\(\begin{bmatrix} 3 &amp; 5 \\ 6 &amp; 3 \end{bmatrix}\)</span> and when we perform GAP on them, we have <span class="arithmatex">\(4.25\)</span>. <ul>
+<li>The same logic applies.</li>
+</ul>
+</li>
+<li>Gradient map <span class="arithmatex">\(\frac{d\y^{386}}{d\A^3}\)</span> has values <span class="arithmatex">\(\begin{bmatrix} 0.1 &amp; -0.1 \\ 0.2 &amp; 0.2 \end{bmatrix}\)</span> and when we perform GAP on them, we have <span class="arithmatex">\(0.1\)</span>.<ul>
+<li>The same logic applies and we see that the gradient is small here and hence we can deduce that this feature map is not very important.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p>Ultimately however, we want to know how the change in <strong>all feature maps <span class="arithmatex">\(\A^k\)</span></strong> affects our final decision. This is where we perform a linear sum of <span class="arithmatex">\(\left(\sum_{k} \alpha_k^c A^k\right)\)</span> of all feature maps with the weight coefficient being their global average pooled gradient map. Just like our good old linear regression model, the intuition is the same as in <span class="arithmatex">\(y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ...\)</span>. The coefficients (the gradient values of <span class="arithmatex">\(2.75, 4.25, 0.1\)</span> decides which feature map are important and gets "activated and highlighted").</p>
+<ul>
+<li>We get the weighted sum heatmap to be the shape <span class="arithmatex">\((2, 2)\)</span> of values <span class="arithmatex">\([8.925, -2.025, 16.125, 2.6]\)</span>. Now this is a very small map and is likely not going to happen in real life. More often the map at this stage is of size <span class="arithmatex">\((10, 10)\)</span> and beyond. Imagine once more how <span class="arithmatex">\(\A^3\)</span> played almost no role.</li>
+</ul>
+<hr />
+<p>Lastly, an elementwise <code>ReLU</code> operation is applied to the heatmap to get <span class="arithmatex">\([8,925, 0, 16.125, 2.6]\)</span> and from the paper: We apply a <code>ReLU</code> to the linear combination of maps because we are only interested in the features that have a positive influence on the class of interest, i.e. pixels whose intensity should be increased in order to increase <span class="arithmatex">\(y^{c}\)</span>. Intuitively, the idea is that negative values contribute to other classes and we should not really care about it.</p>
+<p>We can scale back the heatmap to overlay on the original image.</p>
+<p>From <a href="https://medium.com/@stepanulyanin/implementing-grad-cam-in-pytorch-ea0937c31e82">here</a>, author said:</p>
+<blockquote>
+<p>Another potential question that can arise is why wouldn’t we just compute the gradient of the class logit with respect to the input image. Remember that a convolutional neural network works as a feature extractor and deeper layers of the network operate in increasingly abstract spaces. We want to see which of the features actually influenced the model’s choice of the class rather than just individual image pixels. That is why it is crucial to take the activation maps of deeper convolutional layers.</p>
+</blockquote>
+<h2 id="the-algorithm">The Algorithm</h2>
+<p>With reference to <a href="https://christophm.github.io/interpretable-ml-book/pixel-attribution.html">Interpretable Machine Learning by Christoph Molnar</a>.</p>
+<h3 id="notation">Notation</h3>
+<ul>
+<li>
+<p>Input image: <span class="arithmatex">\(\X\)</span></p>
+</li>
+<li>
+<p><strong>Feature Maps</strong> of the last convolutional layer in a CNN is denoted as:</p>
+<div class="arithmatex">\[\A_1, \A_2, \ldots, \A_k\]</div>
+<p>The <span class="arithmatex">\(k\)</span> is an arbitrary number for the number of feature maps.</p>
+</li>
+<li>
+<p>The <strong>Feature Logits</strong> of a particular <strong>class <span class="arithmatex">\(c\)</span></strong> is denoted as:</p>
+<div class="arithmatex">\[\y^{c}\]</div>
+<p>In other words, in <strong>ImageNet</strong>, the elephant class is indexed <span class="arithmatex">\(386\)</span>, and is denoted <span class="arithmatex">\(\y^{386}\)</span>. This is also the raw feature logits output before the softmax layer.</p>
+</li>
+<li>
+<p>The <strong>gradient of the fully-connected logits for class <span class="arithmatex">\(c\)</span>, <span class="arithmatex">\(\y^{c}\)</span> (before the softmax), with respect to feature map activations <span class="arithmatex">\(\A_k\)</span> of a convolutional layer</strong>:</p>
+<div class="arithmatex">\[\dfrac{d\y^{c}}{d\A^{k}}\]</div>
+</li>
+<li>
+<p>It follows that the <strong>gradient of the fully-connected for each class <span class="arithmatex">\(c\)</span>, <span class="arithmatex">\(\y^{c}\)</span>, with respect to each pixel on the feature map activations <span class="arithmatex">\(\A_k\)</span> is denoted as</strong>:</p>
+<div class="arithmatex">\[\dfrac{d\y^{c}}{d\A^{k}_{ij}}\]</div>
+</li>
+<li>
+<p>Let us define the gradient of <span class="arithmatex">\(\y^c\)</span> with respect to the GAP of each feature map <span class="arithmatex">\(\A^k\)</span> to be:</p>
+<div class="arithmatex">\[\alpha_k^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{global average pooling}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^k}}_{\text{gradients via backprop}}\]</div>
+</li>
+<li>
+<p>Denote the <code>ReLU</code> function as:</p>
+<div class="arithmatex">\[\textbf{ReLU}\]</div>
+</li>
+<li>
+<p>The final heatmap, also called the localization map of Grad-CAM is denoted as:</p>
+<div class="arithmatex">\[\L^{c}_{Grad-CAM} \in \R^{w \times h}\]</div>
+<p>where <span class="arithmatex">\(w\)</span> and <span class="arithmatex">\(h\)</span> is the width and height of the final output localization map.</p>
+<p>and is equals to</p>
+<div class="arithmatex">\[\L^{c}_{Grad-CAM} \in \R^{w \times h} = \underbrace{ReLU}_{\text{Pick positive values}}\left(\sum_{k} \alpha_k^c A^k\right)\]</div>
+</li>
+</ul>
+<h3 id="the-algorithm_1">The Algorithm</h3>
+<p>We will only assume our input is 1 single image.</p>
+<!-- Pseudo code-->
+<p>Let us look at the recipe for Grad-CAM.
+Our goal is to find the localization map, which is defined as:</p>
+<div class="arithmatex">\[L^c_{Grad-CAM} \in \mathbb{R}^{u\times v} = \underbrace{ReLU}_{\text{Pick positive values}}\left(\sum_{k} \alpha_k^c A^k\right)\]</div>
+<p>Here, u is the width, v the height of the explanation and c the class of interest.</p>
+<ol>
+<li>Forward-propagate the input image through the convolutional neural network.</li>
+<li>Obtain the raw score for the class of interest, meaning the activation of the neuron before the softmax layer.</li>
+<li>Set all other class activations to zero.</li>
+<li>Back-propagate the gradient of the class of interest to the last convolutional layer before the fully connected layers: <span class="arithmatex">\(\frac{\delta{}y^c}{\delta{}A^k}\)</span>.</li>
+<li>Weight each feature map "pixel" by the gradient for the class. Indices i and j refer to the width and height dimensions:
+   <span class="arithmatex">\(<span class="arithmatex">\(\alpha_k^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{global average pooling}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^k}}_{\text{gradients via backprop}}\)</span>\)</span>
+This means that the gradients are globally pooled.</li>
+<li>Calculate an average of the feature maps, weighted per pixel by the gradient.</li>
+<li>Apply ReLU to the averaged feature map.</li>
+<li>For visualization: Scale values to the interval between 0 and 1. Upscale the image and overlay it over the original image.</li>
+<li>Additional step for Guided Grad-CAM: Multiply heatmap with guided backpropagation.</li>
+</ol>
+<h4 id="step-1-forward-propagate">Step 1: Forward-propagate</h4>
+<p>This step just takes in <strong>one single image</strong> <span class="arithmatex">\(\mathcal{X}\)</span> and perform a forward pass the input image through the convolutional neural network and save <strong>all the forward pass feature map activations</strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># the y_logits before softmax; forward pass to populate the forward_activations</span>
+<span class="n">y_logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="c1"># this dict will be populated with the feature map outputs</span>
+<span class="n">forward_activations</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;features.11_ReLU(inplace=True)&quot;</span><span class="p">:</span> <span class="n">feature_map_logits</span><span class="p">}</span>
+</code></pre></div>
+<hr />
+<p>We now have the feature maps stored and we can get our target conv layer.</p>
+<div class="arithmatex">\[
+\begin{bmatrix} \A^1 &amp; \A^2 &amp; \A^3 &amp; \cdots &amp; \A^k \end{bmatrix}
+\]</div>
+<p>where each <span class="arithmatex">\(\A^i \in \R^{f \times f}\)</span>.</p>
+<h4 id="step-2-backward-propagate">Step 2: Backward-propagate</h4>
+<p>In Grad-CAM, we need the gradients of the <strong>target category</strong> with respect to the <strong>target convolutional layer</strong>. That is to say, when we call backwards, we are only interested in the particular class's gradients wrt feature maps.</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">target_category</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># get the most likely prediction of the model</span>
+    <span class="n">target_category</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># convert to scalar</span>
+    <span class="n">target_category</span> <span class="o">=</span> <span class="n">target_category</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="c1"># call backward on the model to populate backward_gradients</span>
+<span class="n">y_logits</span><span class="p">[:,</span> <span class="n">target_category</span><span class="p">]</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="c1"># this dict will be populated with the gradients</span>
+<span class="n">backward_gradients</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;features.11_ReLU(inplace=True)&quot;</span><span class="p">:</span> <span class="n">gradients_yc_wrt_features</span><span class="mf">.11</span><span class="p">}</span>
+</code></pre></div>
+<p>The above code just says, if we did not choose a <strong>target category</strong>, the model will choose the one with the highest logit activation. We then call <code>y_logits[: target_category]</code> backwards to store the gradients in <code>backward_gradients</code>.</p>
+<p>We now have the gradients of the class of interest with respect to the target conv layer (usually last conv layer).</p>
+<div class="arithmatex">\[
+\begin{bmatrix} \dfrac{d\y^{c}}{d\A^{1}} &amp; \dfrac{d\y^{c}}{d\A^{2}} &amp; \dfrac{d\y^{c}}{d\A^{3}} &amp; \cdots &amp; \dfrac{d\y^{c}}{d\A^{k}} \end{bmatrix}
+\]</div>
+<p>where each <span class="arithmatex">\(\dfrac{d\y^{c}}{d\A^{i}} \in \R^{f \times f}\)</span>.</p>
+<h4 id="step-3-global-average-pool-gradients">Step 3: Global Average Pool Gradients</h4>
+<p>The intuition we explained earlier tells us that we need to <strong>assign an importance score</strong> to each <strong>feature map <span class="arithmatex">\(\A^i\)</span></strong>. How to do that? In my naive thought, since <span class="arithmatex">\(\dfrac{d\y^{c}}{d\A^{i}}\)</span> is the same shape as the feature map <span class="arithmatex">\(f \times f\)</span>, I would have thought we can just multiply them elementwise. More concretely,</p>
+<p>If</p>
+<div class="arithmatex">\[
+\A^1 = \begin{bmatrix} 2 &amp; 3 \\ 1 &amp; 5 \end{bmatrix} \quad \A^2 = \begin{bmatrix} 3 &amp; 1 \\ 2 &amp; 8 \end{bmatrix}
+\]</div>
+<p>and</p>
+<div class="arithmatex">\[
+\dfrac{d\y^{c}}{d\A^{1}} = \begin{bmatrix} 0.1 &amp; 0.2 \\ 0.3 &amp; 0.5 \end{bmatrix} \quad \dfrac{d\y^{c}}{d\A^{2}} = \begin{bmatrix} 0.3 &amp; 0.1 \\ 0.2 &amp; 0.3 \end{bmatrix}
+\]</div>
+<p>Then we can weigh each feature map on a pixel level:</p>
+<div class="arithmatex">\[
+\A^1 * \dfrac{d\y^{c}}{d\A^{1}} = \begin{bmatrix} 0.2 &amp; 0.6 \\ 0.3 &amp; 0.25 \end{bmatrix} \quad \A^2 * \dfrac{d\y^{c}}{d\A^{2}} = \begin{bmatrix} 0.9 &amp; 0.1 \\ 0.4 &amp; 0.24 \end{bmatrix}
+\]</div>
+<hr />
+<p>However, the paper suggested that we can perform a <strong>Global Average Pooling</strong> on the gradient maps first, the idea is the same, we assume that the average of each gradient map should be representative of the rate of change of <span class="arithmatex">\(y^c\)</span> with respect to each feature map.</p>
+<div class="arithmatex">\[\alpha_k^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{global average pooling}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^k}}_{\text{gradients via backprop}}\]</div>
+<p>where <span class="arithmatex">\(Z\)</span> is the total number of pixels in this gradient map.</p>
+<p>Applying this to our example:</p>
+<div class="arithmatex">\[
+\alpha_1^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{global average pooling}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^1}}_{\text{gradients via backprop}} = \frac{1}{4}\left(0.2+0.6+0.3+0.25\right) = 0.3375
+\]</div>
+<div class="arithmatex">\[
+\alpha_2^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{global average pooling}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^2}}_{\text{gradients via backprop}} = \frac{1}{4}\left(0.9+0.1+0.4+0.24\right) = 0.41
+\]</div>
+<p>These <span class="arithmatex">\(\alpha_k^c\)</span> will be the <strong>importance score of each feature map <span class="arithmatex">\(\A^k\)</span></strong>. We will stack them into vectors:</p>
+<div class="arithmatex">\[
+\begin{bmatrix} \alpha_1^c &amp; \alpha_2^c &amp; \alpha_3^c &amp; \cdots &amp; \alpha_k^c \end{bmatrix}
+\]</div>
+<p>and <span class="arithmatex">\(\alpha_k^c \in \R\)</span> is a scalar.</p>
+<hr />
+<p>In code it is of the form:</p>
+<div class="highlight"><pre><span></span><code><span class="n">dyc_dA</span> <span class="o">=</span> <span class="n">backward_gradients</span><span class="p">[</span><span class="n">target_layer_name</span><span class="p">]</span>
+
+<span class="c1"># average pool the gradients across the channels</span>
+<span class="n">global_average_pooled_gradients</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dyc_dA</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</code></pre></div>
+<h4 id="step-4-weighted-global-sum-localized-feature-maps">Step 4: Weighted Global Sum: Localized Feature Maps</h4>
+<p>Recall that good old linear regression has the form <span class="arithmatex">\(y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_k x_k\)</span>. Now we do the same here and treat <span class="arithmatex">\(\alpha_k^c\)</span> as the beta weight coefficients, and feature maps <span class="arithmatex">\(\A^k\)</span> as our features to get:</p>
+<div class="arithmatex">\[\textbf{Localized_Feature_Map} = \left(\sum_{k} \alpha_k^c A^k\right)\]</div>
+<p>which has a shape of <span class="arithmatex">\(\R^{f \times f}\)</span>. The intuition is that some unimportant feature maps will go down to <span class="arithmatex">\(0\)</span> or near <span class="arithmatex">\(0\)</span>, and the important feature maps are magnified!</p>
+<hr />
+<p>The code has this structure:</p>
+<div class="highlight"><pre><span></span><code><span class="n">weighted_localization_map</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">forward_conv_activations</span><span class="p">)</span>
+
+<span class="c1"># weight the channels by corresponding gradients</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_feature_maps</span><span class="p">):</span>
+    <span class="n">weighted_localization_map</span><span class="p">[</span>
+        <span class="p">:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:</span>
+    <span class="p">]</span> <span class="o">*=</span> <span class="n">global_average_pooled_gradients</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="c1"># sum the channels of the activations</span>
+<span class="n">weighted_localization_map</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+    <span class="n">weighted_localization_map</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="step-5-grad-cam-localization-map-with-relu">Step 5: Grad-CAM Localization Map with ReLU</h4>
+<p>The last step is to apply <code>ReLU</code> to the <span class="arithmatex">\(\textbf{Localized_Feature_Map}\)</span> above. This is really to zero out all negative entries. Why? Well, for one, in typical logistic regression, negative weights are associated with the model placing importance in the "other class of interest", and we do not want that. The same analogy can be applied here though I believe mine is hand-wavy at best.</p>
+<div class="arithmatex">\[L^c_{Grad-CAM} \in \mathbb{R}^{f \times f} = \underbrace{ReLU}_{\text{Pick positive values}}\left(\sum_{k} \alpha_k^c A^k\right)\]</div>
+<hr />
+<p>The code has structure like:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># relu on top of the heatmap expression (2) in https://arxiv.org/pdf/1610.02391.pdf</span>
+<span class="n">relu_weighted_localization_map</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span>
+    <span class="n">weighted_localization_map</span>
+<span class="p">)</span>
+<span class="c1"># normalize the heatmap, scale features to between 0 and 1 to plot</span>
+<span class="n">gradcam_heatmap</span> <span class="o">=</span> <span class="n">relu_weighted_localization_map</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+    <span class="n">relu_weighted_localization_map</span>
+<span class="p">)</span>
+</code></pre></div>
+<h4 id="step-6-superimpose-the-grad-cam-heatmap-to-original-image">Step 6: Superimpose the Grad-CAM Heatmap to Original Image</h4>
+<p>This step is just doing some resizing from the <span class="arithmatex">\(f \times f\)</span> to say <span class="arithmatex">\(224 \times 224\)</span> to overlay on the original image. </p>
+<h2 id="dissecting-kerass-code">Dissecting KERAS's code</h2>
+<p>https://keras.io/examples/vision/grad_cam/ has sample code but I converted to PyTorch, before converting, I annotated each of the variable inside. (See my KERAS notebook as I changed some variables name).</p>
+<ul>
+<li>
+<p><code>last_conv_layer_output</code></p>
+<ul>
+<li>Shape: <span class="arithmatex">\(2 \times 2 \times 3\)</span> with 3 filters of 2 by 2 shape.</li>
+<li>Note this is just <span class="arithmatex">\(\A^1, \A^2, \A^3\)</span> where each <span class="arithmatex">\(\A^k \in \R^{2 \times 2}\)</span>.</li>
+</ul>
+</li>
+<li>
+<p><code>y_logits</code></p>
+<ul>
+<li>Shape: <span class="arithmatex">\(1 \times 1000\)</span> since there are 1000 classes in ImageNet.</li>
+<li>Note that this is our <span class="arithmatex">\(\y\)</span>. If we are interested in the elephant class at index 386, then we denote it as <span class="arithmatex">\(\y^{c} = \y^{386}\)</span>.</li>
+<li>Thus, <span class="arithmatex">\(\y \in \R^{1 \times 1000}\)</span> but <span class="arithmatex">\(\y^{c} \in \R^{1 \times 1}\)</span>.</li>
+<li>Note carefully this is the logits output of <strong>all the layers</strong> of the CNN, and is just right before the <strong>softmax</strong> where we transform the logits to probabilities.</li>
+<li>We can imagine that among these 1000 logits, the highest number means the model thinks that this index is the most probable class.</li>
+<li>Theoretically speaking, there is no difference in differentiation of the logits wrt to the feature maps versus the softmax probs wrt to the feature maps. This is because <strong>softmax is monotonic</strong>, and the pre-softmax logits output will tell us already which class is most probable, and so will the softmax. So there should not be any confusion here on why we did not differentiate softmax probs wrt to the feature maps instead since the ranking is preserved in the sense that values in logits the highest is the most probable when transformed by softmax.</li>
+</ul>
+</li>
+<li>
+<p><code>target_category</code></p>
+<ul>
+<li>This is an optional argument in the function. </li>
+<li>If <code>None</code>, we will automatically assign it to the highest logit's index.</li>
+<li>In this example, the highest logit in <span class="arithmatex">\(\y\)</span> is at index 386 with a value of <span class="arithmatex">\(23.632\)</span>, corresponding to the target class of elephant.</li>
+<li>If specified, then the <span class="arithmatex">\(\y^{c}\)</span> will change.</li>
+</ul>
+</li>
+<li>
+<p><code>target_category_logits</code></p>
+<ul>
+<li>Once our <code>target_category</code> is defined, we will just slice <code>y_logits[:, target_category]</code> to get the logit value of that particular class.</li>
+<li>This variable is just <span class="arithmatex">\(\y^{c}\)</span> if you look carefully.</li>
+</ul>
+</li>
+<li>
+<p><code>grads = tape.gradient(target_category_logits, last_conv_layer_output)</code></p>
+<ul>
+<li>This is the gradient of the output neuron (top predicted or chosen) with regard to the output feature map of the last conv layer.</li>
+<li>This has shape <span class="arithmatex">\(2 \times 2 \times 3\)</span> in our simple example. In the python example, the shape at this moment has an additional axis like <span class="arithmatex">\(1 \times 2 \times 2 \times 3\)</span> which we will eventually squeeze it anyways.</li>
+<li>Notice it has the same shape as <code>last_conv_layer_output</code> aka the feature maps.</li>
+<li>
+<p>In other words, this variable has 3 feature maps stacked together and can be visualized as:     </p>
+<div class="arithmatex">\[\begin{bmatrix} \dfrac{d\y^{c}}{d\A^{1}} &amp; \dfrac{d\y^{c}}{d\A^{2}} &amp; \dfrac{d\y^{c}}{d\A^{3}} \end{bmatrix}\]</div>
+</li>
+</ul>
+</li>
+<li>
+<p><code>pooled_grads</code></p>
+<ul>
+<li>Shape: <span class="arithmatex">\(3 \times 1\)</span></li>
+<li>This is a vector where each entry is the mean intensity of the gradient over a specific feature map channel.</li>
+<li>
+<p>In other words, in <code>grads[0]</code> we have <span class="arithmatex">\(\frac{d\y^c}{d\A^1}\)</span> which is of shape <span class="arithmatex">\(2 \times 2\)</span>. What we do not is <strong>Global Average Pooling</strong> on these gradients where we just take the average of all available pixels in this <span class="arithmatex">\(2 \times 2\)</span> gradient map for feature map 1. You can find more intuition of GAP above, but in general this is similar logic to how you perform GAP on the output of the feature logits from the last conv layer.</p>
+<div class="arithmatex">\[\alpha_k^c = \overbrace{\frac{1}{Z}\sum_{i}\sum_{j}}^{\text{global average pooling}} \underbrace{\frac{\delta y^c}{\delta A_{ij}^k}}_{\text{gradients via backprop}}\]</div>
+<p>where <span class="arithmatex">\(Z\)</span> is the total number of pixels in this gradient map.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>heatmap</code></p>
+<ul>
+<li>Shape: <span class="arithmatex">\(2 \times 2\)</span> which is also the filter size and also the feature map size.</li>
+<li>
+<p>This is the weighted sum of all feature maps <span class="arithmatex">\(\A^1, \A^2, \A^3\)</span> and is</p>
+<div class="arithmatex">\[\textbf{Localized_Map} = \left(\sum_{k} \alpha_k^c A^k\right)\]</div>
+</li>
+</ul>
+</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../01_feature_map_activation/feature_map_activation_reduced/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Feature Map Activations (Part II)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Feature Map Activations (Part II)
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../gradcam_from_scratch/" class="md-footer__link md-footer__link--next" aria-label="Next: Grad-CAM from Scratch" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Grad-CAM from Scratch
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021-2022 Gao Hongnan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://sg.linkedin.com/in/reighnss" target="_blank" rel="noopener" title="sg.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    <a href="https://github.com/gao-hongnan" target="_blank" rel="noopener" title="gaohn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../../../../..", "features": ["content.code.annotate"], "search": "../../../../../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      
+        <script src="../../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
